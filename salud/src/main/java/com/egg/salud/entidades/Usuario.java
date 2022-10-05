@@ -19,6 +19,5 @@ public class Usuario {
     private String contraseña;
     private boolean estado;
 
-    private String ssss;
     private Set<Rol> roles = new HashSet<>();
 }
