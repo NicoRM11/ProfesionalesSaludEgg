@@ -1,5 +1,6 @@
 package com.egg.salud.entidades;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "usuarios")
+@AllArgsConstructor
 @NoArgsConstructor
 public class Usuario {
 
@@ -24,12 +26,6 @@ public class Usuario {
     @JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
     private Set<Rol> roles = new HashSet<>();
 
-    public Usuario(Long id, String usuario, String contraseña, boolean estado, Set<Rol> roles) {
-        this.id = id;
-        this.usuario = usuario;
-        this.contraseña = contraseña;
-        this.estado = estado;
-        this.roles = roles;
-    }
+
 
 }

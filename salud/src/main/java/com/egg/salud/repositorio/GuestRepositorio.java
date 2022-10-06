@@ -6,11 +6,13 @@ package com.egg.salud.repositorio;
 
 import com.egg.salud.entidades.Guest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author santi
  */
+@Repository
 public interface GuestRepositorio extends JpaRepository <Guest, Long>{
     
 }
