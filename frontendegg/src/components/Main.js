@@ -1,7 +1,14 @@
 import React from 'react'
 
+import { Register } from './Register';
+
 export const Main = () => {
   return (
-    <main>Main</main>
+    <main>
+
+      <Register></Register>
+      
+
+    </main>
   )
 }
