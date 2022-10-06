@@ -4,19 +4,15 @@ package com.egg.salud.entidades;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name="guest")
 @Data
-@Table(name="guest")
 @NoArgsConstructor
+@PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class Guest extends Usuario{
 
    private String email;

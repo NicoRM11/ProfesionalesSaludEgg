@@ -1,27 +1,26 @@
 package com.egg.salud.entidades;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Entity
+@Entity(name = "profesional")
 @Data
-@Table(name = "profesional")
 @NoArgsConstructor
+@PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class Profesional extends Usuario{
 
     private String nombre;
     private String apellido;
     private String urlFoto;
-    private List<String> especialidades;
-    private List<String> matriculas;
+    @ElementCollection
+    private List<String> especialidades = new ArrayList<>();
+    @ElementCollection
+    private List<String> matriculas = new ArrayList<>();
     private Integer dni;
     private String domicilio;
 
