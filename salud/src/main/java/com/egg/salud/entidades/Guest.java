@@ -32,7 +32,7 @@ public class Guest extends Usuario{
    private String nacionalidad;
    private String urlFoto;
    
-    @OneToMany(mappedBy ="idGuest", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy ="id_user", cascade=CascadeType.ALL)
     private List<Oferta> oferta;
 
     public Guest(String email, String nombre, String apellido, long dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, Long id, String usuario, String contraseña, boolean estado, Set<Rol> roles) {

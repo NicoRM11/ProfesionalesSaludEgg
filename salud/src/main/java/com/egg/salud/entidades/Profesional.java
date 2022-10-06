@@ -25,7 +25,7 @@ public class Profesional extends Usuario{
     private Integer dni;
     private String domicilio;
 
-    @OneToMany(mappedBy = "idProfesional", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id_profesional", cascade = CascadeType.ALL)
     private List<Oferta> oferta;
 
     public Profesional(Long id, String usuario, String contraseña, boolean estado, Set<Rol> roles, String nombre, String apellido, String urlFoto, List<String> especialidades, List<String> matriculas, Integer dni, String domicilio) {
