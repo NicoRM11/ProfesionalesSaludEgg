@@ -1,15 +1,21 @@
-import React from 'react'
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 export const Navbar = () => {
+
+  const location = useLocation();
+  console.log(location)
+
+
   return (
+    
     <nav className="navbar fixed-top navbar-expand-sm" >
       <div className="container-xxl">
-        <a className="navbar-brand mb-2 h1 text-white" href="#">
+        <a className="navbar-brand mb-0 h1 text-white" href="#">
           <img
-            className="d-inline-block align-top"
-            src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg"
-            alt="Bootstrap" width="30" height="24"/>
-            PDLS
+            src={logo}
+            width="150" height="50"/>
         </a>
         <button
           type="button"
