@@ -13,23 +13,17 @@ import lombok.Data;
  */
 @Data
 public class RegistroGuestDTO {
-    
-    
-   
+
+   private String usuario;
+   private String contraseña;
    private String email;
    private String nombre;
    private String apellido;
    private long dni;
    private String obra_social;
    private long telefono;
-   
    private Date fecha_nacimiento;
-   
    private String nacionalidad;
-   
    private String url_foto;
-   
-   
-   
-   
+
 }
