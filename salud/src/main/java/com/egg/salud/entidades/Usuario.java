@@ -18,8 +18,10 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+    @Column(unique = true)
     protected String usuario;
-    protected String contraseña;
+    
+    protected String password;
     protected Boolean estado;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

@@ -29,24 +29,21 @@ public class GuestServicioImpl implements GuestServicio {
 
     @Override
     public ResponseEntity<?> registrarUsuario(@RequestBody RegistroGuestDTO registroDto) {
+       
         if(guestRepositorio.existsByUsuario(registroDto.getUsuario())) {
-            return new ResponseEntity<>("Ese nombre de usuario ya existe", HttpStatus.BAD_REQUEST);
-        }
-        if(guestRepositorio.existsByEmail(registroDto.getEmail())) {
             return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
         }
         Guest guest = new Guest();
         guest.setUsuario(registroDto.getUsuario());
         guest.setApellido(registroDto.getApellido());
         guest.setDni(registroDto.getDni());
-        guest.setContraseña(passwordEncoder.encode(registroDto.getContraseña()));
-        guest.setEmail(registroDto.getEmail());
+        guest.setPassword(passwordEncoder.encode(registroDto.getPassword()));
         guest.setNombre(registroDto.getNombre());
         guest.setObra_social(registroDto.getObra_social());
         guest.setTelefono(registroDto.getTelefono());
         guest.setFecha_nac(registroDto.getFecha_nacimiento());
         guest.setNacionalidad(registroDto.getNacionalidad());
-        guest.setUrlFoto(registroDto.getUrl_foto());
+        guest.setLocalidad(registroDto.getLocalidad());
 
         Rol roles = rolRepositorio.findByNombre("ROLE_GUEST").get();
         guest.setRoles(Collections.singleton(roles));

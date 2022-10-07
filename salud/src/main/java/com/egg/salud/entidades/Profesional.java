@@ -21,7 +21,9 @@ public class Profesional extends Usuario{
     private List<String> especialidades = new ArrayList<>();
     @ElementCollection
     private List<String> matriculas = new ArrayList<>();
+    @Column(unique = true)
     private Integer dni;
+    
     private String domicilio;
 
     @OneToMany(mappedBy = "id_profesional", cascade = CascadeType.ALL)

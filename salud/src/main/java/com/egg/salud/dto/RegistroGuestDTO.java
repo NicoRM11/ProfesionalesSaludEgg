@@ -15,15 +15,15 @@ import lombok.Data;
 public class RegistroGuestDTO {
 
    private String usuario;
-   private String contraseña;
-   private String email;
+   private String password;
    private String nombre;
    private String apellido;
-   private long dni;
+   private Integer dni;
    private String obra_social;
    private long telefono;
    private Date fecha_nacimiento;
    private String nacionalidad;
    private String url_foto;
+   private String localidad;
 
 }
