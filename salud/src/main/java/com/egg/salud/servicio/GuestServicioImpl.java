@@ -18,8 +18,8 @@ import java.util.Collections;
 @Service
 public class GuestServicioImpl implements GuestServicio {
 
-    @Autowired
-    private ModelMapper modelMapper;
+//    @Autowired
+//    private ModelMapper modelMapper;
     @Autowired
     private GuestRepositorio guestRepositorio;
     @Autowired
@@ -56,8 +56,8 @@ public class GuestServicioImpl implements GuestServicio {
         return new ResponseEntity<>("Usuario registrado exitosamente" , HttpStatus.OK);
     }
 
-    private Guest mapearEntidad(RegistroGuestDTO registroDto){
-        Guest guest = modelMapper.map(registroDto, Guest.class);
-        return guest;
-    }
+//    private Guest mapearEntidad(RegistroGuestDTO registroDto){
+//        Guest guest = modelMapper.map(registroDto, Guest.class);
+//        return guest;
+//    }
 }

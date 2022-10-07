@@ -12,13 +12,7 @@ public class LoginDTO {
     
     
     
-   @
-   private String email;
-   private String nombre;
-   private String apellido;
-   private long dni;
-   private String obra_social;
-   private long telefono;
+   
     
     
     

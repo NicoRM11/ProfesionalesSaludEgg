@@ -19,7 +19,7 @@ public interface GuestRepositorio extends JpaRepository <Guest, Long>{
 
     public Optional<Guest> findByEmail(String email);
 
-    public Optional<Guest> findByUsernameOrEmail(String usuario,String email);
+    public Optional<Guest> findByUsuarioOrEmail(String usuario,String email);
 
     public Optional<Guest> findByUsuario(String usuario);
 
