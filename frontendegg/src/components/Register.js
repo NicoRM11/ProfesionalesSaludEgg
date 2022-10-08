@@ -26,7 +26,7 @@ export const Register = () => {
       try {
         const response = await axios.post(URL, data)
         console.log(response);
-        if (response.data === "Usuario registrado exitosamente") {
+        if (response.statusCode === 201) {
           Swal.fire(
             'Registrado!',
             `El usuario ${data.usuario} ha sido guardado exitosamente`,
@@ -48,8 +48,8 @@ export const Register = () => {
   }
   return (
     <section className="container">
-      <div className="row justify-content-center align-items-center vh-100">
-        <Form className="Formulario col-8 py-4 rounded h6 text-white" onSubmit={handleSubmit}>
+      <div className="row justify-content-center align-items-center">
+        <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
           <Row className="h2 text-center">
             <Form.Label>INGRESE SUS DATOS</Form.Label>
           </Row>
