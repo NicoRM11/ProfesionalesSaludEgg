@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 
 export const Register = () => {
-  const [data, setdata] = useState({ email: "", password: "", password2: "", nombre: "", localidad: "",nacionalidad:"", apellido: "", telefono: "", obra_social: "", dni: "" });
+  const [data, setdata] = useState({ usuario: "", password: "",fecha_nac:"", nombre: "", localidad: "",nacionalidad:"", apellido: "", telefono: "", obra_social: "", dni: "" });
 
   const handleChange = ({ target }) => {
     setdata({
@@ -17,19 +17,19 @@ export const Register = () => {
     })
 
   }
-  const URL = "http://localhost:8080/guest/register/";
+  const URL = "http://localhost:8080/api/auth/registrarGuest";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
-    /*if (data.password === data.password2) {
+    //if (data.password === data.password2) {
       try {
         const response = await axios.post(URL, data)
         console.log(response);
-        if (response.status === 200) {
+        if (response.data === "Usuario registrado exitosamente") {
           Swal.fire(
             'Registrado!',
-            'El usuario $(response.data.email) ha sido guardado exitosamente',
+            `El usuario ${data.usuario} ha sido guardado exitosamente`,
             'success'
           )
         } else {
@@ -43,7 +43,7 @@ export const Register = () => {
       } catch (error) {
         console.log(error)
       }
-    }*/
+    //}
 
   }
   return (
@@ -76,7 +76,7 @@ export const Register = () => {
             <Col md={1}></Col>
             <Col md={4}>
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" placeholder="Email" required onChange={handleChange} />
+              <Form.Control type="email" name="usuario" placeholder="Email" required onChange={handleChange} />
             </Col>
           </Row>
           <Row className="mb-4">
@@ -96,13 +96,18 @@ export const Register = () => {
               <Form.Control type="number" name="telefono" placeholder="Telefono" required onChange={handleChange} />
             </Col>
             <Col md={1}></Col>
+            {/*temporal*/}
             <Col md={4}>
+              <Form.Label>Fecha de nacimiento</Form.Label>
+              <Form.Control type="date" name="fecha_nac" placeholder="Nacionalidad" required onChange={handleChange} />
+            </Col>
+           {/* <Col md={4}>
               <Form.Label>Repetir contraseña</Form.Label>
-              <Form.Control type="password" name="password2" placeholder="Contraseña" required onChange={handleChange} />
-              {data.password !== data.password2 &&
+              <Form.Control type="password" placeholder="Contraseña" required onChange={handleChange} />
+              {data.password !== value.password2 &&
                 <p className="text-dark"> No coinciden las contraseñas.</p>
               }
-            </Col>
+            </Col>*/}
           </Row>
           <Row className="mb-4">
             <Col md={6}>
