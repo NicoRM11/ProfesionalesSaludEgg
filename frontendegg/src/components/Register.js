@@ -1,35 +1,124 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 export const Register = () => {
+  const [data, setdata] = useState({ email: "", password: "", password2: "", nombre: "", localidad: "",nacionalidad:"", apellido: "", telefono: "", obra_social: "", dni: "" });
+
+  const handleChange = ({ target }) => {
+    setdata({
+      ...data,
+      [target.name]: target.value
+    })
+
+  }
+  const URL = "http://localhost:8080/guest/register/";
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(data);
+    /*if (data.password === data.password2) {
+      try {
+        const response = await axios.post(URL, data)
+        console.log(response);
+        if (response.status === 200) {
+          Swal.fire(
+            'Registrado!',
+            'El usuario $(response.data.email) ha sido guardado exitosamente',
+            'success'
+          )
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No se pudo regitrar, intente nuevamente!',
+          })
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    }*/
+
+  }
   return (
     <section className="container">
       <div className="row justify-content-center align-items-center vh-100">
-        <Form className="Formulario mb-0 col-8 py-4 rounded">
-          <Row>
-              <Col md={6}>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-              </Col>
-              <Col md={6}>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-              </Col>
+        <Form className="Formulario col-8 py-4 rounded h6 text-white" onSubmit={handleSubmit}>
+          <Row className="h2 text-center">
+            <Form.Label>INGRESE SUS DATOS</Form.Label>
           </Row>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          <Row className="mb-4">
+            <Col md={3}>
+              <Form.Label >Nombre</Form.Label>
+              <Form.Control type="text" name="nombre" placeholder="Nombre" required onChange={handleChange} />
+            </Col>
+            <Col md={3}>
+              <Form.Label>Apellido</Form.Label>
+              <Form.Control type="text" name="apellido" placeholder="Apellido" required onChange={handleChange} />
+            </Col>
+            <Col md={1}></Col>
+            <Col md={4}>
+              <Form.Label>Localidad</Form.Label>
+              <Form.Control type="text" name="localidad" placeholder="Localidad" required onChange={handleChange} />
+            </Col>
+          </Row>
+          <Row className="mb-4">
+            <Col md={6}>
+              <Form.Label>DNI</Form.Label>
+              <Form.Control type="number" name="dni" placeholder="DNI" required onChange={handleChange} />
+            </Col>
+            <Col md={1}></Col>
+            <Col md={4}>
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" name="email" placeholder="Email" required onChange={handleChange} />
+            </Col>
+          </Row>
+          <Row className="mb-4">
+            <Col md={6}>
+              <Form.Label>Obra Social</Form.Label>
+              <Form.Control type="text" name="obra_social" placeholder="Obra Social" required onChange={handleChange} />
+            </Col>
+            <Col md={1}></Col>
+            <Col md={4}>
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control type="password" name="password" placeholder="Contraseña" required onChange={handleChange} />
+            </Col>
+          </Row>
+          <Row className="mb-4">
+            <Col md={6}>
+              <Form.Label>Telefono</Form.Label>
+              <Form.Control type="number" name="telefono" placeholder="Telefono" required onChange={handleChange} />
+            </Col>
+            <Col md={1}></Col>
+            <Col md={4}>
+              <Form.Label>Repetir contraseña</Form.Label>
+              <Form.Control type="password" name="password2" placeholder="Contraseña" required onChange={handleChange} />
+              {data.password !== data.password2 &&
+                <p className="text-dark"> No coinciden las contraseñas.</p>
+              }
+            </Col>
+          </Row>
+          <Row className="mb-4">
+            <Col md={6}>
+              <Form.Label>Nacionalidad</Form.Label>
+              <Form.Control type="text" name="nacionalidad" placeholder="Nacionalidad" required onChange={handleChange} />
+            </Col>
+          </Row>
+          <Row className="">
+            <Button variant="" className="cta col-3" type="submit">
+              <span>Registrarse</span>
+              <svg viewBox="0 0 13 10" height="10px" width="15px">
+                <path d="M1,5 L11,5"></path>
+                <polyline points="8 1 12 5 8 9"></polyline>
+              </svg>
+            </Button>
+          </Row>
         </Form>
       </div>
     </section>
