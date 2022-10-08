@@ -5,7 +5,6 @@ import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Rol;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.RolRepositorio;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,10 @@ public class GuestServicioImpl implements GuestServicio {
 
     @Override
     public ResponseEntity<?> registrarUsuario(@RequestBody RegistroGuestDTO registroDto) {
-       
+
+
         if(guestRepositorio.existsByUsuario(registroDto.getUsuario())) {
-            return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Ese email de usuario ya existe",HttpStatus.NOT_ACCEPTABLE);
         }
         Guest guest = new Guest();
         guest.setUsuario(registroDto.getUsuario());
@@ -41,16 +41,17 @@ public class GuestServicioImpl implements GuestServicio {
         guest.setNombre(registroDto.getNombre());
         guest.setObra_social(registroDto.getObra_social());
         guest.setTelefono(registroDto.getTelefono());
-        guest.setFecha_nac(registroDto.getFecha_nacimiento());
+        guest.setFecha_nac(registroDto.getFecha_nac());
         guest.setNacionalidad(registroDto.getNacionalidad());
         guest.setLocalidad(registroDto.getLocalidad());
+        guest.setEstado(true);
 
         Rol roles = rolRepositorio.findByNombre("ROLE_GUEST").get();
         guest.setRoles(Collections.singleton(roles));
 
         guestRepositorio.save(guest);
 
-        return new ResponseEntity<>("Usuario registrado exitosamente" , HttpStatus.OK);
+        return new ResponseEntity<>("Usuario registrado exitosamente" , HttpStatus.CREATED);
     }
 
 //    private Guest mapearEntidad(RegistroGuestDTO registroDto){

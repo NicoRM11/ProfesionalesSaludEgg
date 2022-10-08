@@ -34,7 +34,7 @@ public class Guest extends Usuario{
     @OneToMany(mappedBy ="id_user", cascade=CascadeType.ALL)
     private List<Oferta> oferta;
 
-    public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, Long id, String usuario, String contraseña, boolean estado, Set<Rol> roles) {
+    public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, Long id, String usuario, String contraseña, Boolean estado, Set<Rol> roles) {
         super(id, usuario, contraseña, estado, roles);
         this.nombre = nombre;
         this.apellido = apellido;

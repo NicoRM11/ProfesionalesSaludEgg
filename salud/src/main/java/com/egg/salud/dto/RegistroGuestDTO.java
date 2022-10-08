@@ -21,9 +21,8 @@ public class RegistroGuestDTO {
    private Integer dni;
    private String obra_social;
    private long telefono;
-   private Date fecha_nacimiento;
+   private Date fecha_nac;
    private String nacionalidad;
-   private String url_foto;
    private String localidad;
 
 }
