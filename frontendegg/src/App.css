@@ -1,27 +1,51 @@
-html {
-  min-height: 100%;
-  position: relative;
-}
+
 
 body{
   background-color:#F6FCEF;
-  margin: 0;
-  margin-bottom: 60px;
+  
 }
+
 
 nav{
   background-color:#98CFA1
 }
+
 footer{
+  
   background-color:#98CFA1;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
+
 }
 
+.vr{
+  border-left: solid #f6fcef;
+  height:50px;
+  left: 50%;
+  position: absolute;
+ 
+
+}
+
+footer a {
+  text-decoration: none; 
+  color: #f6fcef;
+}
+
+footer .h3{
+  font-size: 20px;
+}
+
+
+
+
 .Formulario{
-  background-color:#98CFA1
+  background-color:#98CFA1;
+  
+}
+
+.Formulario .h2 {
+  letter-spacing: 0.09em;
+  font-weight: 700;
+
 }
 
 /* From uiverse.io by @alexmaracinaru */
@@ -41,7 +65,8 @@ footer{
   left: 0;
   display: block;
   border-radius: 50px;
-  background: #dbe4e7;
+  background: #f6fcef;
+  opacity: 0.5;
   width: 45px;
   height: 45px;
   transition: all 0.3s ease;
@@ -49,11 +74,11 @@ footer{
 
 .cta span {
   position: relative;
-  font-family: "Ubuntu", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
-  color: #234567;
+  color: #FFFFFF;
 }
 
 .cta svg {
@@ -63,7 +88,7 @@ footer{
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke: #234567;
+  stroke: #FFFFFF;
   stroke-width: 2;
   transform: translateX(-5px);
   transition: all 0.3s ease;
@@ -71,7 +96,8 @@ footer{
 
 .cta:hover:before {
   width: 100%;
-  background: #dbe4e7;
+  background: #f6fcef;
+  opacity: 0.5;
 }
 
 .cta:hover svg {

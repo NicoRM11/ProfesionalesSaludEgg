@@ -4,10 +4,9 @@ import { Register } from './Register';
 
 export const Main = () => {
   return (
-    <main className="m-4">
+    <main>
 
-      <Register></Register>
-      
+      <Register ></Register>
 
     </main>
   )
