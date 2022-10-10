@@ -26,7 +26,7 @@ public interface GuestRepositorio extends JpaRepository <Guest, Long>{
 
     public Boolean existsByDni(Integer dni);
 
-    @Query("SELECT g FROM guest WHERE g.obra_social = :obra_social")
-    public List<Guest> listaPorObraSocial(@Param("obra_social") String obra_social);
+    //@Query("SELECT g FROM guest WHERE g.obra_social = :obra_social")
+    //public List<Guest> listaPorObraSocial(@Param("obra_social") String obra_social);
 
 }
