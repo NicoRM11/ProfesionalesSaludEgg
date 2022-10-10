@@ -6,8 +6,11 @@ package com.egg.salud.repositorios;
 
 import com.egg.salud.entidades.Guest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +24,9 @@ public interface GuestRepositorio extends JpaRepository <Guest, Long>{
 
     public  Boolean existsByUsuario(String usuario);
 
+    public Boolean existsByDni(Integer dni);
 
+    @Query("SELECT g FROM guest WHERE g.obra_social = :obra_social")
+    public List<Guest> listaPorObraSocial(@Param("obra_social") String obra_social);
 
 }
