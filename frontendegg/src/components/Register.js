@@ -21,30 +21,27 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
-    //if (data.password === data.password2) {
       try {
         const response = await axios.post(URL, data)
         console.log(response);
-        if (response.statusCode === 201) {
+        if (response.status === 201) {
           Swal.fire(
             'Registrado!',
-            `El usuario ${data.usuario} ha sido guardado exitosamente`,
+            'El usuario ha sido guardado exitosamente',
             'success'
           )
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No se pudo regitrar, intente nuevamente!',
-          })
         }
 
       } catch (error) {
+        if (error.response.status === 406) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `No se pudo registrar, ${error.response.data} !`,
+          })
+        }
         console.log(error)
       }
-    //}
-
   }
   return (
     <section className="container py-5">

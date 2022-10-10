@@ -16,13 +16,8 @@ footer{
 
 }
 
-.vr{
-  border-left: solid #f6fcef;
-  height:50px;
-  left: 50%;
-  position: absolute;
- 
-
+.border-left{
+  border-left: 2px solid #f6fcef;
 }
 
 footer a {
