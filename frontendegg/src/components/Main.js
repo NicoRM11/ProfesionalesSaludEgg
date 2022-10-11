@@ -4,7 +4,7 @@ import { Register } from './Register';
 
 export const Main = () => {
   return (
-    <main>
+    <main className="container text-center py-5">
 
       <Register ></Register>
 

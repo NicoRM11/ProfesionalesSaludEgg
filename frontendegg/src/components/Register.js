@@ -17,7 +17,7 @@ export const Register = () => {
     })
 
   }
-  const URL = "http://localhost:8080/api/auth/registrarGuest";
+  const URL = "http://localhost:8080/api/guest/registrar";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
