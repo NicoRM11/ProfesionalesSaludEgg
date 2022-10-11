@@ -44,6 +44,10 @@ public class GuestControlador {
         return guestServicio.eliminarUsuario(id);
     }
 
+    @GetMapping("/listar/{obra_social}")
+    public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(@PathVariable(name= "obra_social") String obra_social){
+        return guestServicio.listarObraSocial(obra_social);
+    }
 
 
     

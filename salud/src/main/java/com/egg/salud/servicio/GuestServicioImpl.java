@@ -127,6 +127,31 @@ public class GuestServicioImpl implements GuestServicio {
         return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social) {
+        List<Guest> listaGuest = guestRepositorio.listaPorObraSocial(obra_social);
+        List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
+        
+        for (Guest aux: listaGuest) {
+            ResponseGuestDTO guestDTO = new ResponseGuestDTO();
+            guestDTO.setApellido(aux.getApellido());
+            guestDTO.setNombre(aux.getNombre());
+            guestDTO.setFecha_nac(aux.getFecha_nac());
+            guestDTO.setNacionalidad(aux.getNacionalidad());
+            guestDTO.setObra_social(aux.getObra_social());
+            guestDTO.setTelefono(aux.getTelefono());
+            guestDTO.setLocalidad(aux.getLocalidad());
+            guestDTO.setEstado(aux.getEstado());
+            listaGuestDto.add(guestDTO);
+        }
+        return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
+        
+        
+        
+        
+    }
+
 
 
 

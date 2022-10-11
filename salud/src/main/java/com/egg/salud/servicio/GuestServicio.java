@@ -18,4 +18,6 @@ public interface GuestServicio {
 
     public ResponseEntity<List<ResponseGuestDTO>> listar();
 
+    public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social); 
+    
 }
