@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 export const ProfesionalRegister = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "" });
-
+    const [profesiones, setprofesiones] = useState([{ profesion: "", matricula: ""}]);
     const handleChange = ({ target }) => {
         setdata({
             ...data,
@@ -41,6 +41,12 @@ export const ProfesionalRegister = () => {
             }
             console.log(error)
         }
+    }
+
+    const handleProfesionAdd = () => {
+        setprofesiones([...profesiones,
+            { profesion: "", matricula: ""}
+        ])
     }
     return (
         <section className="container py-5">
@@ -86,30 +92,35 @@ export const ProfesionalRegister = () => {
                             <Form.Control type="password" name="password" placeholder="Contraseña" required onChange={handleChange} />
                         </Col>
                     </Row>
-                    <Row className="mb-4">
-                        <Col md={3}>
-                            <Form.Label >Especialidad</Form.Label>
-                            <Form.Control type="text" name="especialidad" placeholder="Especialidad" required onChange={handleChange} />
-                        </Col>
-                        <Col md={3}>
-                            <Form.Label>Matricula</Form.Label>
-                            <Form.Control type="text" name="matricula" placeholder="Matricula" required onChange={handleChange} />
-                        </Col>
-                        <Col md={1}></Col>
-                        {/*temporal*/}
-                        <Col md={4}>
+                    <Row>
+                        <Col md={6}>
                             <Form.Label>Fecha de nacimiento</Form.Label>
                             <Form.Control type="date" name="fecha_nac" placeholder="Nacionalidad" required onChange={handleChange} />
                         </Col>
-                        {/* <Col md={4}>
-                <Form.Label>Repetir contraseña</Form.Label>
-                <Form.Control type="password" placeholder="Contraseña" required onChange={handleChange} />
-                {data.password !== value.password2 &&
-                  <p className="text-dark"> No coinciden las contraseñas.</p>
-                }
-              </Col>*/}
                     </Row>
-                  
+                    <Row className="mb-5 py-5">
+                        {profesiones.map((profesion, index) => (
+                            <div key={index} className="row">
+                                <Col md={3}>
+                                    <Form.Label >Especialidad</Form.Label>
+                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" required onChange={handleChange} />
+                                </Col>
+                                <Col md={3}>
+                                    <Form.Label>Matricula</Form.Label>
+                                    <Form.Control type="text" name="matricula" placeholder="Matricula" required onChange={handleChange} />
+                                </Col>
+                                {
+                                profesiones.length - 1 === index && (
+                                    <Col md={1} className="d-flex align-items-center">
+                                        <Button variant="" onClick={handleProfesionAdd} >
+                                            <i className="bi bi-plus-square text-white"></i>
+                                        </Button>
+                                    </Col>)
+                            }
+                            </div>
+                        ))}
+                    </Row>
+
                     <Row className="">
                         <Button variant="" className="cta col-3" type="submit">
                             <span>Registrarse</span>
