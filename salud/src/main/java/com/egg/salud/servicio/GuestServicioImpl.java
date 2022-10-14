@@ -7,6 +7,8 @@ import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Rol;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.RolRepositorio;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class GuestServicioImpl implements GuestServicio {
 
+    @Autowired
+    private SimpleDateFormat formateo;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -37,8 +43,18 @@ public class GuestServicioImpl implements GuestServicio {
     @Transactional
     public ResponseEntity<?> registrarUsuario(@RequestBody RegistroGuestDTO registroDto) {
 
-        if(guestRepositorio.existsByUsuario(registroDto.getUsuario()) && guestRepositorio.existsByDni(registroDto.getDni())) {
-            return new ResponseEntity<>("el email o DNI de usuario ya existe",HttpStatus.NOT_ACCEPTABLE);
+        if (guestRepositorio.existsByUsuario(registroDto.getUsuario())) {
+            return new ResponseEntity<>("el email de usuario ya existe", HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (guestRepositorio.existsByDni(registroDto.getDni())) {
+            List<Guest> guest = guestRepositorio.findByDni(registroDto.getDni()).get();
+
+            for (Guest aux : guest) {
+                if (aux.getNacionalidad().equals(registroDto.getNacionalidad())) {
+                    return new ResponseEntity<>("el dni ya existe", HttpStatus.NOT_ACCEPTABLE);
+                }
+            }
+
         }
         Guest guest = new Guest();
         guest.setUsuario(registroDto.getUsuario());
@@ -48,7 +64,12 @@ public class GuestServicioImpl implements GuestServicio {
         guest.setNombre(registroDto.getNombre());
         guest.setObra_social(registroDto.getObra_social());
         guest.setTelefono(registroDto.getTelefono());
-        guest.setFecha_nac(registroDto.getFecha_nac());
+        try {
+            guest.setFecha_nac(formateo.parse(registroDto.getFecha_nac()));
+
+        } catch (ParseException ex) {
+            Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         guest.setNacionalidad(registroDto.getNacionalidad());
         guest.setLocalidad(registroDto.getLocalidad());
         guest.setEstado(true);
@@ -58,7 +79,7 @@ public class GuestServicioImpl implements GuestServicio {
 
         guestRepositorio.save(guest);
 
-        return new ResponseEntity<>("usuario registrado exitosamente" , HttpStatus.CREATED);
+        return new ResponseEntity<>("usuario registrado exitosamente", HttpStatus.CREATED);
     }
 
     @Override
@@ -67,9 +88,9 @@ public class GuestServicioImpl implements GuestServicio {
 
         Optional<Guest> respuesta = guestRepositorio.findById(idUsuario);
 
-        if (respuesta.isPresent()){
+        if (respuesta.isPresent()) {
             Guest guest = respuesta.get();
-            if (guest.getEstado() == true){
+            if (guest.getEstado() == true) {
                 guest.setApellido(modificarDto.getApellido());
                 guest.setNombre(modificarDto.getNombre());
                 guest.setObra_social(modificarDto.getObra_social());
@@ -79,12 +100,10 @@ public class GuestServicioImpl implements GuestServicio {
                 guest.setLocalidad(modificarDto.getLocalidad());
 
                 guestRepositorio.save(guest);
-            } else {
-                return new ResponseEntity<>("no se puede modificar un usuario inactivo" , HttpStatus.NOT_ACCEPTABLE);
             }
-            return new ResponseEntity<>("usuario modificado con éxito" , HttpStatus.OK);
+            return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario" , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -93,15 +112,15 @@ public class GuestServicioImpl implements GuestServicio {
     public ResponseEntity<?> eliminarUsuario(Long idUsuario) {
         Optional<Guest> respuesta = guestRepositorio.findById(idUsuario);
 
-        if (respuesta.isPresent()){
+        if (respuesta.isPresent()) {
             Guest guest = respuesta.get();
             guest.setEstado(false);
 
             guestRepositorio.save(guest);
-            return new ResponseEntity<>("usuario eliminado correctamente" , HttpStatus.OK);
+            return new ResponseEntity<>("usuario eliminado correctamente", HttpStatus.OK);
 
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario" , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -112,7 +131,7 @@ public class GuestServicioImpl implements GuestServicio {
         List<Guest> listaGuest = guestRepositorio.findAll();
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
 
-        for (Guest aux: listaGuest) {
+        for (Guest aux : listaGuest) {
             ResponseGuestDTO guestDTO = new ResponseGuestDTO();
             guestDTO.setApellido(aux.getApellido());
             guestDTO.setNombre(aux.getNombre());
@@ -151,11 +170,5 @@ public class GuestServicioImpl implements GuestServicio {
         
         
     }
-
-
-
-
-
-
 
 }

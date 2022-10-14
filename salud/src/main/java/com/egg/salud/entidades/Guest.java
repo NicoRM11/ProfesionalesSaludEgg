@@ -18,7 +18,6 @@ public class Guest extends Usuario{
    private String nombre;
    private String apellido;
    
-   @Column(unique=true)
    private Integer dni;
    
    private String obra_social;
