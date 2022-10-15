@@ -22,7 +22,7 @@ export const GuestRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(URL, data)
+      const response = await axios.post(URL,data)
       console.log(response);
       if (response.status === 201) {
         Swal.fire(

@@ -7,8 +7,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export const ProfesionalRegister = () => {
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "" });
-    const [profesiones, setprofesiones] = useState([{ profesion: "", matricula: ""}]);
+    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "" ,domicilio:"", especialidades:[] , matriculas:[]});
+    const [profesiones, setprofesiones] = useState([{ especialidad: "", matricula: ""}]);
+
     const handleChange = ({ target }) => {
         setdata({
             ...data,
@@ -16,10 +17,12 @@ export const ProfesionalRegister = () => {
         })
 
     }
-    const URL = "http://localhost:8080/api/guest/registrar";
+    const URL = "http://localhost:8080/api/profesional/registrar";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        addProfesionMatricula();
+        console.log(data);
         try {
             const response = await axios.post(URL, data)
             console.log(response);
@@ -45,9 +48,30 @@ export const ProfesionalRegister = () => {
 
     const handleProfesionAdd = () => {
         setprofesiones([...profesiones,
-            { profesion: "", matricula: ""}
+        { especialidad: "", matricula: ""}
         ])
     }
+
+    const handleProfesionRemove = (index) => {
+        const list = [...profesiones]
+        list.splice(index, 1)
+        setprofesiones(list)
+    }
+
+    const handleProfesionChange =(e,index) => {
+        const{name,value} =e.target;
+        const list = [...profesiones];
+        list[index][name] = value;
+        setprofesiones(list)
+    }
+
+    const addProfesionMatricula = () => { 
+        const especialidades = profesiones.map(profesion=>profesion.especialidad);
+        console.log(especialidades)
+        const matriculas = profesiones.map(profesion=>profesion.matricula);
+        setdata({...data,'especialidades':especialidades,'matriculas':matriculas});
+    }
+
     return (
         <section className="container py-5">
             <div className="row justify-content-center align-items-center">
@@ -99,24 +123,38 @@ export const ProfesionalRegister = () => {
                         </Col>
                     </Row>
                     <Row className="mb-5 py-5">
-                        {profesiones.map((profesion, index) => (
+                        {profesiones.map((p, index) => (
                             <div key={index} className="row">
                                 <Col md={3}>
                                     <Form.Label >Especialidad</Form.Label>
-                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" required onChange={handleChange} />
+                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p.especialidad} required onChange={(e)=>handleProfesionChange(e,index)} />
                                 </Col>
                                 <Col md={3}>
                                     <Form.Label>Matricula</Form.Label>
-                                    <Form.Control type="text" name="matricula" placeholder="Matricula" required onChange={handleChange} />
+                                    <Form.Control type="text" name="matricula" placeholder="Matricula" value={p.matricula} required onChange={(e)=>handleProfesionChange(e,index)} />
                                 </Col>
                                 {
-                                profesiones.length - 1 === index && (
-                                    <Col md={1} className="d-flex align-items-center">
-                                        <Button variant="" onClick={handleProfesionAdd} >
-                                            <i className="bi bi-plus-square text-white"></i>
-                                        </Button>
-                                    </Col>)
-                            }
+                                    profesiones.length - 1 === index && (
+                                        <>
+                                            <Col md={1}  className="d-flex align-items-center">
+                                                <Button variant="" onClick={handleProfesionAdd} >
+                                                <i className="bi bi-plus-square-fill text-success"></i>
+                                                </Button>
+                                            </Col>
+                                        </>
+                                    )
+                                }
+                                {
+                                    profesiones.length >1 && (
+                                        <>
+                                            <Col md={1}  className="d-flex align-items-center">
+                                                <Button variant="" onClick={()=>handleProfesionRemove(index)}>
+                                                    <i className="bi bi-dash-circle-fill " width="30" ></i>
+                                                </Button>
+                                            </Col>
+                                        </>
+                                    )
+                                }
                             </div>
                         ))}
                     </Row>
