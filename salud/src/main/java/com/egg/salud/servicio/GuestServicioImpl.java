@@ -95,7 +95,12 @@ public class GuestServicioImpl implements GuestServicio {
                 guest.setNombre(modificarDto.getNombre());
                 guest.setObra_social(modificarDto.getObra_social());
                 guest.setTelefono(modificarDto.getTelefono());
-                guest.setFecha_nac(modificarDto.getFecha_nac());
+                try {
+                    guest.setFecha_nac(formateo.parse(modificarDto.getFecha_nac()));
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 guest.setNacionalidad(modificarDto.getNacionalidad());
                 guest.setLocalidad(modificarDto.getLocalidad());
 
@@ -151,8 +156,8 @@ public class GuestServicioImpl implements GuestServicio {
     public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social) {
         List<Guest> listaGuest = guestRepositorio.listaPorObraSocial(obra_social);
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
-        
-        for (Guest aux: listaGuest) {
+
+        for (Guest aux : listaGuest) {
             ResponseGuestDTO guestDTO = new ResponseGuestDTO();
             guestDTO.setApellido(aux.getApellido());
             guestDTO.setNombre(aux.getNombre());
@@ -165,10 +170,7 @@ public class GuestServicioImpl implements GuestServicio {
             listaGuestDto.add(guestDTO);
         }
         return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
-        
-        
-        
-        
+
     }
 
 }

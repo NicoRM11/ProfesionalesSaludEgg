@@ -11,7 +11,7 @@ public class RequestGuestDTO {
     private String apellido;
     private String obra_social;
     private long telefono;
-    private Date fecha_nac;
+    private String fecha_nac;
     private String nacionalidad;
     private String localidad;
 

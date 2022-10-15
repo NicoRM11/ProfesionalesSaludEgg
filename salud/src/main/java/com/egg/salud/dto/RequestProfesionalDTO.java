@@ -14,7 +14,7 @@ public class RequestProfesionalDTO {
     private String usuario;
     private String password;
     private String nacionalidad;
-    private Date fecha_nac;
+    private String fecha_nac;
     private List<String> especialidades = new ArrayList<>();
     private List<String> matriculas = new ArrayList<>();
     private Integer dni;

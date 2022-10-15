@@ -38,9 +38,9 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
     @Override
     @Transactional
     public ResponseEntity<?> registrarUsuario(@RequestBody RegistroProfesionalDTO registroDto) {
-        
-         if(profesionalRepositorio.existsByUsuario(registroDto.getUsuario()) ) {
-            return new ResponseEntity<>("el email de usuario ya existe",HttpStatus.NOT_ACCEPTABLE);
+
+        if (profesionalRepositorio.existsByUsuario(registroDto.getUsuario())) {
+            return new ResponseEntity<>("el email de usuario ya existe", HttpStatus.NOT_ACCEPTABLE);
         }
         if (profesionalRepositorio.existsByDni(registroDto.getDni())) {
             List<Profesional> profesional = profesionalRepositorio.findByDni(registroDto.getDni()).get();
@@ -53,32 +53,32 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
         }
         Profesional profesional = new Profesional();
-        
+
         profesional.setUsuario(registroDto.getUsuario());
         profesional.setPassword(passwordEncoder.encode(registroDto.getPassword()));
         profesional.setNombre(registroDto.getNombre());
         profesional.setApellido(registroDto.getApellido());
         profesional.setDni(registroDto.getDni());
         profesional.setDomicilio(registroDto.getDomicilio());
-          try {
+        try {
             profesional.setFecha_nac(formateo.parse(registroDto.getFecha_nac()));
-           
+
         } catch (ParseException ex) {
             Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
-         }   
+        }
         profesional.setEspecialidades(registroDto.getEspecialidades());
         profesional.setMatriculas(registroDto.getMatriculas());
         profesional.setNacionalidad(registroDto.getNacionalidad());
         profesional.setEstado(true);
-        
+
         Rol roles = rolRepositorio.findByNombre("ROLE_PROFESIONAL").get();
         profesional.setRoles(Collections.singleton(roles));
 
         profesionalRepositorio.save(profesional);
-       
+
         return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
     }
-     
+
     @Override
     @Transactional
     public ResponseEntity<?> modificarUsuario(Long idUsuario, RequestProfesionalDTO modificarDto) {
@@ -92,7 +92,12 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
                 profesional.setNombre(modificarDto.getNombre());
                 profesional.setDomicilio(modificarDto.getDomicilio());
                 profesional.setEspecialidades(modificarDto.getEspecialidades());
-                profesional.setFecha_nac(modificarDto.getFecha_nac());
+                try {
+                    profesional.setFecha_nac(formateo.parse(modificarDto.getFecha_nac()));
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(ProfesionalServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 profesional.setNacionalidad(modificarDto.getNacionalidad());
                 profesional.setMatriculas(modificarDto.getMatriculas());
                 profesional.setDni(modificarDto.getDni());
@@ -106,8 +111,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
     }
-    
-     @Override
+
+    @Override
     @Transactional
     public ResponseEntity<?> eliminarUsuario(Long idUsuario) {
         Optional<Profesional> respuesta = profesionalRepositorio.findById(idUsuario);
@@ -123,7 +128,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<List<ResponseProfesionalDTO>> listar() {
@@ -146,6 +151,5 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         }
         return new ResponseEntity<>(listaProfesionalDto, HttpStatus.OK);
     }
-    
-    }
 
+}
