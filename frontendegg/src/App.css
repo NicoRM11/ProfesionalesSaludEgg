@@ -7,11 +7,13 @@ body{
 
 
 nav{
-  background-color:#98CFA1
+  background-color:#98CFA1;
+  height: 60px;
 }
 
 footer{
   background-color:#98CFA1;
+  height: 90px;
 }
 
 .btn-select-reg{
@@ -32,8 +34,13 @@ footer .h3{
   font-size: 20px;
 }
 
+.textoVerde{
+  color: #98CFA1;
+}
 
-
+.mainContenedor{
+  min-height: calc(90vh - 150px);
+}
 
 .Formulario{
   background-color:#98CFA1;

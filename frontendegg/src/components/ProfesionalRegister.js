@@ -74,8 +74,8 @@ export const ProfesionalRegister = () => {
 
     return (
         <section className="container py-5">
-            <div className="row justify-content-center align-items-center">
-                <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+            <div className="row justify-content-center align-items-center mainContenedor">
+                <Form className="Formulario col-md-8 col-xxl-12 rounded h6 text-white" onSubmit={handleSubmit}>
                     <Row className="h2 text-center">
                         <Form.Label>INGRESE SUS DATOS</Form.Label>
                     </Row>
@@ -119,7 +119,7 @@ export const ProfesionalRegister = () => {
                     <Row>
                         <Col md={6}>
                             <Form.Label>Fecha de nacimiento</Form.Label>
-                            <Form.Control type="date" name="fecha_nac" placeholder="Nacionalidad" required onChange={handleChange} />
+                            <Form.Control type="date" name="fecha_nac" required onChange={handleChange} />
                         </Col>
                     </Row>
                     <Row className="mb-5 py-5">

@@ -45,8 +45,8 @@ export const GuestRegister = () => {
   }
   return (
     <section className="container py-5">
-      <div className="row justify-content-center align-items-center">
-        <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+      <div className="row justify-content-center align-items-center mainContenedor">
+        <Form className="Formulario col-md-8 col-xxl-12 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
           <Row className="h2 text-center">
             <Form.Label>INGRESE SUS DATOS</Form.Label>
           </Row>
