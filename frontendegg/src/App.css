@@ -112,3 +112,61 @@ footer .h3{
 .cta:active {
   transform: scale(0.95);
 }
+
+
+/*Perfil Guest*/
+.encabezado {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  height: 160px;
+}
+
+.imagenGuest{  
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagenGuest img{
+  border-radius: 100%;
+  height: 4em;
+  width: 4em;
+}
+
+.nombre h2{
+  font-size: 65%;
+  
+}
+
+.dni{
+  display: flex;
+}
+
+.dni h3{
+  font-size: 45%;
+  
+}
+
+.datosUsuario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.nombre{
+  display: flex;
+}
+
+.darseDeBaja{
+  text-decoration: none;
+  font-size: 1.1em;
+  margin-top: 2%;
+  color:#98CFA1;
+  font-weight: 500;
+}
+
+
