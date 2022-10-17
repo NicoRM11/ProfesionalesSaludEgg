@@ -133,17 +133,20 @@ public class GuestServicioImpl implements GuestServicio {
         List<Guest> listaGuest = guestRepositorio.findAll();
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
 
-        for (Guest aux : listaGuest) {
-            ResponseGuestDTO guestDTO = new ResponseGuestDTO();
-            guestDTO.setApellido(aux.getApellido());
-            guestDTO.setNombre(aux.getNombre());
-            guestDTO.setFecha_nac(aux.getFecha_nac());
-            guestDTO.setNacionalidad(aux.getNacionalidad());
-            guestDTO.setObra_social(aux.getObra_social());
-            guestDTO.setTelefono(aux.getTelefono());
-            guestDTO.setLocalidad(aux.getLocalidad());
-            guestDTO.setEstado(aux.getEstado());
-            listaGuestDto.add(guestDTO);
+        for (Guest guest : listaGuest) {
+            ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+            responseGuest.setNombre(guest.getNombre());
+            responseGuest.setApellido(guest.getApellido());
+            responseGuest.setDni(guest.getDni());
+            responseGuest.setUrlFoto(guest.getUrlFoto());
+            responseGuest.setFecha_nac(guest.getFecha_nac());
+            responseGuest.setLocalidad(guest.getLocalidad());
+            responseGuest.setNacionalidad(guest.getNacionalidad());
+            responseGuest.setPassword(guest.getPassword());
+            responseGuest.setObra_social(guest.getObra_social());
+            responseGuest.setUsuario(guest.getUsuario());
+            responseGuest.setEstado(guest.getEstado());
+            listaGuestDto.add(responseGuest);
         }
         return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
     }
@@ -154,20 +157,55 @@ public class GuestServicioImpl implements GuestServicio {
         List<Guest> listaGuest = guestRepositorio.listaPorObraSocial(obra_social);
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
 
-        for (Guest aux : listaGuest) {
-            ResponseGuestDTO guestDTO = new ResponseGuestDTO();
-            guestDTO.setApellido(aux.getApellido());
-            guestDTO.setNombre(aux.getNombre());
-            guestDTO.setFecha_nac(aux.getFecha_nac());
-            guestDTO.setNacionalidad(aux.getNacionalidad());
-            guestDTO.setObra_social(aux.getObra_social());
-            guestDTO.setTelefono(aux.getTelefono());
-            guestDTO.setLocalidad(aux.getLocalidad());
-            guestDTO.setEstado(aux.getEstado());
-            listaGuestDto.add(guestDTO);
+        for (Guest guest : listaGuest) {
+            ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+            responseGuest.setNombre(guest.getNombre());
+            responseGuest.setApellido(guest.getApellido());
+            responseGuest.setDni(guest.getDni());
+            responseGuest.setUrlFoto(guest.getUrlFoto());
+            responseGuest.setFecha_nac(guest.getFecha_nac());
+            responseGuest.setLocalidad(guest.getLocalidad());
+            responseGuest.setNacionalidad(guest.getNacionalidad());
+            responseGuest.setPassword(guest.getPassword());
+            responseGuest.setObra_social(guest.getObra_social());
+            responseGuest.setUsuario(guest.getUsuario());
+            responseGuest.setEstado(guest.getEstado());
+            listaGuestDto.add(responseGuest);
         }
         return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
 
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<?> buscarPorEmail(String usuario) {
+        
+        Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
+        if (respuesta.isPresent()) {
+            Guest guest = respuesta.get();
+            ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+            responseGuest.setNombre(guest.getNombre());
+            responseGuest.setApellido(guest.getApellido());
+            responseGuest.setDni(guest.getDni());
+            responseGuest.setUrlFoto(guest.getUrlFoto());
+            responseGuest.setFecha_nac(guest.getFecha_nac());
+            responseGuest.setLocalidad(guest.getLocalidad());
+            responseGuest.setNacionalidad(guest.getNacionalidad());
+            responseGuest.setPassword(guest.getPassword());
+            responseGuest.setObra_social(guest.getObra_social());
+            responseGuest.setUsuario(guest.getUsuario());
+            responseGuest.setEstado(guest.getEstado());
+            
+            return new ResponseEntity<>(responseGuest, HttpStatus.ACCEPTED);
+            
+        } else {
+           return new ResponseEntity<>("no se encontro al usuario", HttpStatus.NOT_FOUND);
+        }
+        
+        
+        
+        
+        
     }
 
 }

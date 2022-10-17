@@ -43,6 +43,11 @@ public class GuestControlador {
     public ResponseEntity<?> eliminar(@PathVariable(name = "usuario") String usuario){
         return guestServicio.eliminarUsuario(usuario);
     }
+    
+    @GetMapping("/{usuario}")
+    public ResponseEntity<?> buscarPorEmail(@PathVariable String usuario){
+        return guestServicio.buscarPorEmail(usuario);
+    }
 
     @GetMapping("/listar/{obra_social}")
     public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(@PathVariable(name= "obra_social") String obra_social){

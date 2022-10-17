@@ -20,4 +20,6 @@ public interface GuestServicio {
 
     public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social); 
     
+    public ResponseEntity<?> buscarPorEmail(String usuario);
+    
 }
