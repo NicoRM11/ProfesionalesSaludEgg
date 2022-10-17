@@ -6,44 +6,40 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-
-export const GuestProfile = () => {
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
-
-    const [edicion, setEdicion] = useState(false);
-
-    const username = JSON.parse(localStorage.getItem('usuario'))
-    const password = JSON.parse(localStorage.getItem('password'))
+export const ProfesionalProfile = () => {
+    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidades: [], matriculas: [] });
+    const [profesiones, setprofesiones] = useState([{ especialidad: "", matricula: "" }]);
 
     useEffect(() => {
-        cargarPerfil();
+        // cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/${username}`;
+    const URL = "http://localhost:8080/api/profesional";
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
+                params: {
+                    usuario: data.usuario
                 }
-            }
-            );
-            console.log(response.data)
-            setdata(response.data)
-
+            })
+            console.log(response);
         } catch (error) {
-
+            if (error.response.status === 406) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `No se pudo cargar el perfil, ${error.response.data} !`,
+                })
+            }
             console.log(error)
         }
     }
 
     const handleChange = ({ target }) => {
-        /*setEdicion(true);
         setdata({
             ...data,
             [target.name]: target.value
-        })*/
+        })
     }
 
 
@@ -70,6 +66,32 @@ export const GuestProfile = () => {
             }
             console.log(error)
         }
+    }
+
+    const handleProfesionAdd = () => {
+        setprofesiones([...profesiones,
+        { especialidad: "", matricula: ""}
+        ])
+    }
+
+    const handleProfesionRemove = (index) => {
+        const list = [...profesiones]
+        list.splice(index, 1)
+        setprofesiones(list)
+    }
+
+    const handleProfesionChange =(e,index) => {
+        const{name,value} =e.target;
+        const list = [...profesiones];
+        list[index][name] = value;
+        setprofesiones(list)
+    }
+
+    const addProfesionMatricula = () => { 
+        const especialidades = profesiones.map(profesion=>profesion.especialidad);
+        console.log(especialidades)
+        const matriculas = profesiones.map(profesion=>profesion.matricula);
+        setdata({...data,'especialidades':especialidades,'matriculas':matriculas});
     }
     return (
 
@@ -117,11 +139,9 @@ export const GuestProfile = () => {
                     <div className='px-5'>
 
                         <Row className="mb-4">
-
-
                             <Col md={6}>
-                                <Form.Label>Localidad</Form.Label>
-                                <Form.Control type="text" name="localidad" placeholder="Localidad" value={data.localidad} required onChange={handleChange} />
+                                <Form.Label>Domicilio</Form.Label>
+                                <Form.Control type="text" name="domicilio" placeholder="Domicilio" value={data.domicilio} required onChange={handleChange} />
                             </Col>
                             <Col md={1}></Col>
                             <Col md={4}>
@@ -131,8 +151,8 @@ export const GuestProfile = () => {
                         </Row>
                         <Row className="mb-4">
                             <Col md={6}>
-                                <Form.Label>Obra Social</Form.Label>
-                                <Form.Control type="text" name="obra_social" placeholder="Obra Social" value={data.obra_social} required onChange={handleChange} />
+                                <Form.Label>Nacionalidad</Form.Label>
+                                <Form.Control type="text" name="nacionalidad" placeholder="Nacionalidad" value={data.nacionalidad} required onChange={handleChange} />
                             </Col>
                             <Col md={1}></Col>
                             <Col md={4}>
@@ -142,32 +162,55 @@ export const GuestProfile = () => {
                         </Row>
                         <Row className="mb-4">
                             <Col md={6}>
-                                <Form.Label>Telefono</Form.Label>
-                                <Form.Control type="number" name="telefono" placeholder="Telefono" value={data.telefono} required onChange={handleChange} />
-                            </Col>
-                            <Col md={1}></Col>
-                            {/*temporal*/}
-                            <Col md={4}>
                                 <Form.Label>Fecha de nacimiento</Form.Label>
                                 <Form.Control type="date" name="fecha_nac" value={data.fecha_nac} required onChange={handleChange} />
                             </Col>
                         </Row>
                         <Row className="mb-4">
-                            <Col md={6}>
-                                <Form.Label>Nacionalidad</Form.Label>
-                                <Form.Control type="text" name="nacionalidad" placeholder="Nacionalidad" value={data.nacionalidad} required onChange={handleChange} />
-                            </Col>
+                            {profesiones.map((p, index) => (
+                                <div key={index} className="row">
+                                    <Col md={3}>
+                                        <Form.Label >Especialidad</Form.Label>
+                                        <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p.especialidad} required onChange={(e) => handleProfesionChange(e, index)} />
+                                    </Col>
+                                    <Col md={3}>
+                                        <Form.Label>Matricula</Form.Label>
+                                        <Form.Control type="text" name="matricula" placeholder="Matricula" value={p.matricula} required onChange={(e) => handleProfesionChange(e, index)} />
+                                    </Col>
+                                    {
+                                        profesiones.length - 1 === index && (
+                                            <>
+                                                <Col md={1} className="d-flex align-items-center">
+                                                    <Button variant="" onClick={handleProfesionAdd} >
+                                                        <i className="bi bi-plus-square-fill text-success"></i>
+                                                    </Button>
+                                                </Col>
+                                            </>
+                                        )
+                                    }
+                                    {
+                                        profesiones.length > 1 && (
+                                            <>
+                                                <Col md={1} className="d-flex align-items-center">
+                                                    <Button variant="" onClick={() => handleProfesionRemove(index)}>
+                                                        <i className="bi bi-dash-circle-fill " width="30" ></i>
+                                                    </Button>
+                                                </Col>
+                                            </>
+                                        )
+                                    }
+                                </div>
+                            ))}
                         </Row>
                     </div>
                     <Row className="mb-4">
-                        {edicion === true && <Button variant="" className="cta col-sm-3" type="submit">
+                        <Button variant="" className="cta col-sm-3" type="submit">
                             <span>Guardar</span>
                             <svg viewBox="0 0 13 10" height="10px" width="15px">
                                 <path d="M1,5 L11,5"></path>
                                 <polyline points="8 1 12 5 8 9"></polyline>
                             </svg>
-                        </Button>}
-
+                        </Button>
                     </Row>
                 </Form>
             </div>
@@ -179,6 +222,7 @@ export const GuestProfile = () => {
         </section>
     )
 }
+
 
 
 
