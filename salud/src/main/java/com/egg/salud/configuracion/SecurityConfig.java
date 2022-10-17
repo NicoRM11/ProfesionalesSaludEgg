@@ -40,16 +40,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/inicio").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
                 .antMatchers("/api/guest/registrar").permitAll()
                 .antMatchers("/api/profesional/registrar").permitAll()
-                .antMatchers(HttpMethod.PUT , "/api/guest/{id}" ).hasAnyRole("ADMIN" , "GUEST")
-                .antMatchers(HttpMethod.PUT , "/api/profesional/{id}").hasAnyRole("ADMIN", "PROFESIONAL")
-                .antMatchers(HttpMethod.PUT , "/api/admin/{id}").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE , "/api/guest/{id}" ).hasAnyRole("ADMIN" , "GUEST")
-                .antMatchers(HttpMethod.DELETE , "/api/profesional/{id}" ).hasAnyRole("ADMIN" , "PROFESIONAL")
-                .antMatchers(HttpMethod.DELETE , "/api/admin/{id}" ).hasAnyRole("ADMIN")
-                .antMatchers("/api/guest/listar").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
-                .antMatchers("/api/profesional/listar").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
-                .antMatchers("/api/admin/listar").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT , "/api/guest/{usuario}" ).hasAnyRole("ADMIN" , "GUEST")
+                .antMatchers(HttpMethod.PUT , "/api/profesional/{usuario}").hasAnyRole("ADMIN", "PROFESIONAL")
+                .antMatchers(HttpMethod.PUT , "/api/admin/{usuario}").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE , "/api/guest/{usuario}" ).hasAnyRole("ADMIN" , "GUEST")
+                .antMatchers(HttpMethod.DELETE , "/api/profesional/{usuario}" ).hasAnyRole("ADMIN" , "PROFESIONAL")
+                .antMatchers(HttpMethod.DELETE , "/api/admin/{usuario}" ).hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET , "/api/guest/lista").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
+                .antMatchers(HttpMethod.GET , "/api/profesional/lista").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
+                .antMatchers(HttpMethod.GET , "/api/admin/lista").hasAnyRole("ADMIN")
+                .and().httpBasic()
                 .and().csrf().disable();
+                        
     }
 
 

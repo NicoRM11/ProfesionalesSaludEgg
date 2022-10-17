@@ -22,5 +22,7 @@ public interface ProfesionalRepositorio extends JpaRepository <Profesional, Long
     public Optional<List<Profesional>> findByDni(Integer dni);
 
     public Boolean existsByDni(Integer dni);
+    
+    public Optional<Profesional> findByUsuario(String usuario);
 
 }

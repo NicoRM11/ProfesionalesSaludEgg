@@ -3,9 +3,8 @@ package com.egg.salud.servicio;
 import com.egg.salud.dto.LoginDTO;
 import com.egg.salud.dto.RequestUsuarioDTO;
 import com.egg.salud.dto.ResponseUsuarioDTO;
-import com.egg.salud.entidades.Rol;
 import com.egg.salud.entidades.Usuario;
-import com.egg.salud.repositorios.RolRepositorio;
+import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,8 +33,7 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-    @Autowired
-    private RolRepositorio rolRepositorio;
+    
 
     @Transactional
     @Override
@@ -48,8 +46,7 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
             u.setUsuario(request.getUsuario());
             u.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
             u.setEstado(true);
-            Rol roles = rolRepositorio.findByNombre("ROLE_ADMIN").get();
-            u.setRoles(Collections.singleton(roles));
+            u.setRol(Rol.ADMIN);
 
             usuarioRepositorio.save(u);
             return new ResponseEntity<>("usuario registrado exitosamente", HttpStatus.CREATED);
@@ -58,8 +55,8 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Transactional
     @Override
-    public ResponseEntity<?> modificarAdmin(String request, Long id) {
-        Optional<Usuario> busqueda = usuarioRepositorio.findById(id);
+    public ResponseEntity<?> modificarAdmin(String request, String usuario) {
+        Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
             u.setPassword(new BCryptPasswordEncoder().encode(request));
@@ -88,8 +85,8 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Transactional
     @Override
-    public ResponseEntity<?> eliminarAdmin(Long id) {
-        Optional<Usuario> busqueda = usuarioRepositorio.findById(id);
+    public ResponseEntity<?> eliminarAdmin(String usuario) {
+        Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
             u.setEstado(false);
@@ -130,7 +127,7 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
             //lista de permisos
             List<GrantedAuthority> permisos = new ArrayList();
 
-            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRoles().toString());
+            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toString());
 
             permisos.add(p);
 
@@ -146,6 +143,11 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ResponseEntity<?> buscarUsuario(String usuario) {
+        return null;
     }
 
 }

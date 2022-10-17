@@ -4,9 +4,8 @@ import com.egg.salud.dto.RequestGuestDTO;
 import com.egg.salud.dto.RegistroGuestDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.entidades.Guest;
-import com.egg.salud.entidades.Rol;
+import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.repositorios.GuestRepositorio;
-import com.egg.salud.repositorios.RolRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import org.modelmapper.ModelMapper;
@@ -35,8 +34,7 @@ public class GuestServicioImpl implements GuestServicio {
     private ModelMapper modelMapper;
     @Autowired
     private GuestRepositorio guestRepositorio;
-    @Autowired
-    private RolRepositorio rolRepositorio;
+    
 
     @Override
     @Transactional
@@ -73,8 +71,7 @@ public class GuestServicioImpl implements GuestServicio {
         guest.setLocalidad(registroDto.getLocalidad());
         guest.setEstado(true);
 
-        Rol roles = rolRepositorio.findByNombre("ROLE_GUEST").get();
-        guest.setRoles(Collections.singleton(roles));
+        guest.setRol(Rol.GUEST);
 
         guestRepositorio.save(guest);
 

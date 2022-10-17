@@ -10,9 +10,9 @@ public interface ProfesionalServicio {
 
     public ResponseEntity<?> registrarUsuario(RegistroProfesionalDTO registroDto);
 
-    public ResponseEntity<?> modificarUsuario(Long idUsuario, RequestProfesionalDTO modificarDto);
+    public ResponseEntity<?> modificarUsuario(String usuario, RequestProfesionalDTO modificarDto);
 
-    public ResponseEntity<?> eliminarUsuario(Long idUsuario);
+    public ResponseEntity<?> eliminarUsuario(String usuario);
 
     public ResponseEntity<List<ResponseProfesionalDTO>> listar();
 

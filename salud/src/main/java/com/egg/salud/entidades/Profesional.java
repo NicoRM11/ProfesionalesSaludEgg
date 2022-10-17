@@ -1,5 +1,6 @@
 package com.egg.salud.entidades;
 
+import com.egg.salud.enumeraciones.Rol;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,8 +38,8 @@ public class Profesional extends Usuario {
     @OneToMany(mappedBy = "id_profesional", cascade = CascadeType.ALL)
     private List<Oferta> oferta;
 
-    public Profesional(String nombre, String apellido, String urlFoto, String nacionalidad, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Set<Rol> roles) {
-        super(id, usuario, password, estado, roles);
+    public Profesional(String nombre, String apellido, String urlFoto, String nacionalidad, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {
+        super(id, usuario, password, estado, rol);
         this.nombre = nombre;
         this.apellido = apellido;
         this.urlFoto = urlFoto;
@@ -48,6 +49,8 @@ public class Profesional extends Usuario {
         this.domicilio = domicilio;
         this.oferta = oferta;
     }
+
+   
 
     
     

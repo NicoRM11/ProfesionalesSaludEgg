@@ -1,12 +1,11 @@
 package com.egg.salud.entidades;
 
+import com.egg.salud.enumeraciones.Rol;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity(name = "usuario")
 @Data
@@ -23,10 +22,9 @@ public class Usuario {
     
     protected String password;
     protected Boolean estado;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
-    protected Set<Rol> roles = new HashSet<>();
+    
+    @Enumerated(EnumType.STRING)
+    protected Rol rol;
 
 
 

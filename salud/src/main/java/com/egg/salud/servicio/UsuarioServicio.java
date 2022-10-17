@@ -11,12 +11,14 @@ public interface UsuarioServicio {
 
     public ResponseEntity<?> registrarAdmin(RequestUsuarioDTO request);
 
-    public ResponseEntity<?> modificarAdmin(String request, Long id);
+    public ResponseEntity<?> modificarAdmin(String request, String usuario);
 
     public ResponseEntity<List<ResponseUsuarioDTO>> listarAdmin();
 
-    public ResponseEntity<?> eliminarAdmin(Long id);
+    public ResponseEntity<?> eliminarAdmin(String usuario);
     
     public ResponseEntity<?> login(LoginDTO login);
+    
+    public ResponseEntity<?> buscarUsuario(String usuario);
 
 }

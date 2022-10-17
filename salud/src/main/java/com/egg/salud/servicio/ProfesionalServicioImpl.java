@@ -4,9 +4,8 @@ import com.egg.salud.dto.RegistroProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Profesional;
-import com.egg.salud.entidades.Rol;
+import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
-import com.egg.salud.repositorios.RolRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,8 +30,6 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
     private SimpleDateFormat formateo;
     @Autowired
     private ProfesionalRepositorio profesionalRepositorio;
-    @Autowired
-    private RolRepositorio rolRepositorio;
 
     @Override
     @Transactional
@@ -70,8 +67,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         profesional.setNacionalidad(registroDto.getNacionalidad());
         profesional.setEstado(true);
 
-        Rol roles = rolRepositorio.findByNombre("ROLE_PROFESIONAL").get();
-        profesional.setRoles(Collections.singleton(roles));
+        
+        profesional.setRol(Rol.PROFESIONAL);
 
         profesionalRepositorio.save(profesional);
 
@@ -80,9 +77,9 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> modificarUsuario(Long idUsuario, RequestProfesionalDTO modificarDto) {
+    public ResponseEntity<?> modificarUsuario(String usuario, RequestProfesionalDTO modificarDto) {
 
-        Optional<Profesional> respuesta = profesionalRepositorio.findById(idUsuario);
+        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
             Profesional profesional = respuesta.get();
@@ -113,8 +110,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> eliminarUsuario(Long idUsuario) {
-        Optional<Profesional> respuesta = profesionalRepositorio.findById(idUsuario);
+    public ResponseEntity<?> eliminarUsuario(String usuario) {
+        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
             Profesional profesional = respuesta.get();

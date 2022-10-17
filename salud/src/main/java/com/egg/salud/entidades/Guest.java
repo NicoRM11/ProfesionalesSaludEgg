@@ -1,6 +1,7 @@
 
 package com.egg.salud.entidades;
 
+import com.egg.salud.enumeraciones.Rol;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +34,8 @@ public class Guest extends Usuario{
     @OneToMany(mappedBy ="id_user", cascade=CascadeType.ALL)
     private List<Oferta> oferta;
 
-    public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, Long id, String usuario, String contraseña, Boolean estado, Set<Rol> roles) {
-        super(id, usuario, contraseña, estado, roles);
+    public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {
+        super(id, usuario, password, estado, rol);
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -43,12 +44,8 @@ public class Guest extends Usuario{
         this.fecha_nac = fecha_nac;
         this.nacionalidad = nacionalidad;
         this.urlFoto = urlFoto;
-        this.localidad=localidad;
+        this.localidad = localidad;
+        this.oferta = oferta;
     }
-
-    
-
-    
-    
     
 }

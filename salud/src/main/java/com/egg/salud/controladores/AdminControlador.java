@@ -24,14 +24,14 @@ public class AdminControlador {
         return usuarioServicio.registrarAdmin(request);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> modificar(@RequestBody String request , @PathVariable Long id){
-        return usuarioServicio.modificarAdmin(request,id);
+    @PutMapping("/{usuario}")
+    public ResponseEntity<?> modificar(@RequestBody String request , @PathVariable String usuario){
+        return usuarioServicio.modificarAdmin(request,usuario);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
-        return usuarioServicio.eliminarAdmin(id);
+    @DeleteMapping("/{usuario}")
+    public ResponseEntity<?> eliminar(@PathVariable String usuario){
+        return usuarioServicio.eliminarAdmin(usuario);
     }
     
 }
