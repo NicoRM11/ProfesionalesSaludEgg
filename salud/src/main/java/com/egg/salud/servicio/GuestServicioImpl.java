@@ -12,13 +12,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -80,9 +78,9 @@ public class GuestServicioImpl implements GuestServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> modificarUsuario(Long idUsuario, RequestGuestDTO modificarDto) {
+    public ResponseEntity<?> modificarUsuario(String usuario, RequestGuestDTO modificarDto) {
 
-        Optional<Guest> respuesta = guestRepositorio.findById(idUsuario);
+        Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
             Guest guest = respuesta.get();
@@ -113,8 +111,8 @@ public class GuestServicioImpl implements GuestServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> eliminarUsuario(Long idUsuario) {
-        Optional<Guest> respuesta = guestRepositorio.findById(idUsuario);
+    public ResponseEntity<?> eliminarUsuario(String usuario) {
+        Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
             Guest guest = respuesta.get();

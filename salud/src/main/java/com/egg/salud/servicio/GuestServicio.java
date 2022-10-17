@@ -12,9 +12,9 @@ public interface GuestServicio {
 
     public ResponseEntity<?> registrarUsuario(RegistroGuestDTO registroDto);
 
-    public ResponseEntity<?> modificarUsuario(Long idUsuario, RequestGuestDTO modificarDto);
+    public ResponseEntity<?> modificarUsuario(String usuario, RequestGuestDTO modificarDto);
 
-    public ResponseEntity<?> eliminarUsuario(Long idUsuario);
+    public ResponseEntity<?> eliminarUsuario(String usuario);
 
     public ResponseEntity<List<ResponseGuestDTO>> listar();
 

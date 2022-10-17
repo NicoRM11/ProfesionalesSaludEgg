@@ -34,14 +34,14 @@ public class GuestControlador {
         return guestServicio.listar();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> modificar(@RequestBody RequestGuestDTO requestGuestDTO , @PathVariable(name = "id")Long id){
-        return guestServicio.modificarUsuario(id , requestGuestDTO);
+    @PutMapping("/{usuario}")
+    public ResponseEntity<?> modificar(@RequestBody RequestGuestDTO requestGuestDTO , @PathVariable(name = "usuario")String usuario){
+        return guestServicio.modificarUsuario(usuario , requestGuestDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable(name = "id") Long id){
-        return guestServicio.eliminarUsuario(id);
+    @DeleteMapping("/{usuario}")
+    public ResponseEntity<?> eliminar(@PathVariable(name = "usuario") String usuario){
+        return guestServicio.eliminarUsuario(usuario);
     }
 
     @GetMapping("/listar/{obra_social}")
