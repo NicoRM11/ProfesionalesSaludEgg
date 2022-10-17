@@ -132,20 +132,54 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         List<Profesional> listaProfesional = profesionalRepositorio.findAll();
         List<ResponseProfesionalDTO> listaProfesionalDto = new ArrayList<>();
 
-        for (Profesional aux : listaProfesional) {
-            ResponseProfesionalDTO profesionalDTO = new ResponseProfesionalDTO();
-            profesionalDTO.setApellido(aux.getApellido());
-            profesionalDTO.setNombre(aux.getNombre());
-            profesionalDTO.setUsuario(aux.getUsuario());
-            profesionalDTO.setFecha_nac(aux.getFecha_nac());
-            profesionalDTO.setNacionalidad(aux.getNacionalidad());
-            profesionalDTO.setEspecialidades(aux.getEspecialidades());
-            profesionalDTO.setMatriculas(aux.getMatriculas());
-            profesionalDTO.setDomicilio(aux.getDomicilio());
-            profesionalDTO.setEstado(aux.getEstado());
-            listaProfesionalDto.add(profesionalDTO);
+        for (Profesional profesional : listaProfesional) {
+            ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
+            responseProfesional.setApellido(profesional.getApellido());
+            responseProfesional.setDomicilio(profesional.getDomicilio());
+            responseProfesional.setMatriculas(profesional.getMatriculas());
+            responseProfesional.setEspecialidades(profesional.getEspecialidades());
+            responseProfesional.setFecha_nac(profesional.getFecha_nac());
+            responseProfesional.setNombre(profesional.getNombre());
+            responseProfesional.setUsuario(profesional.getUsuario());
+            responseProfesional.setDni(profesional.getDni());
+            responseProfesional.setUrlFoto(profesional.getUrlFoto());
+            responseProfesional.setPassword(profesional.getPassword());
+            responseProfesional.setNacionalidad(profesional.getNacionalidad());
+            responseProfesional.setEstado(profesional.getEstado());
+            
+            listaProfesionalDto.add(responseProfesional);
         }
         return new ResponseEntity<>(listaProfesionalDto, HttpStatus.OK);
+    }
+    
+    @Override
+    public ResponseEntity<?> buscarPorEmail(String usuario){
+        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
+        if(respuesta.isPresent()){
+            Profesional profesional = respuesta.get();
+            ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
+            responseProfesional.setApellido(profesional.getApellido());
+            responseProfesional.setDomicilio(profesional.getDomicilio());
+            responseProfesional.setMatriculas(profesional.getMatriculas());
+            responseProfesional.setEspecialidades(profesional.getEspecialidades());
+            responseProfesional.setFecha_nac(profesional.getFecha_nac());
+            responseProfesional.setNombre(profesional.getNombre());
+            responseProfesional.setUsuario(profesional.getUsuario());
+            responseProfesional.setDni(profesional.getDni());
+            responseProfesional.setUrlFoto(profesional.getUrlFoto());
+            responseProfesional.setPassword(profesional.getPassword());
+            responseProfesional.setNacionalidad(profesional.getNacionalidad());
+            responseProfesional.setEstado(profesional.getEstado());
+            
+            return new ResponseEntity<>(responseProfesional, HttpStatus.ACCEPTED);
+            
+        }else{
+            return new ResponseEntity<>("no se encontro el usuario", HttpStatus.NOT_ACCEPTABLE);
+        }
+        
+        
+        
+        
     }
 
 }

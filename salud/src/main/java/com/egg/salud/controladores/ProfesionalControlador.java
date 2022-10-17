@@ -48,4 +48,8 @@ public class ProfesionalControlador {
         return profesionalServicio.listar();
     }
 
+    @GetMapping("/{usuario}")
+    public ResponseEntity<?>buscarPorEmail(@PathVariable String usuario){
+        return profesionalServicio.buscarPorEmail(usuario);
+    }
 }

@@ -15,5 +15,7 @@ public interface ProfesionalServicio {
     public ResponseEntity<?> eliminarUsuario(String usuario);
 
     public ResponseEntity<List<ResponseProfesionalDTO>> listar();
+    
+    public ResponseEntity<?> buscarPorEmail(String usuario);
 
 }
