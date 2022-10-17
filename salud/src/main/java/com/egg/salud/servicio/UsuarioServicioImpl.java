@@ -1,5 +1,6 @@
 package com.egg.salud.servicio;
 
+import com.egg.salud.dto.LoginDTO;
 import com.egg.salud.dto.RequestUsuarioDTO;
 import com.egg.salud.dto.ResponseUsuarioDTO;
 import com.egg.salud.entidades.Rol;
@@ -17,16 +18,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
-public class UsuarioServicioImpl implements UsuarioServicio{
+public class UsuarioServicioImpl implements UsuarioServicio , UserDetailsService{
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private RolRepositorio rolRepositorio;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -36,7 +45,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         } else {
             Usuario u = new Usuario();
             u.setUsuario(request.getUsuario());
-            u.setPassword(passwordEncoder.encode(request.getPassword()));
+            u.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
             u.setEstado(true);
             Rol roles = rolRepositorio.findByNombre("ROLE_ADMIN").get();
             u.setRoles(Collections.singleton(roles));
@@ -52,7 +61,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         Optional<Usuario> busqueda = usuarioRepositorio.findById(id);
         if (busqueda.isPresent()){
             Usuario u = busqueda.get();
-            u.setPassword(passwordEncoder.encode(request));
+            u.setPassword(new BCryptPasswordEncoder().encode(request));
             usuarioRepositorio.save(u);
 
             return new ResponseEntity<>("usuario modificado con éxito" , HttpStatus.OK);
@@ -89,7 +98,59 @@ public class UsuarioServicioImpl implements UsuarioServicio{
             return new ResponseEntity<>("no se encontró el id de usuario" , HttpStatus.NOT_FOUND);
         }
     }
+    
+    @Override
+    public ResponseEntity<?> login(LoginDTO login) {
+        
+        Optional<Usuario> respuesta = usuarioRepositorio.findByUsuario(login.getUsuario());
+        
+        if (respuesta.isPresent()) {
+            Usuario usuario = respuesta.get();   
+            User user = (User) loadUserByUsername(usuario.getUsuario());
+            return new ResponseEntity<>(user , HttpStatus.ACCEPTED);
+//            if (usuario.getPassword().equals(login.getPassword())) {
+//             User user = (User) loadUserByUsername(usuario.getUsuario());
+//             return new ResponseEntity<>(user , HttpStatus.ACCEPTED);
+//            } else{
+//             return new ResponseEntity<>("contraseña incorrecta" , HttpStatus.NOT_ACCEPTABLE);
+//            }
+        }else{
+          return new ResponseEntity<>("el email ingresado no se encuentra registrado" , HttpStatus.NOT_FOUND);
+        }
+        
+    }
+    
+    
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+             
+        Usuario usuario = usuarioRepositorio.findByUsuario(email).get();
+        
+        if (usuario != null) {
+            
+            //lista de permisos
+            List<GrantedAuthority> permisos = new ArrayList();
+            
+            GrantedAuthority p  = new SimpleGrantedAuthority("ROLE_" + usuario.getRoles().toString());
+            
+            permisos.add(p);
+            
+            //recuperar sesion de usuario ya logueado
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            
+            HttpSession session = attr.getRequest().getSession(true);
+                    
+            session.setAttribute("usuariosession", usuario);
+            
+            
+            return new User(usuario.getUsuario() , usuario.getPassword() , permisos);
+             
+        } else {
+            return null;
+        }
+    }
 
-
-
+   
 }
+
+

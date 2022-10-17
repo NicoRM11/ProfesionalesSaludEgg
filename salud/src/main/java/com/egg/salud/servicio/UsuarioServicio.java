@@ -1,5 +1,6 @@
 package com.egg.salud.servicio;
 
+import com.egg.salud.dto.LoginDTO;
 import com.egg.salud.dto.RequestUsuarioDTO;
 import com.egg.salud.dto.ResponseUsuarioDTO;
 import org.springframework.http.ResponseEntity;
@@ -15,5 +16,7 @@ public interface UsuarioServicio {
     public ResponseEntity<List<ResponseUsuarioDTO>> listarAdmin();
 
     public ResponseEntity<?> eliminarAdmin(Long id);
+    
+    public ResponseEntity<?> login(LoginDTO login);
 
 }

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "http://localhost:3000")
-public class UsuarioControlador {
+public class AdminControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @GetMapping("/all")
+    @GetMapping("/lista")
     public ResponseEntity<?> listar(){
         return usuarioServicio.listarAdmin();
     }
@@ -33,6 +33,5 @@ public class UsuarioControlador {
     public ResponseEntity<?> eliminar(@PathVariable Long id){
         return usuarioServicio.eliminarAdmin(id);
     }
-
-
+    
 }

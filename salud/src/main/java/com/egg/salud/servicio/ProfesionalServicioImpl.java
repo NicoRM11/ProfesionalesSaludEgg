@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +31,6 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
     private SimpleDateFormat formateo;
     @Autowired
     private ProfesionalRepositorio profesionalRepositorio;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private RolRepositorio rolRepositorio;
 
@@ -55,7 +54,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         Profesional profesional = new Profesional();
 
         profesional.setUsuario(registroDto.getUsuario());
-        profesional.setPassword(passwordEncoder.encode(registroDto.getPassword()));
+        profesional.setPassword(new BCryptPasswordEncoder().encode(registroDto.getPassword()));
         profesional.setNombre(registroDto.getNombre());
         profesional.setApellido(registroDto.getApellido());
         profesional.setDni(registroDto.getDni());
@@ -102,7 +101,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
                 profesional.setMatriculas(modificarDto.getMatriculas());
                 profesional.setDni(modificarDto.getDni());
                 profesional.setUsuario(modificarDto.getUsuario());
-                profesional.setPassword(passwordEncoder.encode(modificarDto.getPassword()));
+                profesional.setPassword(new BCryptPasswordEncoder().encode(modificarDto.getPassword()));
 
                 profesionalRepositorio.save(profesional);
             }

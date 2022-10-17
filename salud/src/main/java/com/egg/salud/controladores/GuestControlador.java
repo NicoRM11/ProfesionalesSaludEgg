@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 
 @RestController
@@ -30,20 +29,17 @@ public class GuestControlador {
         return guestServicio.registrarUsuario(registroGuestDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/lista")
     public ResponseEntity<List<ResponseGuestDTO>> listar(){
         return guestServicio.listar();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> modificar(@RequestBody RequestGuestDTO requestGuestDTO , @PathVariable(name = "id")Long id){
         return guestServicio.modificarUsuario(id , requestGuestDTO);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> eliminar(@PathVariable(name = "id") Long id){
         return guestServicio.eliminarUsuario(id);
     }

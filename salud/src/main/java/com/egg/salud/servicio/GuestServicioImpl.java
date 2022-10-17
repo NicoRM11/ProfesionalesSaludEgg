@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class GuestServicioImpl implements GuestServicio {
@@ -34,8 +35,6 @@ public class GuestServicioImpl implements GuestServicio {
     private ModelMapper modelMapper;
     @Autowired
     private GuestRepositorio guestRepositorio;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private RolRepositorio rolRepositorio;
 
@@ -60,7 +59,7 @@ public class GuestServicioImpl implements GuestServicio {
         guest.setUsuario(registroDto.getUsuario());
         guest.setApellido(registroDto.getApellido());
         guest.setDni(registroDto.getDni());
-        guest.setPassword(passwordEncoder.encode(registroDto.getPassword()));
+        guest.setPassword(new BCryptPasswordEncoder().encode(registroDto.getPassword()));
         guest.setNombre(registroDto.getNombre());
         guest.setObra_social(registroDto.getObra_social());
         guest.setTelefono(registroDto.getTelefono());
@@ -93,6 +92,8 @@ public class GuestServicioImpl implements GuestServicio {
             if (guest.getEstado() == true) {
                 guest.setApellido(modificarDto.getApellido());
                 guest.setNombre(modificarDto.getNombre());
+                guest.setDni(modificarDto.getDni());
+                guest.setUsuario(modificarDto.getUsuario());
                 guest.setObra_social(modificarDto.getObra_social());
                 guest.setTelefono(modificarDto.getTelefono());
                 try {
@@ -103,6 +104,7 @@ public class GuestServicioImpl implements GuestServicio {
                 }
                 guest.setNacionalidad(modificarDto.getNacionalidad());
                 guest.setLocalidad(modificarDto.getLocalidad());
+                guest.setPassword(new BCryptPasswordEncoder().encode(modificarDto.getPassword()));
 
                 guestRepositorio.save(guest);
             }
