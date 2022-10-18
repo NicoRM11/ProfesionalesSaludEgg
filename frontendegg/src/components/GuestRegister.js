@@ -7,8 +7,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 
-export const Register = () => {
-  const [data, setdata] = useState({ usuario: "", password: "",fecha_nac:"", nombre: "", localidad: "",nacionalidad:"", apellido: "", telefono: "", obra_social: "", dni: "" });
+export const GuestRegister = () => {
+  const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "" });
 
   const handleChange = ({ target }) => {
     setdata({
@@ -21,32 +21,32 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      try {
-        const response = await axios.post(URL, data)
-        console.log(response);
-        if (response.status === 201) {
-          Swal.fire(
-            'Registrado!',
-            'El usuario ha sido guardado exitosamente',
-            'success'
-          )
-        }
-
-      } catch (error) {
-        if (error.response.status === 406) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `No se pudo registrar, ${error.response.data} !`,
-          })
-        }
-        console.log(error)
+    try {
+      const response = await axios.post(URL,data)
+      console.log(response);
+      if (response.status === 201) {
+        Swal.fire(
+          'Registrado!',
+          'El usuario ha sido guardado exitosamente',
+          'success'
+        )
       }
+
+    } catch (error) {
+      if (error.response.status === 406) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `No se pudo registrar, ${error.response.data} !`,
+        })
+      }
+      console.log(error)
+    }
   }
   return (
     <section className="container py-5">
-      <div className="row justify-content-center align-items-center">
-        <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+      <div className="row justify-content-center align-items-center mainContenedor">
+        <Form className="Formulario col-md-8 col-xxl-12 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
           <Row className="h2 text-center">
             <Form.Label>INGRESE SUS DATOS</Form.Label>
           </Row>
@@ -61,9 +61,10 @@ export const Register = () => {
             </Col>
             <Col md={1}></Col>
             <Col md={4}>
-              <Form.Label>Localidad</Form.Label>
-              <Form.Control type="text" name="localidad" placeholder="Localidad" required onChange={handleChange} />
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" name="usuario" placeholder="Email" required onChange={handleChange} />
             </Col>
+
           </Row>
           <Row className="mb-4">
             <Col md={6}>
@@ -72,8 +73,8 @@ export const Register = () => {
             </Col>
             <Col md={1}></Col>
             <Col md={4}>
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="usuario" placeholder="Email" required onChange={handleChange} />
+              <Form.Label>Localidad</Form.Label>
+              <Form.Control type="text" name="localidad" placeholder="Localidad" required onChange={handleChange} />
             </Col>
           </Row>
           <Row className="mb-4">
@@ -98,7 +99,7 @@ export const Register = () => {
               <Form.Label>Fecha de nacimiento</Form.Label>
               <Form.Control type="date" name="fecha_nac" placeholder="Nacionalidad" required onChange={handleChange} />
             </Col>
-           {/* <Col md={4}>
+            {/* <Col md={4}>
               <Form.Label>Repetir contraseña</Form.Label>
               <Form.Control type="password" placeholder="Contraseña" required onChange={handleChange} />
               {data.password !== value.password2 &&
@@ -113,7 +114,7 @@ export const Register = () => {
             </Col>
           </Row>
           <Row className="">
-            <Button variant="" className="cta col-3" type="submit">
+            <Button variant="" className="cta col-sm-3" type="submit">
               <span>Registrarse</span>
               <svg viewBox="0 0 13 10" height="10px" width="15px">
                 <path d="M1,5 L11,5"></path>
