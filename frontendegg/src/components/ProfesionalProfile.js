@@ -8,29 +8,29 @@ import Swal from 'sweetalert2';
 
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidades: [], matriculas: [] });
-    const [profesiones, setprofesiones] = useState([{ especialidad: "", matricula: "" }]);
+    const [profesiones, setprofesiones] = useState([]);
+
+    const username = JSON.parse(localStorage.getItem('usuario'))
+    const password = JSON.parse(localStorage.getItem('password'))
 
     useEffect(() => {
-        // cargarPerfil();
+        cargarPerfil();
     }, []);
-
-    const URL = "http://localhost:8080/api/profesional";
+    //console.log(data)
+    const URL = `http://localhost:8080/api/profesional/${username}`;
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
-                params: {
-                    usuario: data.usuario
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
                 }
-            })
-            console.log(response);
-        } catch (error) {
-            if (error.response.status === 406) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo cargar el perfil, ${error.response.data} !`,
-                })
             }
+            );
+            setdata(response.data);
+
+        } catch (error) {
+
             console.log(error)
         }
     }
@@ -41,7 +41,6 @@ export const ProfesionalProfile = () => {
             [target.name]: target.value
         })
     }
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -70,7 +69,7 @@ export const ProfesionalProfile = () => {
 
     const handleProfesionAdd = () => {
         setprofesiones([...profesiones,
-        { especialidad: "", matricula: ""}
+        { especialidad: "", matricula: "" }
         ])
     }
 
@@ -80,18 +79,18 @@ export const ProfesionalProfile = () => {
         setprofesiones(list)
     }
 
-    const handleProfesionChange =(e,index) => {
-        const{name,value} =e.target;
+    const handleProfesionChange = (e, index) => {
+        const { name, value } = e.target;
         const list = [...profesiones];
         list[index][name] = value;
         setprofesiones(list)
     }
 
-    const addProfesionMatricula = () => { 
-        const especialidades = profesiones.map(profesion=>profesion.especialidad);
+    const addProfesionMatricula = () => {
+        const especialidades = profesiones.map(profesion => profesion.especialidad);
         console.log(especialidades)
-        const matriculas = profesiones.map(profesion=>profesion.matricula);
-        setdata({...data,'especialidades':especialidades,'matriculas':matriculas});
+        const matriculas = profesiones.map(profesion => profesion.matricula);
+        setdata({ ...data, 'especialidades': especialidades, 'matriculas': matriculas });
     }
     return (
 
@@ -167,15 +166,15 @@ export const ProfesionalProfile = () => {
                             </Col>
                         </Row>
                         <Row className="mb-4">
-                            {profesiones.map((p, index) => (
+                            {data.especialidades.map((p, index) => (
                                 <div key={index} className="row">
                                     <Col md={3}>
                                         <Form.Label >Especialidad</Form.Label>
-                                        <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p.especialidad} required onChange={(e) => handleProfesionChange(e, index)} />
+                                        <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p} required onChange={(e) => handleProfesionChange(e, index)} />
                                     </Col>
                                     <Col md={3}>
                                         <Form.Label>Matricula</Form.Label>
-                                        <Form.Control type="text" name="matricula" placeholder="Matricula" value={p.matricula} required onChange={(e) => handleProfesionChange(e, index)} />
+                                        <Form.Control type="text" name="matricula" placeholder="Matricula" value={data.matriculas[index]}  required onChange={(e) => handleProfesionChange(e, index)} />
                                     </Col>
                                     {
                                         profesiones.length - 1 === index && (

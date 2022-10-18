@@ -1,11 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { Swal } from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 
 const Login = () => {
-  const [data, setdata] = useState({ usuario: "", password: "" });
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,39 +13,35 @@ const Login = () => {
   const URL = "http://localhost:8080/login";
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(usuario);
-    console.log(password);
-    setdata({
-      'usuario': usuario,
-      'password': password,
-    })
-
-
     try {
-      const response = await axios.post(URL,JSON.stringify({usuario,password}),
-      {
-        headers: {'Content-Type': 'application/json'}
-      }
+      const response = await axios.post(URL, JSON.stringify({ usuario, password }),
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
       );
-      console.log(response);
-          localStorage.setItem('usuario', JSON.stringify(usuario));
-          localStorage.setItem('password', JSON.stringify(password));
-          navigate('/GuestProfile');
+      const rol = response.data.authorities[0].authority;
+      localStorage.setItem('rol', JSON.stringify(rol));
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+      localStorage.setItem('password', JSON.stringify(password));
+      if(rol==='ROLE_GUEST'){
+        navigate('/GuestProfile');
+      }
+      if(rol==='ROLE_PROFESIONAL'){
+        navigate('/ProfesionalProfile');
+      }
+      
 
     } catch (error) {
-      /*Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: `No se pudo iniciar sesion !`,
-      })*/
+      if (error.response.status === 406) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `No se pudo iniciar sesion, ${error.response.data} !`,
+        })
+      }
       console.log(error)
     }
-
-    
   }
-
-
-
   return (
     <section className="container ">
       <div className="row justify-content-center align-items-center mt-5 mainContenedor">
