@@ -21,6 +21,8 @@ import java.util.Optional;
 public interface GuestRepositorio extends JpaRepository <Guest, Long>{
 
     public Optional<Guest> findByUsuario(String usuario);
+    
+    public Optional<List<Guest>> findByDni(Integer dni);
 
     public  Boolean existsByUsuario(String usuario);
 

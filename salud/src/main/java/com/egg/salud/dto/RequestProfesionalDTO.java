@@ -1,11 +1,13 @@
+
 package com.egg.salud.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class RegistroProfesionalDTO {
+public class RequestProfesionalDTO {
 
     private String nombre;
     private String apellido;
