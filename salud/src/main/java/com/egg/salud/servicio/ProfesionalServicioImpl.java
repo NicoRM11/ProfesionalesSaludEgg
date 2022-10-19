@@ -2,14 +2,15 @@ package com.egg.salud.servicio;
 
 import com.egg.salud.dto.RegistroProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
+import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
+import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Profesional;
 import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,8 +62,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         } catch (ParseException ex) {
             Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        profesional.setEspecialidades(registroDto.getEspecialidades());
-        profesional.setMatriculas(registroDto.getMatriculas());
+        profesional.setEspecialidad(registroDto.getEspecialidad());
+        profesional.setMatricula(registroDto.getMatricula());
         profesional.setNacionalidad(registroDto.getNacionalidad());
         profesional.setEstado(true);
 
@@ -72,7 +72,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
         profesionalRepositorio.save(profesional);
 
-        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.OK);
+        return new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
                 profesional.setApellido(modificarDto.getApellido());
                 profesional.setNombre(modificarDto.getNombre());
                 profesional.setDomicilio(modificarDto.getDomicilio());
-                profesional.setEspecialidades(modificarDto.getEspecialidades());
+                profesional.setEspecialidad(modificarDto.getEspecialidad());
                 try {
                     profesional.setFecha_nac(formateo.parse(modificarDto.getFecha_nac()));
 
@@ -95,17 +95,21 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
                     Logger.getLogger(ProfesionalServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 profesional.setNacionalidad(modificarDto.getNacionalidad());
-                profesional.setMatriculas(modificarDto.getMatriculas());
+                profesional.setMatricula(modificarDto.getMatricula());
                 profesional.setDni(modificarDto.getDni());
                 profesional.setUsuario(modificarDto.getUsuario());
                 profesional.setPassword(new BCryptPasswordEncoder().encode(modificarDto.getPassword()));
 
                 profesionalRepositorio.save(profesional);
+
+                return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
             }
-            return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
-        } else {
+            }else {
             return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
+
     }
 
     @Override
@@ -136,8 +140,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
             responseProfesional.setApellido(profesional.getApellido());
             responseProfesional.setDomicilio(profesional.getDomicilio());
-            responseProfesional.setMatriculas(profesional.getMatriculas());
-            responseProfesional.setEspecialidades(profesional.getEspecialidades());
+            responseProfesional.setMatricula(profesional.getMatricula());
+            responseProfesional.setEspecialidad(profesional.getEspecialidad());
             responseProfesional.setFecha_nac(profesional.getFecha_nac());
             responseProfesional.setNombre(profesional.getNombre());
             responseProfesional.setUsuario(profesional.getUsuario());
@@ -145,7 +149,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             responseProfesional.setUrlFoto(profesional.getUrlFoto());
             responseProfesional.setPassword(profesional.getPassword());
             responseProfesional.setNacionalidad(profesional.getNacionalidad());
-            responseProfesional.setEstado(profesional.getEstado());
+
             
             listaProfesionalDto.add(responseProfesional);
         }
@@ -160,8 +164,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
             responseProfesional.setApellido(profesional.getApellido());
             responseProfesional.setDomicilio(profesional.getDomicilio());
-            responseProfesional.setMatriculas(profesional.getMatriculas());
-            responseProfesional.setEspecialidades(profesional.getEspecialidades());
+            responseProfesional.setMatricula(profesional.getMatricula());
+            responseProfesional.setEspecialidad(profesional.getEspecialidad());
             responseProfesional.setFecha_nac(profesional.getFecha_nac());
             responseProfesional.setNombre(profesional.getNombre());
             responseProfesional.setUsuario(profesional.getUsuario());
@@ -169,17 +173,41 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             responseProfesional.setUrlFoto(profesional.getUrlFoto());
             responseProfesional.setPassword(profesional.getPassword());
             responseProfesional.setNacionalidad(profesional.getNacionalidad());
-            responseProfesional.setEstado(profesional.getEstado());
+
             
             return new ResponseEntity<>(responseProfesional, HttpStatus.ACCEPTED);
             
         }else{
             return new ResponseEntity<>("no se encontro el usuario", HttpStatus.NOT_ACCEPTABLE);
         }
-        
-        
-        
-        
+
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(String especialidad) {
+        List<Profesional> listaProfesional = profesionalRepositorio.listaPorEspecialidad(especialidad);
+        List<ResponseProfesionalDTO> listaProfesionalDto = new ArrayList<>();
+
+        for (Profesional profesional : listaProfesional) {
+            ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
+            responseProfesional.setNombre(profesional.getNombre());
+            responseProfesional.setApellido(profesional.getApellido());
+            responseProfesional.setDni(profesional.getDni());
+            responseProfesional.setUrlFoto(profesional.getUrlFoto());
+            responseProfesional.setFecha_nac(profesional.getFecha_nac());
+            responseProfesional.setEspecialidad(profesional.getEspecialidad());
+            responseProfesional.setNacionalidad(profesional.getNacionalidad());
+            responseProfesional.setPassword(profesional.getPassword());
+            responseProfesional.setUrlFoto(profesional.getUrlFoto());
+            responseProfesional.setMatricula(profesional.getMatricula());
+            responseProfesional.setDomicilio(profesional.getDomicilio());
+
+            responseProfesional.setUsuario(profesional.getUsuario());
+
+            listaProfesionalDto.add(responseProfesional);
+        }
+        return new ResponseEntity<>(listaProfesionalDto, HttpStatus.OK);
+
+    }
 }
