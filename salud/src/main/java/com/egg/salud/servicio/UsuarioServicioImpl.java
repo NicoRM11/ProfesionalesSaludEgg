@@ -33,7 +33,6 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-    
 
     @Transactional
     @Override
@@ -59,10 +58,14 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
         Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
-            u.setPassword(new BCryptPasswordEncoder().encode(request));
-            usuarioRepositorio.save(u);
+            if (u.getEstado() == true) {
+                u.setPassword(new BCryptPasswordEncoder().encode(request));
+                usuarioRepositorio.save(u);
 
-            return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+                return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
+            }
         } else {
             return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
@@ -76,9 +79,13 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
         List<ResponseUsuarioDTO> listaResponse = new ArrayList<>();
 
         for (Usuario aux : listaUsuario) {
-            ResponseUsuarioDTO response = new ResponseUsuarioDTO();
-            response.setUsuario(aux.getUsuario());
-            listaResponse.add(response);
+            if (aux.getRol().toString().equals("ADMIN")) {
+                ResponseUsuarioDTO response = new ResponseUsuarioDTO();
+                response.setUsuario(aux.getUsuario());
+                response.setRol(aux.getRol());
+                response.setEstado(aux.getEstado());
+                listaResponse.add(response);
+            }
         }
         return new ResponseEntity<>(listaResponse, HttpStatus.OK);
     }
@@ -146,8 +153,42 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<?> buscarUsuario(String usuario) {
-        return null;
+        
+        Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
+        
+        if (busqueda.isPresent()) {
+            Usuario u = busqueda.get();
+            ResponseUsuarioDTO response = new ResponseUsuarioDTO();
+            response.setUsuario(u.getUsuario());
+            response.setEstado(u.getEstado());
+            response.setRol(u.getRol());
+            
+             return new ResponseEntity<>(response, HttpStatus.OK);
+            
+        } else {
+            return new ResponseEntity<>("el email ingresado no se encuentra", HttpStatus.NOT_FOUND);
+        }
+        
+        
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> altaUsuario(String usuario) {
+        Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
+        
+        if (busqueda.isPresent()) {
+            Usuario u = busqueda.get();
+            u.setEstado(true);
+            usuarioRepositorio.save(u);
+            
+            return new ResponseEntity<>("usuario dado de alta con éxito", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("el email ingresado no se encuentra", HttpStatus.NOT_FOUND);
+        }
+        
     }
 
 }

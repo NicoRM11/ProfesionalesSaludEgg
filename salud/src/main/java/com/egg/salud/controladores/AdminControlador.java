@@ -34,4 +34,15 @@ public class AdminControlador {
         return usuarioServicio.eliminarAdmin(usuario);
     }
     
+    @PatchMapping("/{usuario}")
+    public ResponseEntity<?> altaUsuario(@PathVariable String usuario){
+       return usuarioServicio.altaUsuario(usuario);
+    }
+    
+    @GetMapping("/{usuario}")
+    public ResponseEntity<?> buscarUsuario(@PathVariable String usuario){
+       return usuarioServicio.buscarUsuario(usuario);
+    }
+    
+    
 }
