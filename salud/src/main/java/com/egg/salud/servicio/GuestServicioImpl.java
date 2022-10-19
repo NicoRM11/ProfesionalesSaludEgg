@@ -194,6 +194,7 @@ public class GuestServicioImpl implements GuestServicio {
             responseGuest.setPassword(guest.getPassword());
             responseGuest.setObra_social(guest.getObra_social());
             responseGuest.setUsuario(guest.getUsuario());
+            responseGuest.setTelefono(guest.getTelefono());
             responseGuest.setEstado(guest.getEstado());
             
             return new ResponseEntity<>(responseGuest, HttpStatus.ACCEPTED);
