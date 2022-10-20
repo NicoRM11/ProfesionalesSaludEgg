@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 
 export const GuestProfile = () => {
@@ -12,9 +13,12 @@ export const GuestProfile = () => {
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+
+    let navigate = useNavigate()
     console.log(data);
+
     useEffect(() => {
-       cargarPerfil();
+        cargarPerfil();
     }, []);
 
     const URL = `http://localhost:8080/api/guest/${username}`;
@@ -27,14 +31,15 @@ export const GuestProfile = () => {
                 }
             }
             );
-            if(response.status===202) { 
+            if (response.status === 202) {
 
-        /* SET1*/ setdata(response.data); // response.data devuelve todos los valores de la base de datos
-        /* SET2*/ setdata({...data, password: `${password}`});  //lueego de guardar los datos de la base quiero modificar solo el password    
-            //resultado obtenido: se ejecuta solo el SET2 devolviendo data con atributos vacios con el password seteado nada mas
-            //otro resutlado: se ejecuta SET1 pero el SET2 NO
+                response.data.password = `${password}`;
+        /* SET1*/ setdata(response.data);
+                // response.data devuelve todos los valores de la base de datos
+                /* SET2*///setdata({...data, password: `${password}`});  //lueego de guardar los datos de la base quiero modificar solo el password    
+                //resultado obtenido: se ejecuta solo el SET2 devolviendo data con atributos vacios con el password seteado nada mas
+                //otro resutlado: se ejecuta SET1 pero el SET2 NO
             }
-            
         } catch (error) {
             console.log(error)
         }
@@ -60,12 +65,14 @@ export const GuestProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(URL, ()=> {
-                setdata({...data, password: `${password}`});
-                return data;
+            const response = await axios.put(URL, data, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
             })
-            
-            //console.log(response);
+
+            console.log(response);
             if (response.status === 200) {
                 Swal.fire(
                     'Excelente!',
@@ -82,27 +89,59 @@ export const GuestProfile = () => {
                     text: `No se pudo modificar, ${error.response.data} !`,
                 })
             }*/
-            console.log("error")
+            console.log(error)
         }
     }
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.delete(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
+
+            console.log(response);
+            if (response.status === 200) {
+                Swal.fire(
+                    'Se ha dado de baja exitosamente!',
+                    'Lo vamos a extrañar',
+                    'success'
+                )
+                navigate('/login');
+            }
+
+        } catch (error) {
+            /*if (error.response.status === 406) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `No se pudo modificar, ${error.response.data} !`,
+                })
+            }*/
+            console.log(error)
+        }
+    }
+
     return (
 
         <section className="container py-5">
 
             <div className="row justify-content-center align-items-center">
-
                 <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
-
                     <Row className="h2 text-center mt-4">
                         <Form.Label>Editar Perfil</Form.Label>
                     </Row>
+
 
                     <Row className="h2 text-center">
 
                         <div className="encabezado">
 
                             <div className='imagenGuest'>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" alt=""/>
                             </div>
 
                             <div className='datosUsuario'>
@@ -187,8 +226,8 @@ export const GuestProfile = () => {
             </div>
 
             <div className='text-center mt-3'>
-                <a className="darseDeBaja" href="#">Darse de baja
-                </a>
+                <button className="btn darseDeBaja" onClick={handleDelete}>Darse de baja
+                </button>
             </div>
         </section>
     )
