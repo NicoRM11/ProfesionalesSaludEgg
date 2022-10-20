@@ -9,14 +9,12 @@ import Swal from 'sweetalert2';
 
 export const GuestProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
-
     const [edicion, setEdicion] = useState(false);
-
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-
+    console.log(data);
     useEffect(() => {
-        cargarPerfil();
+       cargarPerfil();
     }, []);
 
     const URL = `http://localhost:8080/api/guest/${username}`;
@@ -29,29 +27,45 @@ export const GuestProfile = () => {
                 }
             }
             );
-            console.log(response.data)
-            setdata(response.data)
+            if(response.status===202) { 
 
+        /* SET1*/ setdata(response.data); // response.data devuelve todos los valores de la base de datos
+        /* SET2*/ setdata({...data, password: `${password}`});  //lueego de guardar los datos de la base quiero modificar solo el password    
+            //resultado obtenido: se ejecuta solo el SET2 devolviendo data con atributos vacios con el password seteado nada mas
+            //otro resutlado: se ejecuta SET1 pero el SET2 NO
+            }
+            
         } catch (error) {
-
             console.log(error)
         }
     }
 
     const handleChange = ({ target }) => {
-        /*setEdicion(true);
+        setEdicion(true);
         setdata({
             ...data,
             [target.name]: target.value
-        })*/
+        })
     }
+    const handleChangeNewPassword = ({ target }) => {
+        setEdicion(true);
+        setdata({
+            ...data,
+            password: target.value
+        })
+    }
+
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(URL, data)
-            console.log(response);
+            const response = await axios.put(URL, ()=> {
+                setdata({...data, password: `${password}`});
+                return data;
+            })
+            
+            //console.log(response);
             if (response.status === 200) {
                 Swal.fire(
                     'Excelente!',
@@ -61,14 +75,14 @@ export const GuestProfile = () => {
             }
 
         } catch (error) {
-            if (error.response.status === 406) {
+            /*if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: `No se pudo modificar, ${error.response.data} !`,
                 })
-            }
-            console.log(error)
+            }*/
+            console.log("error")
         }
     }
     return (
@@ -106,7 +120,7 @@ export const GuestProfile = () => {
                                 <Row>
 
                                     <Col md={6}>
-                                        <Form.Control type="number" name="dni" placeholder="DNI" value={data.dni} required onChange={handleChange} disabled />
+                                        <Form.Control type="number" name="dni" placeholder="DNI" value={data.dni} onChange={handleChange} disabled />
                                     </Col>
                                 </Row>
                             </div>
@@ -126,7 +140,7 @@ export const GuestProfile = () => {
                             <Col md={1}></Col>
                             <Col md={4}>
                                 <Form.Label>Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" placeholder="Contraseña" value={data.password} required onChange={handleChange} />
+                                <Form.Control type="password" name="password" placeholder="Contraseña" value={data.password} disabled onChange={handleChange} />
                             </Col>
                         </Row>
                         <Row className="mb-4">
@@ -136,8 +150,8 @@ export const GuestProfile = () => {
                             </Col>
                             <Col md={1}></Col>
                             <Col md={4}>
-                                <Form.Label>Nueva Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" required onChange={handleChange} />
+                                <Form.Label>Cambiar Contraseña</Form.Label>
+                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" onChange={handleChangeNewPassword} />
                             </Col>
                         </Row>
                         <Row className="mb-4">

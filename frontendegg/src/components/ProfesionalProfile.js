@@ -28,6 +28,7 @@ export const ProfesionalProfile = () => {
             }
             );
             setdata(response.data);
+            //setdata(...data,[password]:{password});
 
         } catch (error) {
 
