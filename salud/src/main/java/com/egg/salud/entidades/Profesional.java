@@ -22,11 +22,10 @@ public class Profesional extends Usuario {
     private String urlFoto;
     private String nacionalidad;
     
-    @ElementCollection
-    private List<String> especialidades = new ArrayList<>();
-    
-    @ElementCollection
-    private List<String> matriculas = new ArrayList<>();
+
+    private String especialidad;
+
+    private String matricula;
     
     private Integer dni;
 
@@ -38,22 +37,17 @@ public class Profesional extends Usuario {
     @OneToMany(mappedBy = "id_profesional", cascade = CascadeType.ALL)
     private List<Oferta> oferta;
 
-    public Profesional(String nombre, String apellido, String urlFoto, String nacionalidad, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {
+    public Profesional(Long id, String usuario, String password, Boolean estado, Rol rol, String nombre, String apellido, String urlFoto, String nacionalidad, String especialidad, String matricula, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta) {
         super(id, usuario, password, estado, rol);
         this.nombre = nombre;
         this.apellido = apellido;
         this.urlFoto = urlFoto;
         this.nacionalidad = nacionalidad;
+        this.especialidad = especialidad;
+        this.matricula = matricula;
         this.dni = dni;
         this.fecha_nac = fecha_nac;
         this.domicilio = domicilio;
         this.oferta = oferta;
     }
-
-   
-
-    
-    
-
-    
 }

@@ -8,7 +8,6 @@ import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.repositorios.GuestRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +27,6 @@ public class GuestServicioImpl implements GuestServicio {
 
     @Autowired
     private SimpleDateFormat formateo;
-    @Autowired
-    private ModelMapper modelMapper;
     @Autowired
     private GuestRepositorio guestRepositorio;
     
@@ -102,8 +99,10 @@ public class GuestServicioImpl implements GuestServicio {
                 guest.setPassword(new BCryptPasswordEncoder().encode(modificarDto.getPassword()));
 
                 guestRepositorio.save(guest);
-            }
-            return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+                return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+            } else{
+                return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
+             }
         } else {
             return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
         }
@@ -146,6 +145,7 @@ public class GuestServicioImpl implements GuestServicio {
             responseGuest.setObra_social(guest.getObra_social());
             responseGuest.setUsuario(guest.getUsuario());
             responseGuest.setEstado(guest.getEstado());
+            responseGuest.setTelefono(guest.getTelefono());
             listaGuestDto.add(responseGuest);
         }
         return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
@@ -194,6 +194,7 @@ public class GuestServicioImpl implements GuestServicio {
             responseGuest.setPassword(guest.getPassword());
             responseGuest.setObra_social(guest.getObra_social());
             responseGuest.setUsuario(guest.getUsuario());
+            responseGuest.setTelefono(guest.getTelefono());
             responseGuest.setEstado(guest.getEstado());
             
             return new ResponseEntity<>(responseGuest, HttpStatus.ACCEPTED);

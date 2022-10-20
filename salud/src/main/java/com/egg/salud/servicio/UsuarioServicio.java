@@ -20,5 +20,7 @@ public interface UsuarioServicio {
     public ResponseEntity<?> login(LoginDTO login);
     
     public ResponseEntity<?> buscarUsuario(String usuario);
+    
+    public ResponseEntity<?> altaUsuario(String usuario);
 
 }

@@ -3,6 +3,7 @@ package com.egg.salud.controladores;
 
 import com.egg.salud.dto.RegistroProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
+import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.servicio.ProfesionalServicio;
 import java.util.List;
@@ -51,5 +52,10 @@ public class ProfesionalControlador {
     @GetMapping("/{usuario}")
     public ResponseEntity<?>buscarPorEmail(@PathVariable String usuario){
         return profesionalServicio.buscarPorEmail(usuario);
+    }
+
+    @GetMapping("/listar/{especialidad}")
+    public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(@PathVariable(name= "especialidad") String especialidad){
+        return profesionalServicio.listarEspecialidad(especialidad);
     }
 }

@@ -4,7 +4,6 @@
  */
 package com.egg.salud.dto;
 
-import java.util.Date;
 import lombok.Data;
 
 /**

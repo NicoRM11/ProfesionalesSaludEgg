@@ -2,7 +2,6 @@ package com.egg.salud.dto;
 
 import lombok.Data;
 
-import java.util.Date;
 
 @Data
 public class RequestGuestDTO {
