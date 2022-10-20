@@ -19,6 +19,7 @@ public class Guest extends Usuario{
    private String nombre;
    private String apellido;
    
+   //hacer el DNI unique
    private Integer dni;
    
    private String obra_social;
@@ -31,6 +32,7 @@ public class Guest extends Usuario{
    private String urlFoto;
    private String localidad;
    
+   //id_guest?
     @OneToMany(mappedBy ="id_user", cascade=CascadeType.ALL)
     private List<Oferta> oferta;
 

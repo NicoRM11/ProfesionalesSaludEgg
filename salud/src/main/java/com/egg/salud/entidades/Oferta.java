@@ -17,11 +17,11 @@ public class Oferta {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idGuest", nullable = false)
-    private Guest id_user;
+    private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProfesional", nullable = false)
-    private Profesional id_profesional;
+    private Profesional profesional;
 
     
     //Revisar el Date para fecha y hora
@@ -32,10 +32,11 @@ public class Oferta {
     @Temporal(TemporalType.TIME)
     private Date hora;
     
+    private String localidad;
     private String ubicacion;
     private String modalidad;
     private String especialidad;
     private Integer telefono;
-    private Boolean estado;
+    private Boolean disponible;
 
 }
