@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface OfertaServicio {
    
-    public ResponseEntity<?> crearOfertaProfesional(String profesional,CrearOfertaDTO crearOfertaDto);
+    public ResponseEntity<?> crearOfertaProfesional(String usuario,CrearOfertaDTO crearOfertaDto);
 
     
 //    public ResponseEntity<?> modificarOfertaProfesional(String usuario, RequestOfertaProfesionalDTO modificarDto);

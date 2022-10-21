@@ -67,7 +67,7 @@ public class ProfesionalControlador {
     
     
     @PostMapping("/crear-oferta/{usuario}")
-    public ResponseEntity<?> crear(@RequestBody CrearOfertaDTO crearOfertaDto,@PathVariable (name= "usuario") String usuario){
+    public ResponseEntity<?> crearOferta(@RequestBody CrearOfertaDTO crearOfertaDto,@PathVariable (name= "usuario") String usuario){
 
         return ofertaServicio.crearOfertaProfesional(usuario, crearOfertaDto);
                 

@@ -44,7 +44,7 @@ public class OfertaServiciolmpl implements OfertaServicio {
             Profesional profesional = respuesta.get();
             if (profesional.getEstado() == true) {
                 Oferta oferta = new Oferta();
-                oferta.setDisponible(Boolean.TRUE);
+                oferta.setDisponible(true);
                 oferta.setModalidad(crearOfertaDto.getModalidad());
                 oferta.setEspecialidad(profesional.getEspecialidad());
                 oferta.setUbicacion(profesional.getDomicilio());
