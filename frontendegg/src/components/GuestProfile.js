@@ -32,13 +32,8 @@ export const GuestProfile = () => {
             }
             );
             if (response.status === 202) {
-
                 response.data.password = `${password}`;
-        /* SET1*/ setdata(response.data);
-                // response.data devuelve todos los valores de la base de datos
-                /* SET2*///setdata({...data, password: `${password}`});  //lueego de guardar los datos de la base quiero modificar solo el password    
-                //resultado obtenido: se ejecuta solo el SET2 devolviendo data con atributos vacios con el password seteado nada mas
-                //otro resutlado: se ejecuta SET1 pero el SET2 NO
+                setdata(response.data);
             }
         } catch (error) {
             console.log(error)
@@ -59,9 +54,6 @@ export const GuestProfile = () => {
             password: target.value
         })
     }
-
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -82,13 +74,13 @@ export const GuestProfile = () => {
             }
 
         } catch (error) {
-            /*if (error.response.status === 406) {
+            if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: `No se pudo modificar, ${error.response.data} !`,
                 })
-            }*/
+            }
             console.log(error)
         }
     }
@@ -114,13 +106,13 @@ export const GuestProfile = () => {
             }
 
         } catch (error) {
-            /*if (error.response.status === 406) {
+            if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `No se pudo modificar, ${error.response.data} !`,
+                    text: `No se pudo eliminar la cuenta, ${error.response.data} !`,
                 })
-            }*/
+            }
             console.log(error)
         }
     }

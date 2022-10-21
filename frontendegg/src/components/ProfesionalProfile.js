@@ -5,18 +5,19 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfesionalProfile = () => {
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidades: [], matriculas: [] });
-    const [profesiones, setprofesiones] = useState([]);
-
+    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
+    const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    let navigate = useNavigate();
 
     useEffect(() => {
         cargarPerfil();
     }, []);
-    //console.log(data)
+
     const URL = `http://localhost:8080/api/profesional/${username}`;
     const cargarPerfil = async () => {
         try {
@@ -27,16 +28,18 @@ export const ProfesionalProfile = () => {
                 }
             }
             );
-            setdata(response.data);
-            //setdata(...data,[password]:{password});
-
+            if (response.status === 202) {
+                response.data.password = `${password}`;
+                setdata(response.data);
+            }
+            console.log(response);
         } catch (error) {
-
             console.log(error)
         }
     }
 
     const handleChange = ({ target }) => {
+        setEdicion(true);
         setdata({
             ...data,
             [target.name]: target.value
@@ -46,7 +49,13 @@ export const ProfesionalProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(URL, data)
+            const response = await axios.put(URL, data, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
+
             console.log(response);
             if (response.status === 200) {
                 Swal.fire(
@@ -67,31 +76,43 @@ export const ProfesionalProfile = () => {
             console.log(error)
         }
     }
-
-    const handleProfesionAdd = () => {
-        setprofesiones([...profesiones,
-        { especialidad: "", matricula: "" }
-        ])
+    const handleChangeNewPassword = ({ target }) => {
+        setEdicion(true);
+        setdata({
+            ...data,
+            password: target.value
+        })
     }
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.delete(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
 
-    const handleProfesionRemove = (index) => {
-        const list = [...profesiones]
-        list.splice(index, 1)
-        setprofesiones(list)
-    }
+            console.log(response);
+            if (response.status === 200) {
+                Swal.fire(
+                    'Se ha dado de baja exitosamente!',
+                    'Lo vamos a extrañar',
+                    'success'
+                )
+                navigate('/login');
+            }
 
-    const handleProfesionChange = (e, index) => {
-        const { name, value } = e.target;
-        const list = [...profesiones];
-        list[index][name] = value;
-        setprofesiones(list)
-    }
-
-    const addProfesionMatricula = () => {
-        const especialidades = profesiones.map(profesion => profesion.especialidad);
-        console.log(especialidades)
-        const matriculas = profesiones.map(profesion => profesion.matricula);
-        setdata({ ...data, 'especialidades': especialidades, 'matriculas': matriculas });
+        } catch (error) {
+            if (error.response.status === 406) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `No se pudo eliminar la cuenta, ${error.response.data} !`,
+                })
+            }
+            console.log(error)
+        }
     }
     return (
 
@@ -110,7 +131,7 @@ export const ProfesionalProfile = () => {
                         <div className="encabezado">
 
                             <div className='imagenGuest'>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" alt="imagen" />
                             </div>
 
                             <div className='datosUsuario'>
@@ -156,8 +177,8 @@ export const ProfesionalProfile = () => {
                             </Col>
                             <Col md={1}></Col>
                             <Col md={4}>
-                                <Form.Label>Nueva Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" required onChange={handleChange} />
+                                <Form.Label>Cambiar Contraseña</Form.Label>
+                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" onChange={handleChangeNewPassword} />
                             </Col>
                         </Row>
                         <Row className="mb-4">
@@ -167,57 +188,34 @@ export const ProfesionalProfile = () => {
                             </Col>
                         </Row>
                         <Row className="mb-4">
-                            {data.especialidades.map((p, index) => (
-                                <div key={index} className="row">
-                                    <Col md={3}>
-                                        <Form.Label >Especialidad</Form.Label>
-                                        <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p} required onChange={(e) => handleProfesionChange(e, index)} />
-                                    </Col>
-                                    <Col md={3}>
-                                        <Form.Label>Matricula</Form.Label>
-                                        <Form.Control type="text" name="matricula" placeholder="Matricula" value={data.matriculas[index]}  required onChange={(e) => handleProfesionChange(e, index)} />
-                                    </Col>
-                                    {
-                                        profesiones.length - 1 === index && (
-                                            <>
-                                                <Col md={1} className="d-flex align-items-center">
-                                                    <Button variant="" onClick={handleProfesionAdd} >
-                                                        <i className="bi bi-plus-square-fill text-success"></i>
-                                                    </Button>
-                                                </Col>
-                                            </>
-                                        )
-                                    }
-                                    {
-                                        profesiones.length > 1 && (
-                                            <>
-                                                <Col md={1} className="d-flex align-items-center">
-                                                    <Button variant="" onClick={() => handleProfesionRemove(index)}>
-                                                        <i className="bi bi-dash-circle-fill " width="30" ></i>
-                                                    </Button>
-                                                </Col>
-                                            </>
-                                        )
-                                    }
-                                </div>
-                            ))}
+                            <div className="row">
+                                <Col md={3}>
+                                    <Form.Label >Especialidad</Form.Label>
+                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={data.especialidad} required onChange={handleChange} />
+                                </Col>
+                                <Col md={3}>
+                                    <Form.Label>Matricula</Form.Label>
+                                    <Form.Control type="text" name="matricula" placeholder="Matricula" value={data.matricula} required onChange={handleChange} />
+                                </Col>
+
+                            </div>
                         </Row>
                     </div>
                     <Row className="mb-4">
-                        <Button variant="" className="cta col-sm-3" type="submit">
+                    {edicion === true && <Button variant="" className="cta col-sm-3" type="submit">
                             <span>Guardar</span>
                             <svg viewBox="0 0 13 10" height="10px" width="15px">
                                 <path d="M1,5 L11,5"></path>
                                 <polyline points="8 1 12 5 8 9"></polyline>
                             </svg>
-                        </Button>
+                        </Button>}
                     </Row>
                 </Form>
             </div>
 
             <div className='text-center mt-3'>
-                <a className="darseDeBaja" href="#">Darse de baja
-                </a>
+                <button className="btn darseDeBaja" onClick={handleDelete}>Darse de baja
+                </button>
             </div>
         </section>
     )

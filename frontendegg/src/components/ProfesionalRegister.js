@@ -5,10 +5,11 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfesionalRegister = () => {
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "" ,domicilio:"", especialidades:[] , matriculas:[]});
-    const [profesiones, setprofesiones] = useState([{ especialidad: "", matricula: ""}]);
+    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
+    let navigate = useNavigate()
 
     const handleChange = ({ target }) => {
         setdata({
@@ -21,7 +22,6 @@ export const ProfesionalRegister = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        addProfesionMatricula();
         console.log(data);
         try {
             const response = await axios.post(URL, data)
@@ -32,6 +32,7 @@ export const ProfesionalRegister = () => {
                     'El usuario ha sido guardado exitosamente',
                     'success'
                 )
+                navigate('/login');
             }
 
         } catch (error) {
@@ -46,31 +47,6 @@ export const ProfesionalRegister = () => {
         }
     }
 
-    const handleProfesionAdd = () => {
-        setprofesiones([...profesiones,
-        { especialidad: "", matricula: ""}
-        ])
-    }
-
-    const handleProfesionRemove = (index) => {
-        const list = [...profesiones]
-        list.splice(index, 1)
-        setprofesiones(list)
-    }
-
-    const handleProfesionChange =(e,index) => {
-        const{name,value} =e.target;
-        const list = [...profesiones];
-        list[index][name] = value;
-        setprofesiones(list)
-    }
-
-    const addProfesionMatricula = () => { 
-        const especialidades = profesiones.map(profesion=>profesion.especialidad);
-        console.log(especialidades)
-        const matriculas = profesiones.map(profesion=>profesion.matricula);
-        setdata({...data,'especialidades':especialidades,'matriculas':matriculas});
-    }
 
     return (
         <section className="container py-5">
@@ -123,40 +99,16 @@ export const ProfesionalRegister = () => {
                         </Col>
                     </Row>
                     <Row className="mb-5 py-5">
-                        {profesiones.map((p, index) => (
-                            <div key={index} className="row">
-                                <Col md={3}>
-                                    <Form.Label >Especialidad</Form.Label>
-                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={p.especialidad} required onChange={(e)=>handleProfesionChange(e,index)} />
-                                </Col>
-                                <Col md={3}>
-                                    <Form.Label>Matricula</Form.Label>
-                                    <Form.Control type="text" name="matricula" placeholder="Matricula" value={p.matricula} required onChange={(e)=>handleProfesionChange(e,index)} />
-                                </Col>
-                                {
-                                    profesiones.length - 1 === index && (
-                                        <>
-                                            <Col md={1}  className="d-flex align-items-center">
-                                                <Button variant="" onClick={handleProfesionAdd} >
-                                                <i className="bi bi-plus-square-fill text-success"></i>
-                                                </Button>
-                                            </Col>
-                                        </>
-                                    )
-                                }
-                                {
-                                    profesiones.length >1 && (
-                                        <>
-                                            <Col md={1}  className="d-flex align-items-center">
-                                                <Button variant="" onClick={()=>handleProfesionRemove(index)}>
-                                                    <i className="bi bi-dash-circle-fill " width="30" ></i>
-                                                </Button>
-                                            </Col>
-                                        </>
-                                    )
-                                }
-                            </div>
-                        ))}
+                        <div className="row">
+                            <Col md={3}>
+                                <Form.Label >Especialidad</Form.Label>
+                                <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={data.especialidad} required onChange={handleChange} />
+                            </Col>
+                            <Col md={3}>
+                                <Form.Label>Matricula</Form.Label>
+                                <Form.Control type="text" name="matricula" placeholder="Matricula" value={data.matricula} required onChange={handleChange} />
+                            </Col>
+                        </div>
                     </Row>
 
                     <Row className="">

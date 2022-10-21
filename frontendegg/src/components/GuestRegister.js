@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 
 export const GuestRegister = () => {
   const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "" });
+  let navigate = useNavigate();
 
   const handleChange = ({ target }) => {
     setdata({
@@ -30,6 +32,7 @@ export const GuestRegister = () => {
           'El usuario ha sido guardado exitosamente',
           'success'
         )
+        navigate('/login');
       }
 
     } catch (error) {
