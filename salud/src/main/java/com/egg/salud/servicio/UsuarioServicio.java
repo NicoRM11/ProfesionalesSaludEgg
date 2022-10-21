@@ -3,24 +3,24 @@ package com.egg.salud.servicio;
 import com.egg.salud.dto.LoginDTO;
 import com.egg.salud.dto.RequestUsuarioDTO;
 import com.egg.salud.dto.ResponseUsuarioDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import org.springframework.security.core.userdetails.User;
 
 public interface UsuarioServicio {
 
-    public ResponseEntity<?> registrarAdmin(RequestUsuarioDTO request);
+    public String registrarAdmin(RequestUsuarioDTO request) throws Exception;
 
-    public ResponseEntity<?> modificarAdmin(String request, String usuario);
+    public String modificarAdmin(String request, String usuario) throws Exception;
 
-    public ResponseEntity<List<ResponseUsuarioDTO>> listarAdmin();
+    public List<ResponseUsuarioDTO> listarAdmin();
 
-    public ResponseEntity<?> eliminarAdmin(String usuario);
+    public String eliminarAdmin(String usuario) throws Exception;
     
-    public ResponseEntity<?> login(LoginDTO login);
+    public User login(LoginDTO login) throws Exception;
     
-    public ResponseEntity<?> buscarUsuario(String usuario);
+    public ResponseUsuarioDTO buscarUsuario(String usuario) throws Exception;
     
-    public ResponseEntity<?> altaUsuario(String usuario);
+    public String altaUsuario(String usuario) throws Exception;
 
 }

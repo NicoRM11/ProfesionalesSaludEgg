@@ -2,24 +2,22 @@ package com.egg.salud.servicio;
 
 
 import com.egg.salud.dto.RequestGuestDTO;
-import com.egg.salud.dto.RegistroGuestDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface GuestServicio {
 
-    public ResponseEntity<?> registrarUsuario(RegistroGuestDTO registroDto);
+    public String registrarUsuario(RequestGuestDTO requestDto) throws Exception;
 
-    public ResponseEntity<?> modificarUsuario(String usuario, RequestGuestDTO modificarDto);
+    public String modificarUsuario(String usuario, RequestGuestDTO modificarDto) throws Exception;
 
-    public ResponseEntity<?> eliminarUsuario(String usuario);
+    public String eliminarUsuario(String usuario) throws Exception;
 
-    public ResponseEntity<List<ResponseGuestDTO>> listar();
+    public List<ResponseGuestDTO> listar() throws Exception;
 
-    public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social); 
+    public List<ResponseGuestDTO> listarObraSocial(String obra_social) throws Exception; 
     
-    public ResponseEntity<?> buscarPorEmail(String usuario);
+    public ResponseGuestDTO buscarPorEmail(String usuario) throws Exception;
     
 }

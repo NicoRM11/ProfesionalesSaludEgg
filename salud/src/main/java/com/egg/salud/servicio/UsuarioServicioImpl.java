@@ -5,16 +5,14 @@ import com.egg.salud.dto.RequestUsuarioDTO;
 import com.egg.salud.dto.ResponseUsuarioDTO;
 import com.egg.salud.entidades.Usuario;
 import com.egg.salud.enumeraciones.Rol;
+import com.egg.salud.exceptions.ResourceNotFoundException;
+import com.egg.salud.exceptions.UserIsExistsException;
 import com.egg.salud.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
@@ -36,10 +34,10 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Transactional
     @Override
-    public ResponseEntity<?> registrarAdmin(RequestUsuarioDTO request) {
+    public String registrarAdmin(RequestUsuarioDTO request) throws Exception {
 
         if (usuarioRepositorio.existsByUsuario(request.getUsuario())) {
-            return new ResponseEntity<>("el email de usuario ya existe", HttpStatus.NOT_ACCEPTABLE);
+            throw new UserIsExistsException("el email de usuario ya existe");
         } else {
             Usuario u = new Usuario();
             u.setUsuario(request.getUsuario());
@@ -48,13 +46,13 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
             u.setRol(Rol.ADMIN);
 
             usuarioRepositorio.save(u);
-            return new ResponseEntity<>("usuario registrado exitosamente", HttpStatus.CREATED);
+            return "usuario registrado exitosamente";
         }
     }
 
     @Transactional
     @Override
-    public ResponseEntity<?> modificarAdmin(String request, String usuario) {
+    public String modificarAdmin(String request, String usuario) throws Exception {
         Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
@@ -62,18 +60,18 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
                 u.setPassword(new BCryptPasswordEncoder().encode(request));
                 usuarioRepositorio.save(u);
 
-                return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
+                return "usuario modificado con éxito";
             } else {
-                return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
+                throw new UserIsExistsException("no se puede modificar al usuario");
             }
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("no se encontró el email de usuario");
         }
     }
 
     @Transactional(readOnly = true)
     @Override
-    public ResponseEntity<List<ResponseUsuarioDTO>> listarAdmin() {
+    public List<ResponseUsuarioDTO> listarAdmin() {
 
         List<Usuario> listaUsuario = usuarioRepositorio.findAll();
         List<ResponseUsuarioDTO> listaResponse = new ArrayList<>();
@@ -87,39 +85,43 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
                 listaResponse.add(response);
             }
         }
-        return new ResponseEntity<>(listaResponse, HttpStatus.OK);
+        return listaResponse;
     }
 
     @Transactional
     @Override
-    public ResponseEntity<?> eliminarAdmin(String usuario) {
+    public String eliminarAdmin(String usuario) throws Exception {
         Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
             u.setEstado(false);
             usuarioRepositorio.save(u);
-            return new ResponseEntity<>("usuario eliminado con éxito", HttpStatus.OK);
+            return "usuario eliminado con éxito";
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("no se encontró el email de usuario");
         }
     }
 
     @Override
-    public ResponseEntity<?> login(LoginDTO login) {
+    public User login(LoginDTO login) throws Exception {
 
         Optional<Usuario> respuesta = usuarioRepositorio.findByUsuario(login.getUsuario());
 
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            if (passwordEncoder.matches(login.getPassword(), usuario.getPassword())) {
-                User user = (User) loadUserByUsername(usuario.getUsuario());
-                return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+            if (usuario.getEstado()) {
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                if (passwordEncoder.matches(login.getPassword(), usuario.getPassword())) {
+                    User user = (User) loadUserByUsername(usuario.getUsuario());
+                    return user;
+                } else {
+                    throw new UserIsExistsException("contraseña incorrecta");
+                }
             } else {
-                return new ResponseEntity<>("contraseña incorrecta", HttpStatus.NOT_ACCEPTABLE);
+                throw new UserIsExistsException("no puede ingresar un usuario dado de baja");
             }
         } else {
-            return new ResponseEntity<>("el email ingresado no se encuentra registrado", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("el email ingresado no se encuentra registrado");
         }
 
     }
@@ -154,41 +156,38 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<?> buscarUsuario(String usuario) {
-        
+    public ResponseUsuarioDTO buscarUsuario(String usuario) throws Exception {
+
         Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
-        
+
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
             ResponseUsuarioDTO response = new ResponseUsuarioDTO();
             response.setUsuario(u.getUsuario());
             response.setEstado(u.getEstado());
             response.setRol(u.getRol());
-            
-             return new ResponseEntity<>(response, HttpStatus.OK);
-            
+            return response;
         } else {
-            return new ResponseEntity<>("el email ingresado no se encuentra", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("el email ingresado no se encuentra");
         }
-        
-        
+
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> altaUsuario(String usuario) {
+    public String altaUsuario(String usuario) throws Exception {
+
         Optional<Usuario> busqueda = usuarioRepositorio.findByUsuario(usuario);
-        
+
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
             u.setEstado(true);
             usuarioRepositorio.save(u);
-            
-            return new ResponseEntity<>("usuario dado de alta con éxito", HttpStatus.OK);
+            return "usuario dado de alta con exito";
         } else {
-            return new ResponseEntity<>("el email ingresado no se encuentra", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("el email ingresado no se encuentra");
         }
-        
+
     }
 
 }

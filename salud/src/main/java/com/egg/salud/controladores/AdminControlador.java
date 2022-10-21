@@ -1,6 +1,7 @@
 package com.egg.salud.controladores;
 
 import com.egg.salud.dto.RequestUsuarioDTO;
+import com.egg.salud.dto.ResponseUsuarioDTO;
 import com.egg.salud.servicio.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,32 +17,32 @@ public class AdminControlador {
 
     @GetMapping("/lista")
     public ResponseEntity<?> listar(){
-        return usuarioServicio.listarAdmin();
+        return ResponseEntity.ok().body(usuarioServicio.listarAdmin());
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrar(@RequestBody RequestUsuarioDTO request){
-        return usuarioServicio.registrarAdmin(request);
+    public ResponseEntity<?> registrar(@RequestBody RequestUsuarioDTO request) throws Exception{
+        return ResponseEntity.ok().body(usuarioServicio.registrarAdmin(request));
     }
 
     @PutMapping("/{usuario}")
-    public ResponseEntity<?> modificar(@RequestBody String request , @PathVariable String usuario){
-        return usuarioServicio.modificarAdmin(request,usuario);
+    public ResponseEntity<?> modificar(@RequestBody String request , @PathVariable String usuario) throws Exception{
+        return ResponseEntity.ok().body(usuarioServicio.modificarAdmin(request, usuario));
     }
 
     @DeleteMapping("/{usuario}")
-    public ResponseEntity<?> eliminar(@PathVariable String usuario){
-        return usuarioServicio.eliminarAdmin(usuario);
+    public ResponseEntity<?> eliminar(@PathVariable String usuario) throws Exception{
+        return ResponseEntity.ok().body(usuarioServicio.eliminarAdmin(usuario));
     }
     
     @PatchMapping("/{usuario}")
-    public ResponseEntity<?> altaUsuario(@PathVariable String usuario){
-       return usuarioServicio.altaUsuario(usuario);
+    public ResponseEntity<?> altaUsuario(@PathVariable String usuario) throws Exception{
+       return ResponseEntity.ok().body(usuarioServicio.altaUsuario(usuario));
     }
     
-    @GetMapping("/{usuario}")
-    public ResponseEntity<?> buscarUsuario(@PathVariable String usuario){
-       return usuarioServicio.buscarUsuario(usuario);
+    @GetMapping("/detalle/{usuario}")
+    public ResponseEntity<ResponseUsuarioDTO> buscarUsuario(@PathVariable String usuario) throws Exception{
+       return ResponseEntity.ok().body(usuarioServicio.buscarUsuario(usuario));
     }
     
     

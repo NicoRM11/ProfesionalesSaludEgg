@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.egg.salud.controladores;
 
 import com.egg.salud.dto.LoginDTO;
@@ -24,8 +20,8 @@ private UsuarioServicio usuarioServicio;
 
 
 @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginDTO login){
-    return usuarioServicio.login(login);
+public ResponseEntity<?> login(@RequestBody LoginDTO login) throws Exception{
+    return ResponseEntity.ok().body(usuarioServicio.login(login));
 }
 
 

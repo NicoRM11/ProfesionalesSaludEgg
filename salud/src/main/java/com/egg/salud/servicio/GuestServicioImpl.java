@@ -1,16 +1,16 @@
 package com.egg.salud.servicio;
 
 import com.egg.salud.dto.RequestGuestDTO;
-import com.egg.salud.dto.RegistroGuestDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.enumeraciones.Rol;
+import com.egg.salud.exceptions.DataNotFoundException;
+import com.egg.salud.exceptions.ResourceNotFoundException;
+import com.egg.salud.exceptions.UserIsExistsException;
 import com.egg.salud.repositorios.GuestRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,53 +29,51 @@ public class GuestServicioImpl implements GuestServicio {
     private SimpleDateFormat formateo;
     @Autowired
     private GuestRepositorio guestRepositorio;
-    
 
     @Override
     @Transactional
-    public ResponseEntity<?> registrarUsuario(@RequestBody RegistroGuestDTO registroDto) {
+    public String registrarUsuario(@RequestBody RequestGuestDTO requestDto) throws Exception {
 
-        if (guestRepositorio.existsByUsuario(registroDto.getUsuario())) {
-            return new ResponseEntity<>("el email de usuario ya existe", HttpStatus.NOT_ACCEPTABLE);
+        if (guestRepositorio.existsByUsuario(requestDto.getUsuario())) {
+            throw new UserIsExistsException("el email de usuario ya existe");
         }
-        if (guestRepositorio.existsByDni(registroDto.getDni())) {
-            List<Guest> guest = guestRepositorio.findByDni(registroDto.getDni()).get();
+        if (guestRepositorio.existsByDni(requestDto.getDni())) {
+            List<Guest> guest = guestRepositorio.findByDni(requestDto.getDni()).get();
 
             for (Guest aux : guest) {
-                if (aux.getNacionalidad().equals(registroDto.getNacionalidad())) {
-                    return new ResponseEntity<>("el dni ya existe", HttpStatus.NOT_ACCEPTABLE);
+                if (aux.getNacionalidad().equals(requestDto.getNacionalidad())) {
+                    throw new UserIsExistsException("el dni ya existe");
                 }
             }
-
         }
         Guest guest = new Guest();
-        guest.setUsuario(registroDto.getUsuario());
-        guest.setApellido(registroDto.getApellido());
-        guest.setDni(registroDto.getDni());
-        guest.setPassword(new BCryptPasswordEncoder().encode(registroDto.getPassword()));
-        guest.setNombre(registroDto.getNombre());
-        guest.setObra_social(registroDto.getObra_social());
-        guest.setTelefono(registroDto.getTelefono());
+        guest.setUsuario(requestDto.getUsuario());
+        guest.setApellido(requestDto.getApellido());
+        guest.setDni(requestDto.getDni());
+        guest.setPassword(new BCryptPasswordEncoder().encode(requestDto.getPassword()));
+        guest.setNombre(requestDto.getNombre());
+        guest.setObra_social(requestDto.getObra_social());
+        guest.setTelefono(requestDto.getTelefono());
         try {
-            guest.setFecha_nac(formateo.parse(registroDto.getFecha_nac()));
+            guest.setFecha_nac(formateo.parse(requestDto.getFecha_nac()));
 
         } catch (ParseException ex) {
             Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        guest.setNacionalidad(registroDto.getNacionalidad());
-        guest.setLocalidad(registroDto.getLocalidad());
+        guest.setNacionalidad(requestDto.getNacionalidad());
+        guest.setLocalidad(requestDto.getLocalidad());
         guest.setEstado(true);
 
         guest.setRol(Rol.GUEST);
 
         guestRepositorio.save(guest);
 
-        return new ResponseEntity<>("usuario registrado exitosamente", HttpStatus.CREATED);
+        return "usuario registrado exitosamente";
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> modificarUsuario(String usuario, RequestGuestDTO modificarDto) {
+    public String modificarUsuario(String usuario, RequestGuestDTO modificarDto) throws Exception {
 
         Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
 
@@ -99,18 +97,18 @@ public class GuestServicioImpl implements GuestServicio {
                 guest.setPassword(new BCryptPasswordEncoder().encode(modificarDto.getPassword()));
 
                 guestRepositorio.save(guest);
-                return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
-            } else{
-                return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
-             }
+                return "usuario modificado con éxito";
+            } else {
+                throw new UserIsExistsException("no se puede modificar al usuario");
+            }
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("no se encontró el email del usuario");
         }
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> eliminarUsuario(String usuario) {
+    public String eliminarUsuario(String usuario) throws Exception {
         Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
@@ -118,19 +116,22 @@ public class GuestServicioImpl implements GuestServicio {
             guest.setEstado(false);
 
             guestRepositorio.save(guest);
-            return new ResponseEntity<>("usuario eliminado correctamente", HttpStatus.OK);
+            return "usuario eliminado correctamente";
 
         } else {
-            return new ResponseEntity<>("no se encontró el id de usuario", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("no se encontró el email de usuario");
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<List<ResponseGuestDTO>> listar() {
+    public List<ResponseGuestDTO> listar() throws Exception {
 
         List<Guest> listaGuest = guestRepositorio.findAll();
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
+        if (listaGuest.size() < 1) {
+            throw new DataNotFoundException("no se encuentran registros en la base de datos");
+        }
 
         for (Guest guest : listaGuest) {
             ResponseGuestDTO responseGuest = new ResponseGuestDTO();
@@ -148,65 +149,70 @@ public class GuestServicioImpl implements GuestServicio {
             responseGuest.setTelefono(guest.getTelefono());
             listaGuestDto.add(responseGuest);
         }
-        return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
+        return listaGuestDto;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(String obra_social) {
+    public List<ResponseGuestDTO> listarObraSocial(String obra_social) throws Exception {
         List<Guest> listaGuest = guestRepositorio.listaPorObraSocial(obra_social);
         List<ResponseGuestDTO> listaGuestDto = new ArrayList<>();
 
-        for (Guest guest : listaGuest) {
-            ResponseGuestDTO responseGuest = new ResponseGuestDTO();
-            responseGuest.setNombre(guest.getNombre());
-            responseGuest.setApellido(guest.getApellido());
-            responseGuest.setDni(guest.getDni());
-            responseGuest.setUrlFoto(guest.getUrlFoto());
-            responseGuest.setFecha_nac(guest.getFecha_nac());
-            responseGuest.setLocalidad(guest.getLocalidad());
-            responseGuest.setNacionalidad(guest.getNacionalidad());
-            responseGuest.setPassword(guest.getPassword());
-            responseGuest.setObra_social(guest.getObra_social());
-            responseGuest.setUsuario(guest.getUsuario());
-            responseGuest.setEstado(guest.getEstado());
-            listaGuestDto.add(responseGuest);
+        if (listaGuest.size() < 1) {
+            throw new DataNotFoundException("no se encuentran registros en la base de datos");
         }
-        return new ResponseEntity<>(listaGuestDto, HttpStatus.OK);
+
+        for (Guest guest : listaGuest) {
+            if (guest.getEstado()) {
+                ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+                responseGuest.setNombre(guest.getNombre());
+                responseGuest.setApellido(guest.getApellido());
+                responseGuest.setDni(guest.getDni());
+                responseGuest.setUrlFoto(guest.getUrlFoto());
+                responseGuest.setFecha_nac(guest.getFecha_nac());
+                responseGuest.setLocalidad(guest.getLocalidad());
+                responseGuest.setNacionalidad(guest.getNacionalidad());
+                responseGuest.setPassword(guest.getPassword());
+                responseGuest.setObra_social(guest.getObra_social());
+                responseGuest.setUsuario(guest.getUsuario());
+                responseGuest.setEstado(guest.getEstado());
+                listaGuestDto.add(responseGuest);
+            }
+        }
+        return listaGuestDto;
 
     }
-    
+
     @Transactional(readOnly = true)
     @Override
-    public ResponseEntity<?> buscarPorEmail(String usuario) {
-        
+    public ResponseGuestDTO buscarPorEmail(String usuario) throws Exception {
+
         Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
         if (respuesta.isPresent()) {
             Guest guest = respuesta.get();
-            ResponseGuestDTO responseGuest = new ResponseGuestDTO();
-            responseGuest.setNombre(guest.getNombre());
-            responseGuest.setApellido(guest.getApellido());
-            responseGuest.setDni(guest.getDni());
-            responseGuest.setUrlFoto(guest.getUrlFoto());
-            responseGuest.setFecha_nac(guest.getFecha_nac());
-            responseGuest.setLocalidad(guest.getLocalidad());
-            responseGuest.setNacionalidad(guest.getNacionalidad());
-            responseGuest.setPassword(guest.getPassword());
-            responseGuest.setObra_social(guest.getObra_social());
-            responseGuest.setUsuario(guest.getUsuario());
-            responseGuest.setTelefono(guest.getTelefono());
-            responseGuest.setEstado(guest.getEstado());
-            
-            return new ResponseEntity<>(responseGuest, HttpStatus.ACCEPTED);
-            
+            if (guest.getEstado()) {
+                ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+                responseGuest.setNombre(guest.getNombre());
+                responseGuest.setApellido(guest.getApellido());
+                responseGuest.setDni(guest.getDni());
+                responseGuest.setUrlFoto(guest.getUrlFoto());
+                responseGuest.setFecha_nac(guest.getFecha_nac());
+                responseGuest.setLocalidad(guest.getLocalidad());
+                responseGuest.setNacionalidad(guest.getNacionalidad());
+                responseGuest.setPassword(guest.getPassword());
+                responseGuest.setObra_social(guest.getObra_social());
+                responseGuest.setUsuario(guest.getUsuario());
+                responseGuest.setTelefono(guest.getTelefono());
+                responseGuest.setEstado(guest.getEstado());
+
+                return responseGuest;
+            } else {
+                throw new UserIsExistsException("error, usuario dado de baja");
+            }
         } else {
-           return new ResponseEntity<>("no se encontro al usuario", HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("no se encontro al usuario");
         }
-        
-        
-        
-        
-        
+
     }
 
 }
