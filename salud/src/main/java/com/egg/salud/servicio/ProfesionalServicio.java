@@ -1,24 +1,23 @@
 package com.egg.salud.servicio;
 
-import com.egg.salud.dto.RegistroProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
-import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
+
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 public interface ProfesionalServicio {
 
-    public ResponseEntity<?> registrarUsuario(RegistroProfesionalDTO registroDto);
 
-    public ResponseEntity<?> modificarUsuario(String usuario, RequestProfesionalDTO modificarDto);
+    public String registrarUsuario(RequestProfesionalDTO requestProfesionalDTO) throws Exception;
 
-    public ResponseEntity<?> eliminarUsuario(String usuario);
+    public String modificarUsuario(String usuario, RequestProfesionalDTO modificarDto) throws Exception;
 
-    public ResponseEntity<List<ResponseProfesionalDTO>> listar();
+    public String eliminarUsuario(String usuario) throws Exception;
+
+    public List<ResponseProfesionalDTO> listar() throws Exception;
     
-    public ResponseEntity<?> buscarPorEmail(String usuario);
+    public ResponseProfesionalDTO buscarPorEmail(String usuario) throws Exception;
 
-    public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(String especialidad);
+    public List<ResponseProfesionalDTO> listarEspecialidad(String especialidad) throws Exception;
 
 }
