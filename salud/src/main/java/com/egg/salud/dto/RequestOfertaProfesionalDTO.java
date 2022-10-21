@@ -8,6 +8,9 @@ import lombok.Data;
 
 @Data
 public class RequestOfertaProfesionalDTO {
+    
+    
+    
 /*
    Para la creacion del objeto oferta se solicitara la informacion de login del profesional, 
     mas su disponibilidad de dias, horarios y ubicaciones.

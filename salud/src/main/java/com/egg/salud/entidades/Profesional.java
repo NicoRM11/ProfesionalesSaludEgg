@@ -16,7 +16,8 @@ import java.util.Set;
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class Profesional extends Usuario {
 
-    
+    //agregar localidad
+    //sacar fecha de nacimiento
     private String nombre;
     private String apellido;
     private String urlFoto;
@@ -34,7 +35,7 @@ public class Profesional extends Usuario {
 
     private String domicilio;
 
-    @OneToMany(mappedBy = "id_profesional", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "profesional", cascade = CascadeType.ALL)
     private List<Oferta> oferta;
 
     public Profesional(Long id, String usuario, String password, Boolean estado, Rol rol, String nombre, String apellido, String urlFoto, String nacionalidad, String especialidad, String matricula, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta) {

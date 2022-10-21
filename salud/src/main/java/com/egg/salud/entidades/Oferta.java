@@ -5,18 +5,20 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Oferta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idGuest", nullable = false)
+   @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idGuest", nullable = true)
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)

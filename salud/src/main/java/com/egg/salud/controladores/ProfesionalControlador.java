@@ -1,10 +1,12 @@
 
 package com.egg.salud.controladores;
 
+import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RegistroProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
+import com.egg.salud.servicio.OfertaServicio;
 import com.egg.salud.servicio.ProfesionalServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ProfesionalControlador {
     
     @Autowired
     private ProfesionalServicio profesionalServicio;
+    
+    @Autowired
+    private OfertaServicio ofertaServicio;
     
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody RegistroProfesionalDTO registroProfesionalDTO){
@@ -57,5 +62,15 @@ public class ProfesionalControlador {
     @GetMapping("/listar/{especialidad}")
     public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(@PathVariable(name= "especialidad") String especialidad){
         return profesionalServicio.listarEspecialidad(especialidad);
+    }
+    
+    
+    
+    @PostMapping("/crear-oferta/{usuario}")
+    public ResponseEntity<?> crear(@RequestBody CrearOfertaDTO crearOfertaDto,@PathVariable (name= "usuario") String usuario){
+
+        return ofertaServicio.crearOfertaProfesional(usuario, crearOfertaDto);
+                
+                
     }
 }

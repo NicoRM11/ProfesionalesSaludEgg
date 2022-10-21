@@ -18,4 +18,5 @@ public class RegistroProfesionalDTO {
     private Integer dni;
     private String domicilio;
    
+    //TELEFONO?
 }
