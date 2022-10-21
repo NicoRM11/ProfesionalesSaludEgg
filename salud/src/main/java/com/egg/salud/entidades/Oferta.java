@@ -18,7 +18,7 @@ public class Oferta {
     private Long id;
 
    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idGuest", nullable = true)
+    @JoinColumn(name = "idGuest")
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)

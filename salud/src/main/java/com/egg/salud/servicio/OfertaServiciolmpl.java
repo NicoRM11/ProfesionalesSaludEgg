@@ -37,13 +37,14 @@ public class OfertaServiciolmpl implements OfertaServicio {
     @Override
     @Transactional
     public ResponseEntity<?> crearOfertaProfesional(String usuario, @RequestBody CrearOfertaDTO crearOfertaDto) {
-
+        System.out.println("mostrar " + crearOfertaDto);
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
             Profesional profesional = respuesta.get();
             if (profesional.getEstado() == true) {
                 Oferta oferta = new Oferta();
+                oferta.setProfesional(profesional);
                 oferta.setDisponible(true);
                 oferta.setModalidad(crearOfertaDto.getModalidad());
                 oferta.setEspecialidad(profesional.getEspecialidad());
@@ -51,7 +52,6 @@ public class OfertaServiciolmpl implements OfertaServicio {
                 oferta.setLocalidad(crearOfertaDto.getLocalidad());
                 oferta.setTelefono(crearOfertaDto.getTelefono());
                 oferta.setFecha(crearOfertaDto.getFecha());
-                oferta.setHora(crearOfertaDto.getHora());
 
                 ofertaRepositorio.save(oferta);
 
