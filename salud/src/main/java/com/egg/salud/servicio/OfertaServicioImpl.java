@@ -145,12 +145,13 @@ public class OfertaServicioImpl implements OfertaServicio {
     @Transactional(readOnly=true)
     public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas() {
         
+        //Intentar buscar por id distinto de null
         List<Oferta> listaOfertaAceptada = ofertaRepositorio.findAll();
         List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
 
         for (Oferta oferta : listaOfertaAceptada) {
             
-            if (oferta.getGuest().getId()==1){
+            
                 
             
             ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
@@ -168,9 +169,7 @@ public class OfertaServicioImpl implements OfertaServicio {
             ofertaAceptadaDto.setUbicacion_consultorio(oferta.getUbicacion());
             
             listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
-        } else{
-                System.out.println("Error");
-            }}
+        }
         return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
         }
     
