@@ -27,7 +27,6 @@ export const Oferta = () => {
     const localizer = momentLocalizer(moment);
     const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
     const [allEvents, setAllEvents] = useState(events);
-    console.log(newEvent)
     const handleAddEvent = () => {
         setAllEvents([...allEvents, newEvent]);
     }
@@ -55,9 +54,10 @@ export const Oferta = () => {
                 </div>
 
             </div>
-            <Calendar
+            <Calendar 
                 localizer={localizer}
                 events={allEvents}
+                onDoubleClickEvent={console.log("evento")}
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: 500, margin: "50px" }}

@@ -9,13 +9,10 @@ import { useNavigate } from 'react-router-dom';
 
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
-    const [especialidad,setEspecialidad] = useState("");
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     let navigate = useNavigate();
-
-    console.log(especialidad)
 
     useEffect(() => {
         cargarPerfil();

@@ -9,6 +9,9 @@ import { GuestProfile } from './components/GuestProfile';
 import { ProfesionalProfile } from './components/ProfesionalProfile';
 import Inicio from './components/Inicio';
 import { Error404 } from './components/Error404';
+import { Oferta } from './components/Oferta';
+import "react-datepicker/dist/react-datepicker.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 function App() {
   return (
