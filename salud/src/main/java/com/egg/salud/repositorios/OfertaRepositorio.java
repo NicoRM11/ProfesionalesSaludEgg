@@ -5,6 +5,7 @@
 package com.egg.salud.repositorios;
 
 import com.egg.salud.entidades.Oferta;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
+    
+    
+    public Optional <Oferta> findById(Long id);
     
 }

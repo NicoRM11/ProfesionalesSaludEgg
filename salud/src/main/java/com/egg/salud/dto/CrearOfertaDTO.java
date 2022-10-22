@@ -11,13 +11,13 @@ import lombok.Data;
 public class CrearOfertaDTO {
 
    
-    
+    private Date hora;
     private Date fecha;
     private String localidad;
     
     private String modalidad;
     
-    private Integer telefono;
+    private Long telefono;
     
     
     

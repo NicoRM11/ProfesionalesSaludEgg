@@ -38,7 +38,8 @@ public class Oferta {
     private String ubicacion;
     private String modalidad;
     private String especialidad;
-    private Integer telefono;
+    private Long telefono;
     private Boolean disponible;
+    private Boolean estado;
 
 }
