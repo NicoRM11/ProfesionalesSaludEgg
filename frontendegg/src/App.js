@@ -9,7 +9,6 @@ import { GuestProfile } from './components/GuestProfile';
 import { ProfesionalProfile } from './components/ProfesionalProfile';
 import Inicio from './components/Inicio';
 import { Error404 } from './components/Error404';
-import React, { Component }  from 'react';
 
 function App() {
   return (
@@ -21,6 +20,7 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/GuestProfile" element={<GuestProfile />} />
           <Route exact path="/ProfesionalProfile" element={<ProfesionalProfile />} />
+          <Route exact path="/Oferta" element={<Oferta />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
         <Footer></Footer>

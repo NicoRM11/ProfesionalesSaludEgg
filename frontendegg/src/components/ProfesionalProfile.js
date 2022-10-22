@@ -9,10 +9,13 @@ import { useNavigate } from 'react-router-dom';
 
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
+    const [especialidad,setEspecialidad] = useState("");
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     let navigate = useNavigate();
+
+    console.log(especialidad)
 
     useEffect(() => {
         cargarPerfil();
@@ -192,7 +195,12 @@ export const ProfesionalProfile = () => {
                             <div className="row">
                                 <Col md={3}>
                                     <Form.Label >Especialidad</Form.Label>
-                                    <Form.Control type="text" name="especialidad" placeholder="Especialidad" value={data.especialidad} required onChange={handleChange} />
+                                    <select class="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
+                                        <option  value="Pediatria">Pediatria</option>
+                                        <option  value="Ginecologia">Ginecología</option>
+                                        <option  value="Clinica">Clinica</option>
+                                        <option  value="Cardiologia">Cardiologia</option>
+                                    </select>
                                 </Col>
                                 <Col md={3}>
                                     <Form.Label>Matricula</Form.Label>
@@ -203,7 +211,7 @@ export const ProfesionalProfile = () => {
                         </Row>
                     </div>
                     <Row className="mb-4">
-                    {edicion === true && <Button variant="" className="cta col-sm-3" type="submit">
+                        {edicion === true && <Button variant="" className="cta col-sm-3" type="submit">
                             <span>Guardar</span>
                             <svg viewBox="0 0 13 10" height="10px" width="15px">
                                 <path d="M1,5 L11,5"></path>
