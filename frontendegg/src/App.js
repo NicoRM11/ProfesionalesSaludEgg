@@ -9,6 +9,7 @@ import { GuestProfile } from './components/GuestProfile';
 import { ProfesionalProfile } from './components/ProfesionalProfile';
 import Inicio from './components/Inicio';
 import { Error404 } from './components/Error404';
+import React, { Component }  from 'react';
 
 function App() {
   return (

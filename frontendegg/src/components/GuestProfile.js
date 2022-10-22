@@ -7,12 +7,23 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
+import Avatar from "@mui/material/Avatar";
+import { storage } from "./firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import IconButton from '@mui/material/IconButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
+
+
+
 
 export const GuestProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const [image, setImage] = useState(null);
+    const [url, setUrl] = useState(null);
 
     let navigate = useNavigate()
     console.log(data);
@@ -39,6 +50,8 @@ export const GuestProfile = () => {
             console.log(error)
         }
     }
+
+
 
     const handleChange = ({ target }) => {
         setEdicion(true);
@@ -83,6 +96,7 @@ export const GuestProfile = () => {
             }
             console.log(error)
         }
+
     }
 
     const handleDelete = async (e) => {
@@ -116,7 +130,37 @@ export const GuestProfile = () => {
             console.log(error)
         }
     }
+    /*Imagenes*/
 
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    }
+
+    const handleSubmitImage = () => {
+
+        /* Imagen */
+        const imageRef = ref(storage, "image");
+        uploadBytes(imageRef, image)
+            .then(() => {
+                getDownloadURL(imageRef).then((url) => {
+                    setUrl(url)
+                })
+                    .catch(error => {
+                        console.log(error.message, "error getting the image url");
+                    });
+
+                setImage(null);
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
+    }
+
+
+
+    console.log(image)
     return (
 
         <section className="container py-5">
@@ -130,11 +174,25 @@ export const GuestProfile = () => {
 
                     <Row className="h2 text-center">
 
-                        <div className="encabezado">
+                        <div className="encabezado mb-5">
 
-                            <div className='imagenGuest'>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" alt=""/>
+                            <div className='imagenGuest '>
+                                <Avatar
+                                    alt="Imagen Perfil"
+                                    src={url}
+                                    sx={{ width: 150, height: 150 }}
+                                />
+                                <div className='botones mt-2'>
+
+                                    <IconButton color="primary" aria-label="upload picture" component="label">
+                                        <input hidden accept="image/*" type="file" onChange={handleImageChange} />
+                                        <PhotoCamera />
+                                    </IconButton>
+                                    <Button  variant="primary" onClick={handleSubmitImage}>Submit</Button>
+                                </div>
+
                             </div>
+
 
                             <div className='datosUsuario'>
                                 <Row className="mb-4">

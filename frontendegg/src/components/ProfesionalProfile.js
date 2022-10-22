@@ -131,6 +131,7 @@ export const ProfesionalProfile = () => {
                         <div className="encabezado">
 
                             <div className='imagenGuest'>
+                                
                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" alt="imagen" />
                             </div>
 
