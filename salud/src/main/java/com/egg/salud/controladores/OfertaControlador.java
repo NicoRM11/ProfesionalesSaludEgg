@@ -7,9 +7,13 @@ package com.egg.salud.controladores;
 
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
+import com.egg.salud.dto.ResponseGuestDTO;
+import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.servicio.GuestServicio;
 import com.egg.salud.servicio.OfertaServicio;
 import com.egg.salud.servicio.ProfesionalServicio;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,9 +54,14 @@ public class OfertaControlador {
         return ofertaServicio.eliminarOfertaProfesional(id);
     }
     
-    @GetMapping("/ofertas-aceptadas-vista-profesional")
-    public ResponseEntity<?> buscarOfertaProfesionalAceptadas(){
-        return ofertaServicio.buscarOfertaProfesionalAceptadas();
+    @GetMapping("/listar-ofertas-profesional/{disponible}")
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(@PathVariable(name= "disponible") Boolean disponible){
+        return ofertaServicio.buscarOfertaProfesionalAceptadas(disponible);
+    }
+    
+    @GetMapping("/listar-ofertas-profesional-disponibles/{disponible}")
+    public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(@PathVariable(name= "disponible") Boolean disponible){
+        return ofertaServicio.buscarOfertaProfesionalDisponible(disponible);
     }
 
     

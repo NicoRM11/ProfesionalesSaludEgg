@@ -1,6 +1,7 @@
 package com.egg.salud.entidades;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 
@@ -19,10 +20,12 @@ public class Oferta {
 
    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idGuest")
+   //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProfesional", nullable = false)
+    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Profesional profesional;
 
     

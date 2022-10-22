@@ -5,6 +5,7 @@ import com.egg.salud.dto.RequestGuestDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
 import com.egg.salud.entidades.Profesional;
@@ -32,8 +33,8 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @Service
 public class OfertaServicioImpl implements OfertaServicio {
-    
-     @Autowired
+
+    @Autowired
     private SimpleDateFormat formateo;
 
     @Autowired
@@ -48,7 +49,7 @@ public class OfertaServicioImpl implements OfertaServicio {
     @Override
     @Transactional
     public ResponseEntity<?> crearOfertaProfesional(String usuario, @RequestBody CrearOfertaDTO crearOfertaDto) {
-        
+
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
@@ -83,102 +84,113 @@ public class OfertaServicioImpl implements OfertaServicio {
     @Override
     @Transactional
     public ResponseEntity<?> modificarOferta(Long id, RequestOfertaProfesionalDTO requestOfertaProfesionalDTO) {
-        
+
         Optional<Oferta> respuesta = ofertaRepositorio.findById(id);
-        
+
         if (respuesta.isPresent()) {
             Oferta oferta = respuesta.get();
-            
+
             if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true) {
-                
-                              
-                
+
                 oferta.setModalidad(requestOfertaProfesionalDTO.getModalidad());
                 oferta.setLocalidad(requestOfertaProfesionalDTO.getLocalidad());
                 oferta.setTelefono(requestOfertaProfesionalDTO.getTelefono());
                 oferta.setFecha(requestOfertaProfesionalDTO.getFecha());
                 oferta.setHora(requestOfertaProfesionalDTO.getHora());
-                
-                
 
                 ofertaRepositorio.save(oferta);
                 return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
-            } else{
+            } else {
                 return new ResponseEntity<>("no se puede modificar un usuario dado de baja", HttpStatus.NOT_ACCEPTABLE);
-             }
+            }
         } else {
             return new ResponseEntity<>("no se encontró el id de la oferta", HttpStatus.NOT_FOUND);
         }
     }
-    
-    
+
     @Override
     @Transactional
     public ResponseEntity<?> eliminarOfertaProfesional(Long id) {
-        
+
         Optional<Oferta> respuesta = ofertaRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
-            
-            Oferta oferta = respuesta.get();
-            if (oferta.getProfesional().getEstado() == true){
-               oferta.setEstado(false);
 
-            ofertaRepositorio.save(oferta);
-            return new ResponseEntity<>("oferta eliminada correctamente", HttpStatus.OK);
- 
-            
-            
-        } else{
+            Oferta oferta = respuesta.get();
+            if (oferta.getProfesional().getEstado() == true) {
+                oferta.setEstado(false);
+
+                ofertaRepositorio.save(oferta);
+                return new ResponseEntity<>("oferta eliminada correctamente", HttpStatus.OK);
+
+            } else {
                 return new ResponseEntity<>("no se puede modificar porque el profesional esta dado de baja", HttpStatus.NOT_ACCEPTABLE);
-             }
+            }
         } else {
             return new ResponseEntity<>("no se encontró el id de la oferta", HttpStatus.NOT_FOUND);
         }
-        
-             
-        
+
     }
-    
 
     @Override
-    @Transactional(readOnly=true)
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas() {
-        
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(Boolean disponible) {
+
         //Intentar buscar por id distinto de null
-        List<Oferta> listaOfertaAceptada = ofertaRepositorio.findAll();
+        List<Oferta> listaOfertaProfesional = ofertaRepositorio.findAll();
         List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
 
-        for (Oferta oferta : listaOfertaAceptada) {
-            
-            
-                
-            
-            ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
-            
-            ofertaAceptadaDto.setNombre_guest(oferta.getGuest().getNombre());
-            ofertaAceptadaDto.setApellido_guest(oferta.getGuest().getApellido());
-            ofertaAceptadaDto.setFecha_nac_guest(oferta.getGuest().getFecha_nac());
-            ofertaAceptadaDto.setObra_social_guest(oferta.getGuest().getObra_social());
-            ofertaAceptadaDto.setTelefono_guest(oferta.getGuest().getTelefono());
-            
-            ofertaAceptadaDto.setFecha_turno(oferta.getFecha());
-            ofertaAceptadaDto.setHora_turno(oferta.getHora());
-            ofertaAceptadaDto.setLocalidad_consultorio(oferta.getLocalidad());
-            ofertaAceptadaDto.setModalidad(oferta.getModalidad());
-            ofertaAceptadaDto.setUbicacion_consultorio(oferta.getUbicacion());
-            
-            listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
+        for (Oferta oferta : listaOfertaProfesional) {
+
+            if (oferta.getDisponible() == false) {
+                ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
+                ofertaAceptadaDto.setNombre_guest(oferta.getGuest().getNombre());
+                ofertaAceptadaDto.setApellido_guest(oferta.getGuest().getApellido());
+                ofertaAceptadaDto.setFecha_nac_guest(oferta.getGuest().getFecha_nac());
+                ofertaAceptadaDto.setObra_social_guest(oferta.getGuest().getObra_social());
+                ofertaAceptadaDto.setTelefono_guest(oferta.getGuest().getTelefono());
+
+                ofertaAceptadaDto.setFecha_turno(oferta.getFecha());
+                ofertaAceptadaDto.setHora_turno(oferta.getHora());
+                ofertaAceptadaDto.setLocalidad_consultorio(oferta.getLocalidad());
+                ofertaAceptadaDto.setModalidad(oferta.getModalidad());
+                ofertaAceptadaDto.setUbicacion_consultorio(oferta.getUbicacion());
+
+                listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
+            } else {
+                System.out.println("Ninguna oferta aceptada");
+            }
+
         }
         return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
-        }
-    
     }
 
-    
-        
-    
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponible(Boolean disponible) {
+        List<Oferta> listaOfertaProfesional = ofertaRepositorio.findAll();
+        List<ResponseOfertaDisponibleProfesionalDTO> listaOfertaDisponibleProfesionalDTO = new ArrayList<>();
 
-    
+        for (Oferta oferta : listaOfertaProfesional) {
+
+            if (oferta.getDisponible() == true) {
+                ResponseOfertaDisponibleProfesionalDTO ofertaDisponibleDto = new ResponseOfertaDisponibleProfesionalDTO();
+                                
+                ofertaDisponibleDto.setFecha_turno(oferta.getFecha());
+                ofertaDisponibleDto.setHora_turno(oferta.getHora());
+                ofertaDisponibleDto.setLocalidad_consultorio(oferta.getLocalidad());
+                ofertaDisponibleDto.setModalidad(oferta.getModalidad());
+                ofertaDisponibleDto.setUbicacion_consultorio(oferta.getUbicacion());
+
+                listaOfertaDisponibleProfesionalDTO.add(ofertaDisponibleDto);
+            } else {
+                System.out.println("Ninguna oferta aceptada");
+            }
+
+        }
+        return new ResponseEntity<>(listaOfertaDisponibleProfesionalDTO, HttpStatus.OK);
+    }
+
+}
 
 

@@ -6,6 +6,7 @@ import com.egg.salud.dto.RegistroGuestDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -22,7 +23,10 @@ public interface OfertaServicio {
     public ResponseEntity<?> eliminarOfertaProfesional(Long id);
 
     
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas();
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(Boolean disponible);
+    
+    
+    public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponible(Boolean disponible);
     
 //public ResponseEntity<List<ResponseGuestDTO>> listarOfertaProfesional();
 //    
