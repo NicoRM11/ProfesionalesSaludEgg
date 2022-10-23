@@ -184,11 +184,11 @@ export const GuestProfile = () => {
                                 />
                                 <div className='botones mt-2'>
 
-                                    <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <input hidden accept="image/*" type="file" onChange={handleImageChange} />
-                                        <PhotoCamera />
+                                    <IconButton color="primary" aria-label="upload picture" component="label" onChange={handleSubmitImage}>
+                                        <input hidden accept="image/*" type="file" onClick={handleImageChange} />
+                                        <PhotoCamera color="success" />
                                     </IconButton>
-                                    <Button  variant="primary" onClick={handleSubmitImage}>Submit</Button>
+                                    
                                 </div>
 
                             </div>
