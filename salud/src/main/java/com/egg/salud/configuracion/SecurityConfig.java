@@ -40,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/inicio").hasAnyRole("ADMIN", "PROFESIONAL", "GUEST")
                 .antMatchers("/api/guest/registrar").permitAll()
                 .antMatchers("/api/profesional/registrar").permitAll()
+                .antMatchers("/api/profesional/crear-oferta/**").permitAll()
+                .antMatchers("/api/oferta/**").permitAll()
                 .antMatchers(HttpMethod.PUT , "/api/guest/{usuario}" ).hasAnyRole("ADMIN" , "GUEST")
                 .antMatchers(HttpMethod.PUT , "/api/profesional/{usuario}").hasAnyRole("ADMIN", "PROFESIONAL")
                 .antMatchers(HttpMethod.PUT , "/api/admin/{usuario}").hasAnyRole("ADMIN")

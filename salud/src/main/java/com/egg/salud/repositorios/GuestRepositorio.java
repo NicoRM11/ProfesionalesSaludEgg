@@ -30,5 +30,5 @@ public interface GuestRepositorio extends JpaRepository <Guest, Long>{
 
     @Query("SELECT g FROM guest g WHERE g.obra_social = :obra_social")
     public List<Guest> listaPorObraSocial(@Param("obra_social") String obra_social);
-
+    
 }

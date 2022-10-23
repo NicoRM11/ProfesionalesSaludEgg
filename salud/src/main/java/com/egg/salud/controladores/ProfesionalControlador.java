@@ -1,8 +1,14 @@
 
 package com.egg.salud.controladores;
 
+<<<<<<< HEAD
+=======
+import com.egg.salud.dto.CrearOfertaDTO;
+import com.egg.salud.dto.RegistroProfesionalDTO;
+>>>>>>> develop
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
+import com.egg.salud.servicio.OfertaServicio;
 import com.egg.salud.servicio.ProfesionalServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +30,9 @@ public class ProfesionalControlador {
     
     @Autowired
     private ProfesionalServicio profesionalServicio;
+    
+    @Autowired
+    private OfertaServicio ofertaServicio;
     
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody RequestProfesionalDTO requestProfesionalDTO) throws Exception{
@@ -55,4 +64,8 @@ public class ProfesionalControlador {
     public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(@PathVariable(name= "especialidad") String especialidad) throws Exception{
         return ResponseEntity.ok().body(profesionalServicio.listarEspecialidad(especialidad));
     }
+    
+    
+    
+    
 }
