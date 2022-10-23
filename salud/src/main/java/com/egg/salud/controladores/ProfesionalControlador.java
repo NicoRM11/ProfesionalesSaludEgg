@@ -1,11 +1,10 @@
 
 package com.egg.salud.controladores;
 
-<<<<<<< HEAD
-=======
+
 import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RegistroProfesionalDTO;
->>>>>>> develop
+
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.servicio.OfertaServicio;

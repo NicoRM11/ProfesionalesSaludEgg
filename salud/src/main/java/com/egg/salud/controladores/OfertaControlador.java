@@ -90,7 +90,7 @@ public class OfertaControlador {
         return ofertaServicio.buscarOfertaGuestAceptadas(usuario);
     }
     
-    @GetMapping("/listar-ofertas-guest-disponibles/")
+    @GetMapping("/listar-ofertas-guest-disponibles")
     public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponibles(){
         return ofertaServicio.buscarOfertaGuestDisponible();
     }
