@@ -6,6 +6,8 @@ package com.egg.salud.repositorios;
 
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
+import com.egg.salud.entidades.Profesional;
+import com.egg.salud.entidades.Usuario;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,6 +27,7 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     
     public Optional<List<Oferta>> findByDisponible(Boolean disponible);
     
-//    @Query("SELECT o FROM oferta o WHERE o.disponible = :disponible")
-//    public List<Oferta> listarPorOfertaProfesionalAceptada(@Param("disponible") Boolean disponible);
+    @Query("SELECT o FROM oferta o WHERE o.id_profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario)")
+    public List<Oferta> listaPorProfesional(@Param("usuario") String usuario);
+
 }

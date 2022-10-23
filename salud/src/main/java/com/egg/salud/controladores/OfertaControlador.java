@@ -8,6 +8,7 @@ package com.egg.salud.controladores;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
+import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.servicio.GuestServicio;
@@ -54,17 +55,31 @@ public class OfertaControlador {
         return ofertaServicio.eliminarOfertaProfesional(id);
     }
     
-    @GetMapping("/listar-ofertas-profesional/{disponible}")
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(@PathVariable(name= "disponible") Boolean disponible){
-        return ofertaServicio.buscarOfertaProfesionalAceptadas(disponible);
+    @GetMapping("/listar-ofertas-profesional/{usuario}")
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(@PathVariable(name = "usuario") String usuario){
+        return ofertaServicio.buscarOfertaProfesionalAceptadas(usuario);
     }
     
-    @GetMapping("/listar-ofertas-profesional-disponibles/{disponible}")
-    public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(@PathVariable(name= "disponible") Boolean disponible){
-        return ofertaServicio.buscarOfertaProfesionalDisponible(disponible);
+    @GetMapping("/listar-ofertas-profesional-disponibles")
+    public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(){
+        return ofertaServicio.buscarOfertaProfesionalDisponible();
     }
-
     
     
+//Revisar si es put o post o algun otro
+    @PutMapping("/aceptar-oferta-guest/{usuario}/{id_oferta}")
+    public ResponseEntity<?> aceptarOfertaGuest(@PathVariable(name = "id_oferta") Long id,@PathVariable(name = "usuario") String usuario){
+        return ofertaServicio.aceptarOfertaGuest(usuario, id);
+    }
+    
+    @DeleteMapping("/cancelar-oferta-guest/{usuario}/{id_oferta}")
+    public ResponseEntity<?> cancelarOfertaGuest(@PathVariable(name = "id_oferta") Long id,@PathVariable(name = "usuario") String usuario){
+        return ofertaServicio.cancelarOfertaGuest(usuario, id);
+    }
+    
+    @GetMapping("/listar-ofertas-guest")
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas(){
+        return ofertaServicio.buscarOfertaGuestAceptadas();
+    }
 
 }
