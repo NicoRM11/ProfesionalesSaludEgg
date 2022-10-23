@@ -5,11 +5,13 @@
  */
 package com.egg.salud.controladores;
 
+import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.servicio.GuestServicio;
 import com.egg.salud.servicio.OfertaServicio;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,15 +47,20 @@ public class OfertaControlador {
 //    @Autowired
 //    private GuestServicio guestServicio;
     
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<?> modificarOferta(@RequestBody RequestOfertaProfesionalDTO requestOfertaProfesionalDTO , @PathVariable(name = "id")Long id){
-        return ofertaServicio.modificarOferta(id , requestOfertaProfesionalDTO);
+    @PostMapping("/crear-oferta/{usuario}")
+    public ResponseEntity<?> crearOferta(@RequestBody CrearOfertaDTO crearOfertaDto,@PathVariable (name= "usuario") String usuario){
+        System.out.println("mostrar (controlador) " + crearOfertaDto);
+        return ofertaServicio.crearOfertaProfesional(usuario, crearOfertaDto);
     }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarOfertaProfesional(@PathVariable(name = "id") Long id){
-        return ofertaServicio.eliminarOfertaProfesional(id);
+    @PutMapping("/{usuario}/{id}")
+    public ResponseEntity<?> modificarOferta(@RequestBody RequestOfertaProfesionalDTO requestOfertaProfesionalDTO , @PathVariable(name = "id")Long id,@PathVariable (name= "usuario") String usuario){
+        return ofertaServicio.modificarOferta(id , requestOfertaProfesionalDTO, usuario);
+    }
+    
+    @DeleteMapping("/{usuario}/{id}")
+    public ResponseEntity<?> eliminarOfertaProfesional(@PathVariable(name = "id") Long id,@PathVariable (name= "usuario") String usuario){
+        return ofertaServicio.eliminarOfertaProfesional(id, usuario);
     }
     
     @GetMapping("/listar-ofertas-profesional/{usuario}")
@@ -60,7 +68,7 @@ public class OfertaControlador {
         return ofertaServicio.buscarOfertaProfesionalAceptadas(usuario);
     }
     
-    @GetMapping("/listar-ofertas-profesional-disponibles")
+    @GetMapping("/listar-ofertas-profesional-disponibles/")
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(){
         return ofertaServicio.buscarOfertaProfesionalDisponible();
     }
@@ -77,9 +85,14 @@ public class OfertaControlador {
         return ofertaServicio.cancelarOfertaGuest(usuario, id);
     }
     
-    @GetMapping("/listar-ofertas-guest")
-    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas(){
-        return ofertaServicio.buscarOfertaGuestAceptadas();
+    @GetMapping("/listar-ofertas-guest/{usuario}")
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas(@PathVariable(name = "usuario") String usuario){
+        return ofertaServicio.buscarOfertaGuestAceptadas(usuario);
+    }
+    
+    @GetMapping("/listar-ofertas-guest-disponibles/")
+    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponibles(){
+        return ofertaServicio.buscarOfertaGuestDisponible();
     }
 
 }

@@ -6,13 +6,17 @@
 package com.egg.salud.dto;
 
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author Walter
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseOfertaAceptadaGuestDTO {
 
     private String nombre_profesional;

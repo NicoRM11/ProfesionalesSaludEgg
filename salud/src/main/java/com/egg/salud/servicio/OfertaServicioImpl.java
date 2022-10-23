@@ -6,6 +6,7 @@ import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
@@ -85,11 +86,11 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> modificarOferta(Long id, RequestOfertaProfesionalDTO requestOfertaProfesionalDTO) {
+    public ResponseEntity<?> modificarOferta(Long id, RequestOfertaProfesionalDTO requestOfertaProfesionalDTO, String usuario) {
 
         Optional<Oferta> respuesta = ofertaRepositorio.findById(id);
-
-        if (respuesta.isPresent()) {
+        Optional<Profesional> respuesta2 = profesionalRepositorio.findByUsuario(usuario);
+        if (respuesta.isPresent() && respuesta2.isPresent()) {
             Oferta oferta = respuesta.get();
 
             if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true) {
@@ -112,11 +113,12 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Override
     @Transactional
-    public ResponseEntity<?> eliminarOfertaProfesional(Long id) {
+    public ResponseEntity<?> eliminarOfertaProfesional(Long id, String usuario) {
 
         Optional<Oferta> respuesta = ofertaRepositorio.findById(id);
-
-        if (respuesta.isPresent()) {
+        Optional<Profesional> respuesta2 = profesionalRepositorio.findByUsuario(usuario);
+        
+        if (respuesta.isPresent() && respuesta2.isPresent()) {
 
             Oferta oferta = respuesta.get();
             if (oferta.getProfesional().getEstado() == true) {
@@ -271,10 +273,13 @@ public class OfertaServicioImpl implements OfertaServicio {
     }
 
     @Override
-    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas() {
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas(String usuario) {
         
-        List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
-        List<ResponseOfertaAceptadaGuestDTO> listaOfertaAceptadaGuestDTO = new ArrayList<>();
+        Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
+        
+        if (respuesta.isPresent()){
+            List<Oferta> listaOfertaGuest = ofertaRepositorio.listaPorGuest(usuario);
+            List<ResponseOfertaAceptadaGuestDTO> listaOfertaAceptadaGuestDTO = new ArrayList<>();
 
         for (Oferta oferta : listaOfertaGuest) {
 
@@ -299,14 +304,64 @@ public class OfertaServicioImpl implements OfertaServicio {
 
         }
         return new ResponseEntity<>(listaOfertaAceptadaGuestDTO, HttpStatus.OK);
+        } 
         
+        //
+        //Manejo de errores
+        //
+        ResponseOfertaAceptadaGuestDTO a = new ResponseOfertaAceptadaGuestDTO("asd","asd",1L,"es",new Date(),new Date(),"as","as","as");
         
+        List<ResponseOfertaAceptadaGuestDTO> prueba = new ArrayList<>();
+        prueba.add(a);
+        return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
+        //
+        //
+        //
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponible() {
         
+        List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
+        List<ResponseOfertaDisponibleGuestDTO> listaOfertaDisponibleGuestDTO = new ArrayList<>();
+
+        for (Oferta oferta : listaOfertaGuest) {
+
+            if (oferta.getDisponible() == true) {
+                ResponseOfertaDisponibleGuestDTO ofertaDisponibleDto = new ResponseOfertaDisponibleGuestDTO();
+                                
+                ofertaDisponibleDto.setFecha_turno(oferta.getFecha());
+                ofertaDisponibleDto.setHora_turno(oferta.getHora());
+                ofertaDisponibleDto.setLocalidad_consultorio(oferta.getLocalidad());
+                ofertaDisponibleDto.setModalidad(oferta.getModalidad());
+                ofertaDisponibleDto.setUbicacion_consultorio(oferta.getUbicacion());
+                
+                ofertaDisponibleDto.setApellido_profesional(oferta.getProfesional().getApellido());
+                ofertaDisponibleDto.setNombre_profesional(oferta.getProfesional().getNombre());
+                ofertaDisponibleDto.setTelefono_consultorio(oferta.getTelefono());
+                ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
+
+                listaOfertaDisponibleGuestDTO.add(ofertaDisponibleDto);
+            } else {
+                System.out.println("Ninguna oferta aceptada");
+            }
+
+        }
+        return new ResponseEntity<>(listaOfertaDisponibleGuestDTO, HttpStatus.OK);
+    }
         
+    
+    
+    
+    
+    
+    
+    
+    
     }
     
     
 
-}
+
 
 

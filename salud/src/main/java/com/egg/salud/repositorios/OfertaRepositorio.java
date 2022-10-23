@@ -33,6 +33,8 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     //@Query("SELECT o FROM oferta o WHERE o.profesional.usuario = :usuario")
     public List<Oferta> listaPorProfesional(@Param("usuario") String usuario);
     
+    @Query("SELECT o FROM oferta o WHERE o.guest.usuario = :usuario")
+    public List<Oferta> listaPorGuest(@Param("usuario") String usuario);
       
     //@Query("SELECT o FROM oferta o WHERE o.id_profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario)")
 }
