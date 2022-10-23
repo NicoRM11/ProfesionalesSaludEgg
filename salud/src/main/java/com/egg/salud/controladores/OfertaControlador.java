@@ -35,14 +35,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 public class OfertaControlador {
 
-    @Autowired
-    private ProfesionalServicio profesionalServicio;
+//    @Autowired
+//    private ProfesionalServicio profesionalServicio;
 
     @Autowired
     private OfertaServicio ofertaServicio;
 
-    @Autowired
-    private GuestServicio guestServicio;
+//    @Autowired
+//    private GuestServicio guestServicio;
     
     
     @PutMapping("/{id}")
