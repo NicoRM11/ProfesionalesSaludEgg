@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name="oferta")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,12 +19,12 @@ public class Oferta {
     private Long id;
 
    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idGuest")
+    @JoinColumn(name = "id_guest")
    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProfesional", nullable = false)
+    @JoinColumn(name = "id_profesional", nullable = false)
     //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Profesional profesional;
 
