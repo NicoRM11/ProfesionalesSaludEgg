@@ -13,11 +13,13 @@ public class CrearOfertaDTO {
    
     private Date hora;
     private Date fecha;
-    private String localidad;
+    private String localidad_consultorio;
     
     private String modalidad;
     
-    private Long telefono;
+    private Long telefono_consultorio;
+
+    private String domicilio_consultorio;
     
     
     

@@ -63,9 +63,9 @@ public class OfertaServicioImpl implements OfertaServicio {
                 oferta.setDisponible(true);
                 oferta.setModalidad(crearOfertaDto.getModalidad());
                 oferta.setEspecialidad(profesional.getEspecialidad());
-                oferta.setUbicacion(profesional.getDomicilio());
-                oferta.setLocalidad(crearOfertaDto.getLocalidad());
-                oferta.setTelefono(crearOfertaDto.getTelefono());
+                oferta.setUbicacion(crearOfertaDto.getDomicilio_consultorio());
+                oferta.setLocalidad(crearOfertaDto.getLocalidad_consultorio());
+                oferta.setTelefono(crearOfertaDto.getTelefono_consultorio());
                 oferta.setFecha(crearOfertaDto.getFecha());
                 oferta.setHora(crearOfertaDto.getHora());
                 oferta.setEstado(true);
@@ -155,7 +155,7 @@ public class OfertaServicioImpl implements OfertaServicio {
 
             if (oferta.getDisponible() == false) {
                 ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
-                ofertaAceptadaDto.setNombre_guest(oferta.getGuest().getNombre());
+                ofertaAceptadaDto.setGuest(oferta.getGuest());
                 ofertaAceptadaDto.setApellido_guest(oferta.getGuest().getApellido());
                 ofertaAceptadaDto.setFecha_nac_guest(oferta.getGuest().getFecha_nac());
                 ofertaAceptadaDto.setObra_social_guest(oferta.getGuest().getObra_social());
@@ -176,11 +176,12 @@ public class OfertaServicioImpl implements OfertaServicio {
         
         return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
         } 
-        
+
+        Guest asd = new Guest();
         //
         //Manejo de errores
         //
-        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO("asd","asd","asd",
+        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd,"asd","asd","asd",
                 1L,new Date(),new Date(),new Date(),"asd","asd","asd");
         
         List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
