@@ -4,6 +4,7 @@ import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RequestGuestDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
+import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
@@ -345,49 +346,54 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Transactional(readOnly = true)
     @Override
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> todasLasOfertasProfesional(String usuario) {
+    public ResponseEntity<List<ResponseListaOfertaDTO>> todasLasOfertasProfesional(String usuario) {
         
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
+            
             List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
-
-            List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
+            
+            
+            List<ResponseListaOfertaDTO> listaProfesionalDTO = new ArrayList<>();
 
             for (Oferta oferta : listaOfertaProfesional) {
 
                 if (oferta.getEstado() == true) {
-                    ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
-                    ofertaAceptadaDto.setGuest(oferta.getGuest());
-                    ofertaAceptadaDto.setApellido(oferta.getGuest().getApellido());
-                    ofertaAceptadaDto.setFecha_nac(oferta.getGuest().getFecha_nac());
-                    ofertaAceptadaDto.setObra_social(oferta.getGuest().getObra_social());
-                    ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
-
+                    ResponseListaOfertaDTO ofertaAceptadaDto = new ResponseListaOfertaDTO();
+                    
+                    if (oferta.getDisponible() == false) {
+                       ofertaAceptadaDto.setGuest(oferta.getGuest());
+                       ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
+                    } else {
+                      ofertaAceptadaDto.setGuest(new Guest());
+                      ofertaAceptadaDto.setTelefono(null);
+                    }
+                    ofertaAceptadaDto.setEspecialidad(oferta.getEspecialidad());
                     ofertaAceptadaDto.setId(oferta.getId());
                     ofertaAceptadaDto.setStart(oferta.getStart());
                     ofertaAceptadaDto.setEnd(oferta.getEnd());
                     ofertaAceptadaDto.setLocalidad(oferta.getLocalidad());
                     ofertaAceptadaDto.setModalidad(oferta.getModalidad());
                     ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
-
-                    listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
-                } else {
-                    System.out.println("Ninguna oferta aceptada");
+                    ofertaAceptadaDto.setDisponible(oferta.getDisponible());
+                    
+                    listaProfesionalDTO.add(ofertaAceptadaDto);
                 }
             }
-            return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
-        }
+            return new ResponseEntity<>(listaProfesionalDTO, HttpStatus.OK);
+            
+        } else{
+            System.out.println("holu");
+             return null;
+         }
 
-        Guest asd = new Guest();
-        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd, "asd", "asd", "asd",
-                1L, new Date(), new Date(), new Date(), "asd", "asd", "asd");
-
-        List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
-        prueba.add(a);
-        return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
-   
-    
+//        Guest asd = new Guest();
+//        ResponseListaOfertaDTO a = new ResponseListaOfertaDTO
+//        List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
+//        prueba.add(a);
+//        return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
+//   
     }
 
     @Transactional(readOnly = true)

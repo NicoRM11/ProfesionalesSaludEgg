@@ -86,6 +86,7 @@ public class GuestServicioImpl implements GuestServicio {
                 guest.setUsuario(modificarDto.getUsuario());
                 guest.setObra_social(modificarDto.getObra_social());
                 guest.setTelefono(modificarDto.getTelefono());
+                guest.setUrlFoto(modificarDto.getUrlFoto());
                 try {
                     guest.setFecha_nac(formateo.parse(modificarDto.getFecha_nac()));
 

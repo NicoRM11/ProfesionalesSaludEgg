@@ -23,7 +23,7 @@ public class Guest extends Usuario{
    private Integer dni;
    
    private String obra_social;
-   private long telefono;
+   private Long telefono;
    
    @Temporal(TemporalType.DATE)
    private Date fecha_nac;

@@ -9,6 +9,7 @@ import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
+import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
@@ -95,8 +96,8 @@ public class OfertaControlador {
         return ofertaServicio.buscarOfertaGuestDisponible();
     }
 
-    @GetMapping("/listar-todas-las-ofertas-profesional")
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> todasLasOfertasProfesional(String usuario){
+    @GetMapping("/listar-todas-las-ofertas-profesional/{usuario}")
+    public ResponseEntity<List<ResponseListaOfertaDTO>> todasLasOfertasProfesional(@PathVariable String usuario){
         return ofertaServicio.todasLasOfertasProfesional(usuario);
     }
     

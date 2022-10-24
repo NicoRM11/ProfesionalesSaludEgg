@@ -19,5 +19,6 @@ public class RequestProfesionalDTO {
     private String matricula;
     private Integer dni;
     private String domicilio;
+    private String urlFoto;
    
 }

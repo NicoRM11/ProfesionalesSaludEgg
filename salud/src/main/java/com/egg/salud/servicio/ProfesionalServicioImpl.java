@@ -87,6 +87,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
                 profesional.setNombre(modificarDto.getNombre());
                 profesional.setDomicilio(modificarDto.getDomicilio());
                 profesional.setEspecialidad(modificarDto.getEspecialidad());
+                profesional.setUrlFoto(modificarDto.getUrlFoto());
                 try {
                     profesional.setFecha_nac(formateo.parse(modificarDto.getFecha_nac()));
 

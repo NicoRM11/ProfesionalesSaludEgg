@@ -5,6 +5,7 @@ import com.egg.salud.dto.RequestGuestDTO;
 
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseGuestDTO;
+import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
@@ -27,7 +28,7 @@ public interface OfertaServicio {
     
     public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(String usuario);
     
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> todasLasOfertasProfesional(String usuario);
+    public ResponseEntity<List<ResponseListaOfertaDTO>> todasLasOfertasProfesional(String usuario);
     
     
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponible();

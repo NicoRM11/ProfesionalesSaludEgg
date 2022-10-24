@@ -12,9 +12,10 @@ public class RequestGuestDTO {
     private Integer dni;
     private String password;
     private String obra_social;
-    private long telefono;
+    private Long telefono;
     private String fecha_nac;
     private String nacionalidad;
     private String localidad;
+    private String urlFoto;
 
 }
