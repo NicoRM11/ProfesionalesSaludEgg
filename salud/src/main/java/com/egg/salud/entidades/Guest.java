@@ -2,6 +2,7 @@
 package com.egg.salud.entidades;
 
 import com.egg.salud.enumeraciones.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;

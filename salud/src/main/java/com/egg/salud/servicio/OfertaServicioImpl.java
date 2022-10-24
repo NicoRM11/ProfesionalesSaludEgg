@@ -356,10 +356,13 @@ public class OfertaServicioImpl implements OfertaServicio {
                     ResponseListaOfertaDTO ofertaAceptadaDto = new ResponseListaOfertaDTO();
 
                     if (oferta.getDisponible() == false) {
-                        ofertaAceptadaDto.setGuest(oferta.getGuest());
-                    } else {
-                        ofertaAceptadaDto.setGuest(new Guest());
+                        ofertaAceptadaDto.setNombre(oferta.getGuest().getNombre());
+                        ofertaAceptadaDto.setApellido(oferta.getGuest().getApellido());
+                        ofertaAceptadaDto.setTelefonoGuest(oferta.getGuest().getTelefono());
+                   } else {
+                       // ofertaAceptadaDto.setGuest(new Guest());
                     }
+                    
                     ofertaAceptadaDto.setTelefono(oferta.getTelefono());
                     ofertaAceptadaDto.setEspecialidad(oferta.getEspecialidad());
                     ofertaAceptadaDto.setId(oferta.getId());
