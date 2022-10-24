@@ -23,16 +23,17 @@ export const GuestProfile = () => {
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     const [image, setImage] = useState(null);
-    const [url, setUrl] = useState(null);
+    //const [url, setUrl] = useState(null);
 
     let navigate = useNavigate()
     console.log(data);
+    console.log(image);
 
     useEffect(() => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/${username}`;
+    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
@@ -42,9 +43,11 @@ export const GuestProfile = () => {
                 }
             }
             );
-            if (response.status === 202) {
+            console.log(response);
+            if (response.status === 200) {
                 response.data.password = `${password}`;
                 setdata(response.data);
+                
             }
         } catch (error) {
             console.log(error)
@@ -67,7 +70,9 @@ export const GuestProfile = () => {
             password: target.value
         })
     }
+
     const handleSubmit = async (e) => {
+        const URL = `http://localhost:8080/api/guest/${username}`;
         e.preventDefault();
         try {
             const response = await axios.put(URL, data, {
@@ -87,13 +92,12 @@ export const GuestProfile = () => {
             }
 
         } catch (error) {
-            if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `No se pudo modificar, ${error.response.data} !`,
+                    text: `No se pudo modificar !`,
                 })
-            }
+            
             console.log(error)
         }
 
@@ -141,11 +145,13 @@ export const GuestProfile = () => {
     const handleSubmitImage = () => {
 
         /* Imagen */
-        const imageRef = ref(storage, "image");
+        const imageRef = ref(storage, `image/${username}`);
         uploadBytes(imageRef, image)
             .then(() => {
                 getDownloadURL(imageRef).then((url) => {
-                    setUrl(url)
+                    setdata({...data,urlFoto:url})
+                    //setUrl(url)
+                    //console.log(url);
                 })
                     .catch(error => {
                         console.log(error.message, "error getting the image url");
@@ -158,9 +164,7 @@ export const GuestProfile = () => {
             })
     }
 
-
-
-    console.log(image)
+   // console.log(image)
     return (
 
         <section className="container py-5">
@@ -179,7 +183,7 @@ export const GuestProfile = () => {
                             <div className='imagenGuest '>
                                 <Avatar
                                     alt="Imagen Perfil"
-                                    src={url}
+                                    src={data.urlFoto}
                                     sx={{ width: 150, height: 150 }}
                                 />
                                 <div className='botones mt-2'>

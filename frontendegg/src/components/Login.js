@@ -32,11 +32,12 @@ const Login = () => {
       
 
     } catch (error) {
-      if (error.response.status === 406) {
+      console.log(error)
+      if (error.response.status === 406 ||error.response.status === 404) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: `No se pudo iniciar sesion, ${error.response.data} !`,
+          text: `No se pudo iniciar sesion, ${error.response.data.messages[0]} !`,
         })
       }
       console.log(error)

@@ -68,7 +68,8 @@ export const Oferta = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         setAllEvents([...allEvents, newEvent]);
-        setData({start:newEvent.start, end:newEvent.end, modalidad:newEvent.modalidad, telefono:newEvent.telefono, localidad:newEvent.localidad})
+        setData({start:newEvent.start,consultorio:newEvent.consultorio, end:newEvent.end, modalidad:newEvent.modalidad, telefono:newEvent.telefono, localidad:newEvent.localidad})
+        if(data.telefono!==""){
         try {
             const response = await axios.post(URL, data, {
                 auth: {
@@ -96,7 +97,29 @@ export const Oferta = () => {
             }
             console.log(error)
         }
+        }
     }
+
+    /*const cargarOfertas = async () => {
+        const URL = `http://localhost:8080/listar-ofertas-profesional-disponibles/${username}`;
+        try {
+            const response = await axios.get(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            }
+            );
+            console.log(response);
+            if (response.status === 200) {
+                response.data.password = `${password}`;
+                setdata(response.data);
+                
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }*/
 
     return (
         <div className="myCustomHeight">
@@ -114,6 +137,7 @@ export const Oferta = () => {
                     </div>
                     <div className="col">
                         <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
+                            <option value="Modalidad">Modalidad</option>
                             <option value="Virtual">Virtual</option>
                             <option value="Presencial">Presencial</option>
                         </select>

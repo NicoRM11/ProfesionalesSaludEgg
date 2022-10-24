@@ -18,8 +18,8 @@ export const ProfesionalProfile = () => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/profesional/${username}`;
     const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -28,7 +28,8 @@ export const ProfesionalProfile = () => {
                 }
             }
             );
-            if (response.status === 202) {
+            console.log(response);
+            if (response.status === 200) {
                 response.data.password = `${password}`;
                 setdata(response.data);
             }
@@ -47,6 +48,7 @@ export const ProfesionalProfile = () => {
     }
 
     const handleSubmit = async (e) => {
+        const URL = `http://localhost:8080/api/profesional/${username}`;
         e.preventDefault();
         try {
             const response = await axios.put(URL, data, {
@@ -66,13 +68,11 @@ export const ProfesionalProfile = () => {
             }
 
         } catch (error) {
-            if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `No se pudo modificar, ${error.response.data} !`,
+                    text: `No se pudo modificar!`,
                 })
-            }
             console.log(error)
         }
     }
@@ -85,6 +85,7 @@ export const ProfesionalProfile = () => {
     }
     const handleDelete = async (e) => {
         e.preventDefault();
+        const URL = `http://localhost:8080/api/profesional/${username}`;
         try {
             const response = await axios.delete(URL, {
                 auth: {
@@ -104,13 +105,11 @@ export const ProfesionalProfile = () => {
             }
 
         } catch (error) {
-            if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `No se pudo eliminar la cuenta, ${error.response.data} !`,
+                    text: `No se pudo eliminar la cuenta, intente nuevamente !`,
                 })
-            }
             console.log(error)
         }
     }
@@ -190,9 +189,9 @@ export const ProfesionalProfile = () => {
                         </Row>
                         <Row className="mb-4">
                             <div className="row">
-                                <Col md={3}>
+                                <Col md={4}>
                                     <Form.Label >Especialidad</Form.Label>
-                                    <select class="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
+                                    <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
                                         <option  value="Pediatria">Pediatria</option>
                                         <option  value="Ginecologia">Ginecología</option>
                                         <option  value="Clinica">Clinica</option>
