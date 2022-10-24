@@ -7,12 +7,19 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
+import Avatar from "@mui/material/Avatar";
+import { storage } from "./firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import IconButton from '@mui/material/IconButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     let navigate = useNavigate();
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
         cargarPerfil();
@@ -68,11 +75,11 @@ export const ProfesionalProfile = () => {
             }
 
         } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo modificar!`,
-                })
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `No se pudo modificar!`,
+            })
             console.log(error)
         }
     }
@@ -105,13 +112,44 @@ export const ProfesionalProfile = () => {
             }
 
         } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo eliminar la cuenta, intente nuevamente !`,
-                })
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `No se pudo eliminar la cuenta, intente nuevamente !`,
+            })
             console.log(error)
         }
+    }
+
+    const handleImageChange = (e) => {
+
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    }
+
+    const handleSubmitImage = () => {
+
+        /* Imagen */
+
+        const imageRef = ref(storage, `image/${username}`);
+        uploadBytes(imageRef, image)
+            .then(() => {
+                getDownloadURL(imageRef).then((url) => {
+                    setdata({ ...data, urlFoto: url })
+                    //setUrl(url)
+                    //console.log(url);
+                })
+                    .catch(error => {
+                        console.log(error.message, "error getting the image url");
+                    });
+
+                setImage(null);
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
+        setEdicion(true);
     }
     return (
 
@@ -127,11 +165,25 @@ export const ProfesionalProfile = () => {
 
                     <Row className="h2 text-center">
 
-                        <div className="encabezado">
+                        <div className="encabezado mb-5">
 
-                            <div className='imagenGuest'>
-                                
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" alt="imagen" />
+                            <div className='imagenGuest '>
+                                <Avatar
+                                    alt="Imagen Perfil"
+                                    src={data.urlFoto}
+                                    sx={{ width: 150, height: 150 }}
+                                />
+                                <div className='botones mt-2'>
+
+                                    <IconButton color="primary" aria-label="upload picture" component="label" onChange={handleImageChange}>
+                                        <input hidden accept="image/*" type="file" />
+                                        <PhotoCamera color="success" />
+                                    </IconButton>
+
+                                    <Button variant="outline-success" onClick={handleSubmitImage}>Subir imagen</Button>{' '}
+
+                                </div>
+
                             </div>
 
                             <div className='datosUsuario'>
@@ -192,10 +244,10 @@ export const ProfesionalProfile = () => {
                                 <Col md={4}>
                                     <Form.Label >Especialidad</Form.Label>
                                     <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
-                                        <option  value="Pediatria">Pediatria</option>
-                                        <option  value="Ginecologia">Ginecología</option>
-                                        <option  value="Clinica">Clinica</option>
-                                        <option  value="Cardiologia">Cardiologia</option>
+                                        <option value="Pediatria">Pediatria</option>
+                                        <option value="Ginecologia">Ginecología</option>
+                                        <option value="Clinica">Clinica</option>
+                                        <option value="Cardiologia">Cardiologia</option>
                                     </select>
                                 </Col>
                                 <Col md={3}>
