@@ -63,11 +63,11 @@ public class OfertaServicioImpl implements OfertaServicio {
                 oferta.setDisponible(true);
                 oferta.setModalidad(crearOfertaDto.getModalidad());
                 oferta.setEspecialidad(profesional.getEspecialidad());
-                oferta.setUbicacion(crearOfertaDto.getDomicilio_consultorio());
-                oferta.setLocalidad(crearOfertaDto.getLocalidad_consultorio());
-                oferta.setTelefono(crearOfertaDto.getTelefono_consultorio());
-                oferta.setFecha(crearOfertaDto.getFecha());
-                oferta.setHora(crearOfertaDto.getHora());
+                oferta.setConsultorio(crearOfertaDto.getConsultorio());
+                oferta.setLocalidad(crearOfertaDto.getLocalidad());
+                oferta.setTelefono(crearOfertaDto.getTelefono());
+                oferta.setStart(crearOfertaDto.getStart());
+                oferta.setEnd(crearOfertaDto.getEnd());
                 oferta.setEstado(true);
 
                 ofertaRepositorio.save(oferta);
@@ -98,8 +98,9 @@ public class OfertaServicioImpl implements OfertaServicio {
                 oferta.setModalidad(requestOfertaProfesionalDTO.getModalidad());
                 oferta.setLocalidad(requestOfertaProfesionalDTO.getLocalidad());
                 oferta.setTelefono(requestOfertaProfesionalDTO.getTelefono());
-                oferta.setFecha(requestOfertaProfesionalDTO.getFecha());
-                oferta.setHora(requestOfertaProfesionalDTO.getHora());
+                oferta.setStart(requestOfertaProfesionalDTO.getStart());
+                oferta.setEnd(requestOfertaProfesionalDTO.getEnd());
+                oferta.setConsultorio(requestOfertaProfesionalDTO.getConsultorio());
 
                 ofertaRepositorio.save(oferta);
                 return new ResponseEntity<>("usuario modificado con éxito", HttpStatus.OK);
@@ -117,7 +118,7 @@ public class OfertaServicioImpl implements OfertaServicio {
 
         Optional<Oferta> respuesta = ofertaRepositorio.findById(id);
         Optional<Profesional> respuesta2 = profesionalRepositorio.findByUsuario(usuario);
-        
+
         if (respuesta.isPresent() && respuesta2.isPresent()) {
 
             Oferta oferta = respuesta.get();
@@ -139,57 +140,47 @@ public class OfertaServicioImpl implements OfertaServicio {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(String usuario) {
-        
+
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
-        
-        if(respuesta.isPresent()){
-//            Profesional profesional = respuesta.get();
-            
-        
-        //Intentar buscar por id distinto de null
-        List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
-        
-        List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
 
-        for (Oferta oferta : listaOfertaProfesional) {
+        if (respuesta.isPresent()) {
+            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
 
-            if (oferta.getDisponible() == false) {
-                ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
-                ofertaAceptadaDto.setGuest(oferta.getGuest());
-                ofertaAceptadaDto.setApellido_guest(oferta.getGuest().getApellido());
-                ofertaAceptadaDto.setFecha_nac_guest(oferta.getGuest().getFecha_nac());
-                ofertaAceptadaDto.setObra_social_guest(oferta.getGuest().getObra_social());
-                ofertaAceptadaDto.setTelefono_guest(oferta.getGuest().getTelefono());
+            List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
 
-                ofertaAceptadaDto.setFecha_turno(oferta.getFecha());
-                ofertaAceptadaDto.setHora_turno(oferta.getHora());
-                ofertaAceptadaDto.setLocalidad_consultorio(oferta.getLocalidad());
-                ofertaAceptadaDto.setModalidad(oferta.getModalidad());
-                ofertaAceptadaDto.setUbicacion_consultorio(oferta.getUbicacion());
+            for (Oferta oferta : listaOfertaProfesional) {
 
-                listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
-            } else {
-                System.out.println("Ninguna oferta aceptada");
+                if (oferta.getDisponible() == false && oferta.getEstado() == true) {
+                    ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
+                    ofertaAceptadaDto.setGuest(oferta.getGuest());
+                    ofertaAceptadaDto.setApellido(oferta.getGuest().getApellido());
+                    ofertaAceptadaDto.setFecha_nac(oferta.getGuest().getFecha_nac());
+                    ofertaAceptadaDto.setObra_social(oferta.getGuest().getObra_social());
+                    ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
+
+                    ofertaAceptadaDto.setId(oferta.getId());
+                    ofertaAceptadaDto.setStart(oferta.getStart());
+                    ofertaAceptadaDto.setEnd(oferta.getEnd());
+                    ofertaAceptadaDto.setLocalidad(oferta.getLocalidad());
+                    ofertaAceptadaDto.setModalidad(oferta.getModalidad());
+                    ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
+
+                    listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
+                } else {
+                    System.out.println("Ninguna oferta aceptada");
+                }
             }
-
+            return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
         }
-        
-        return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
-        } 
 
         Guest asd = new Guest();
-        //
-        //Manejo de errores
-        //
-        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd,"asd","asd","asd",
-                1L,new Date(),new Date(),new Date(),"asd","asd","asd");
-        
+        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd, "asd", "asd", "asd",
+                1L, new Date(), new Date(), new Date(), "asd", "asd", "asd");
+
         List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
         prueba.add(a);
         return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
-        //
-        //
-        //
+   
     }
 
     @Override
@@ -200,14 +191,15 @@ public class OfertaServicioImpl implements OfertaServicio {
 
         for (Oferta oferta : listaOfertaProfesional) {
 
-            if (oferta.getDisponible() == true) {
+            if (oferta.getDisponible() == true && oferta.getEstado() == true) {
                 ResponseOfertaDisponibleProfesionalDTO ofertaDisponibleDto = new ResponseOfertaDisponibleProfesionalDTO();
-                                
-                ofertaDisponibleDto.setFecha_turno(oferta.getFecha());
-                ofertaDisponibleDto.setHora_turno(oferta.getHora());
-                ofertaDisponibleDto.setLocalidad_consultorio(oferta.getLocalidad());
+
+                ofertaDisponibleDto.setStart(oferta.getStart());
+                ofertaDisponibleDto.setEnd(oferta.getEnd());
+                ofertaDisponibleDto.setLocalidad(oferta.getLocalidad());
                 ofertaDisponibleDto.setModalidad(oferta.getModalidad());
-                ofertaDisponibleDto.setUbicacion_consultorio(oferta.getUbicacion());
+                ofertaDisponibleDto.setConsultorio(oferta.getConsultorio());
+                ofertaDisponibleDto.setId(oferta.getId());
 
                 listaOfertaDisponibleProfesionalDTO.add(ofertaDisponibleDto);
             } else {
@@ -220,15 +212,15 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Override
     public ResponseEntity<?> aceptarOfertaGuest(String usuario, Long id) {
-        
-         Optional<Oferta> respuesta_oferta = ofertaRepositorio.findById(id);
-         Optional<Guest> respuesta_guest = guestRepositorio.findByUsuario(usuario);
+
+        Optional<Oferta> respuesta_oferta = ofertaRepositorio.findById(id);
+        Optional<Guest> respuesta_guest = guestRepositorio.findByUsuario(usuario);
 
         if (respuesta_oferta.isPresent() && respuesta_guest.isPresent()) {
             Oferta oferta = respuesta_oferta.get();
             Guest guest = respuesta_guest.get();
 
-            if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true 
+            if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true
                     && guest.getEstado() == true) {
 
                 oferta.setDisponible(false);
@@ -246,15 +238,15 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Override
     public ResponseEntity<?> cancelarOfertaGuest(String usuario, Long id) {
-        
+
         Optional<Oferta> respuesta_oferta = ofertaRepositorio.findById(id);
-         Optional<Guest> respuesta_guest = guestRepositorio.findByUsuario(usuario);
+        Optional<Guest> respuesta_guest = guestRepositorio.findByUsuario(usuario);
 
         if (respuesta_oferta.isPresent() && respuesta_guest.isPresent()) {
             Oferta oferta = respuesta_oferta.get();
             Guest guest = respuesta_guest.get();
 
-            if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true 
+            if (oferta.getProfesional().getEstado() == true && oferta.getEstado() == true
                     && guest.getEstado() == true) {
 
                 oferta.setDisponible(true);
@@ -269,49 +261,48 @@ public class OfertaServicioImpl implements OfertaServicio {
             return new ResponseEntity<>("no se encontró el id de la oferta o del usuario", HttpStatus.NOT_FOUND);
         }
 
-        
-
     }
 
     @Override
     public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> buscarOfertaGuestAceptadas(String usuario) {
-        
+
         Optional<Guest> respuesta = guestRepositorio.findByUsuario(usuario);
-        
-        if (respuesta.isPresent()){
+
+        if (respuesta.isPresent()) {
             List<Oferta> listaOfertaGuest = ofertaRepositorio.listaPorGuest(usuario);
             List<ResponseOfertaAceptadaGuestDTO> listaOfertaAceptadaGuestDTO = new ArrayList<>();
 
-        for (Oferta oferta : listaOfertaGuest) {
+            for (Oferta oferta : listaOfertaGuest) {
 
-            if (oferta.getDisponible() == false) {
-                ResponseOfertaAceptadaGuestDTO ofertaAceptadaDto = new ResponseOfertaAceptadaGuestDTO();
-                
-                ofertaAceptadaDto.setNombre_profesional(oferta.getProfesional().getNombre());
-                ofertaAceptadaDto.setApellido_profesional(oferta.getProfesional().getApellido());
-                ofertaAceptadaDto.setEspecialidad(oferta.getProfesional().getEspecialidad());
+                if (oferta.getDisponible() == false && oferta.getEstado() == true) {
+                    ResponseOfertaAceptadaGuestDTO ofertaAceptadaDto = new ResponseOfertaAceptadaGuestDTO();
 
-                ofertaAceptadaDto.setFecha_turno(oferta.getFecha());
-                ofertaAceptadaDto.setHora_turno(oferta.getHora());
-                ofertaAceptadaDto.setLocalidad_consultorio(oferta.getLocalidad());
-                ofertaAceptadaDto.setModalidad(oferta.getModalidad());
-                ofertaAceptadaDto.setUbicacion_consultorio(oferta.getUbicacion());
-                ofertaAceptadaDto.setTelefono_consultorio(oferta.getTelefono());
+                    ofertaAceptadaDto.setId(oferta.getId());
+                    ofertaAceptadaDto.setNombre(oferta.getProfesional().getNombre());
+                    ofertaAceptadaDto.setApellido(oferta.getProfesional().getApellido());
+                    ofertaAceptadaDto.setEspecialidad(oferta.getProfesional().getEspecialidad());
 
-                listaOfertaAceptadaGuestDTO.add(ofertaAceptadaDto);
-            } else {
-                System.out.println("Ninguna oferta aceptada");
+                    ofertaAceptadaDto.setStart(oferta.getStart());
+                    ofertaAceptadaDto.setEnd(oferta.getEnd());
+                    ofertaAceptadaDto.setLocalidad(oferta.getLocalidad());
+                    ofertaAceptadaDto.setModalidad(oferta.getModalidad());
+                    ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
+                    ofertaAceptadaDto.setTelefono(oferta.getTelefono());
+
+                    listaOfertaAceptadaGuestDTO.add(ofertaAceptadaDto);
+                } else {
+                    System.out.println("Ninguna oferta aceptada");
+                }
+
             }
-
+            return new ResponseEntity<>(listaOfertaAceptadaGuestDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>(listaOfertaAceptadaGuestDTO, HttpStatus.OK);
-        } 
-        
+
         //
         //Manejo de errores
         //
-        ResponseOfertaAceptadaGuestDTO a = new ResponseOfertaAceptadaGuestDTO("asd","asd",1L,"es",new Date(),new Date(),"as","as","as");
-        
+        ResponseOfertaAceptadaGuestDTO a = new ResponseOfertaAceptadaGuestDTO(2L, "asd", "asd", 1L, "es", new Date(), new Date(), "as", "as", "as");
+
         List<ResponseOfertaAceptadaGuestDTO> prueba = new ArrayList<>();
         prueba.add(a);
         return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
@@ -322,24 +313,25 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Override
     public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponible() {
-        
+
         List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
         List<ResponseOfertaDisponibleGuestDTO> listaOfertaDisponibleGuestDTO = new ArrayList<>();
 
         for (Oferta oferta : listaOfertaGuest) {
 
-            if (oferta.getDisponible() == true) {
+            if (oferta.getDisponible() == true && oferta.getEstado() == true) {
                 ResponseOfertaDisponibleGuestDTO ofertaDisponibleDto = new ResponseOfertaDisponibleGuestDTO();
-                                
-                ofertaDisponibleDto.setFecha_turno(oferta.getFecha());
-                ofertaDisponibleDto.setHora_turno(oferta.getHora());
-                ofertaDisponibleDto.setLocalidad_consultorio(oferta.getLocalidad());
+
+                ofertaDisponibleDto.setId(oferta.getId());
+                ofertaDisponibleDto.setStart(oferta.getStart());
+                ofertaDisponibleDto.setEnd(oferta.getEnd());
+                ofertaDisponibleDto.setLocalidad(oferta.getLocalidad());
                 ofertaDisponibleDto.setModalidad(oferta.getModalidad());
-                ofertaDisponibleDto.setUbicacion_consultorio(oferta.getUbicacion());
-                
-                ofertaDisponibleDto.setApellido_profesional(oferta.getProfesional().getApellido());
-                ofertaDisponibleDto.setNombre_profesional(oferta.getProfesional().getNombre());
-                ofertaDisponibleDto.setTelefono_consultorio(oferta.getTelefono());
+                ofertaDisponibleDto.setConsultorio(oferta.getConsultorio());
+
+                ofertaDisponibleDto.setApellido(oferta.getProfesional().getApellido());
+                ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
+                ofertaDisponibleDto.setTelefono(oferta.getTelefono());
                 ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
 
                 listaOfertaDisponibleGuestDTO.add(ofertaDisponibleDto);
@@ -350,19 +342,85 @@ public class OfertaServicioImpl implements OfertaServicio {
         }
         return new ResponseEntity<>(listaOfertaDisponibleGuestDTO, HttpStatus.OK);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> todasLasOfertasProfesional(String usuario) {
         
-    
-    
-    
-    
-    
-    
-    
+        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
+
+        if (respuesta.isPresent()) {
+            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
+
+            List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
+
+            for (Oferta oferta : listaOfertaProfesional) {
+
+                if (oferta.getEstado() == true) {
+                    ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
+                    ofertaAceptadaDto.setGuest(oferta.getGuest());
+                    ofertaAceptadaDto.setApellido(oferta.getGuest().getApellido());
+                    ofertaAceptadaDto.setFecha_nac(oferta.getGuest().getFecha_nac());
+                    ofertaAceptadaDto.setObra_social(oferta.getGuest().getObra_social());
+                    ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
+
+                    ofertaAceptadaDto.setId(oferta.getId());
+                    ofertaAceptadaDto.setStart(oferta.getStart());
+                    ofertaAceptadaDto.setEnd(oferta.getEnd());
+                    ofertaAceptadaDto.setLocalidad(oferta.getLocalidad());
+                    ofertaAceptadaDto.setModalidad(oferta.getModalidad());
+                    ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
+
+                    listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
+                } else {
+                    System.out.println("Ninguna oferta aceptada");
+                }
+            }
+            return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
+        }
+
+        Guest asd = new Guest();
+        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd, "asd", "asd", "asd",
+                1L, new Date(), new Date(), new Date(), "asd", "asd", "asd");
+
+        List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
+        prueba.add(a);
+        return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
+   
     
     }
+
+//    @Transactional(readOnly = true)
+//    @Override
+//    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario) {
+//        List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
+//        List<ResponseOfertaDisponibleGuestDTO> todasLasOfertasGuestDTO = new ArrayList<>();
+//
+//        for (Oferta oferta : listaOfertaGuest) {
+//
+//            if (oferta.getEstado() == true) {
+//                ResponseOfertaDisponibleGuestDTO ofertaDisponibleDto = new ResponseOfertaDisponibleGuestDTO();
+//
+//                ofertaDisponibleDto.setId(oferta.getId());
+//                ofertaDisponibleDto.setStart(oferta.getStart());
+//                ofertaDisponibleDto.setEnd(oferta.getEnd());
+//                ofertaDisponibleDto.setLocalidad(oferta.getLocalidad());
+//                ofertaDisponibleDto.setModalidad(oferta.getModalidad());
+//                ofertaDisponibleDto.setConsultorio(oferta.getConsultorio());
+//
+//                ofertaDisponibleDto.setApellido(oferta.getProfesional().getApellido());
+//                ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
+//                ofertaDisponibleDto.setTelefono(oferta.getTelefono());
+//                ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
+//
+//                todasLasOfertasGuestDTO.add(ofertaDisponibleDto);
+//            } else {
+//                System.out.println("Manejo de errores");
+//            }
+//
+//        }
+//        return null;
+//
+//    }
     
-    
-
-
-
-
+}

@@ -9,9 +9,11 @@ import lombok.Data;
 @Data
 public class RequestOfertaProfesionalDTO {
     
-    private Date hora;
-    private Date fecha;
+    private Date start;
+    private Date end;
     private String localidad;
+    //agregar - al imp
+    private String consultorio;
     
     private String modalidad;
     

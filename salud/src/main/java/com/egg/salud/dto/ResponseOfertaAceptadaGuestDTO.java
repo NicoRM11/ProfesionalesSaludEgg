@@ -19,15 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseOfertaAceptadaGuestDTO {
 
-    private String nombre_profesional;
-    private String apellido_profesional;
-    private Long telefono_consultorio;
+    private Long id;
+    private String nombre;
+    private String apellido;
+    private Long telefono;
     private String especialidad;
 
-    private Date fecha_turno;
-    private Date hora_turno;
-    private String localidad_consultorio;
+    private Date start;
+    private Date end;
+    private String localidad;
     private String modalidad;
-    private String ubicacion_consultorio;
+    private String consultorio;
 
 }

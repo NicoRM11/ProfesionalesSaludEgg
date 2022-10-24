@@ -14,15 +14,16 @@ import lombok.Data;
 @Data
 public class ResponseOfertaDisponibleGuestDTO {
 
-    private Date fecha_turno;
-    private Date hora_turno;
-    private String localidad_consultorio;
+    private Long id;
+    private Date start;
+    private Date end;
+    private String localidad;
     private String modalidad;
-    private String ubicacion_consultorio;
+    private String consultorio;
 
-    private String nombre_profesional;
-    private String apellido_profesional;
-    private Long telefono_consultorio;
+    private String nombre;
+    private String apellido;
+    private Long telefono;
     private String especialidad;
 
 }

@@ -11,15 +11,15 @@ import lombok.Data;
 public class CrearOfertaDTO {
 
    
-    private Date hora;
-    private Date fecha;
-    private String localidad_consultorio;
+    private Date start;
+    private Date end;
+    private String localidad;
     
     private String modalidad;
     
-    private Long telefono_consultorio;
+    private Long telefono;
 
-    private String domicilio_consultorio;
+    private String consultorio;
     
     
     

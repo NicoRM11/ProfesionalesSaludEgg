@@ -18,12 +18,12 @@ import lombok.Data;
 public class ResponseOfertaDisponibleProfesionalDTO {
     
     
-    
-    private Date fecha_turno;
-     private Date hora_turno;
-     private String localidad_consultorio;
+    private Long id;
+    private Date start;
+     private Date end;
+     private String localidad;
      private String modalidad;
-     private String ubicacion_consultorio;
+     private String consultorio;
     
     
 }

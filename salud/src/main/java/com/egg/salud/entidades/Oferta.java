@@ -29,16 +29,16 @@ public class Oferta {
     private Profesional profesional;
 
     
-    //Revisar el Date para fecha y hora
+    //Revisar el Date para start y end
     
     @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private Date start;
     
-    @Temporal(TemporalType.TIME)
-    private Date hora;
+    @Temporal(TemporalType.DATE)
+    private Date end;
     
     private String localidad;
-    private String ubicacion;
+    private String consultorio;
     private String modalidad;
     private String especialidad;
     private Long telefono;
