@@ -137,6 +137,7 @@ export const GuestProfile = () => {
     /*Imagenes*/
 
     const handleImageChange = (e) => {
+        
         if (e.target.files[0]) {
             setImage(e.target.files[0]);
         }
@@ -145,6 +146,7 @@ export const GuestProfile = () => {
     const handleSubmitImage = () => {
 
         /* Imagen */
+        
         const imageRef = ref(storage, `image/${username}`);
         uploadBytes(imageRef, image)
             .then(() => {
@@ -162,6 +164,7 @@ export const GuestProfile = () => {
             .catch(error => {
                 console.log(error.message);
             })
+            setEdicion(true);
     }
 
    // console.log(image)
