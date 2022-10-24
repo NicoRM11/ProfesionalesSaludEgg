@@ -357,11 +357,10 @@ public class OfertaServicioImpl implements OfertaServicio {
 
                     if (oferta.getDisponible() == false) {
                         ofertaAceptadaDto.setGuest(oferta.getGuest());
-                        ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
                     } else {
                         ofertaAceptadaDto.setGuest(new Guest());
-                        ofertaAceptadaDto.setTelefono(null);
                     }
+                    ofertaAceptadaDto.setTelefono(oferta.getTelefono());
                     ofertaAceptadaDto.setEspecialidad(oferta.getEspecialidad());
                     ofertaAceptadaDto.setId(oferta.getId());
                     ofertaAceptadaDto.setStart(oferta.getStart());
