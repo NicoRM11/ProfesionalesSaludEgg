@@ -32,7 +32,7 @@ public interface OfertaServicio {
     
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponible();
     
-    //public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario);
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario);
     
     public ResponseEntity<?> aceptarOfertaGuest(String usuario,Long id);
     

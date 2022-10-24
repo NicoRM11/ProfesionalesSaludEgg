@@ -68,7 +68,7 @@ public class OfertaControlador {
         return ofertaServicio.buscarOfertaProfesionalAceptadas(usuario);
     }
     
-    @GetMapping("/listar-ofertas-profesional-disponibles/")
+    @GetMapping("/listar-ofertas-profesional-disponibles")
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(){
         return ofertaServicio.buscarOfertaProfesionalDisponible();
     }
@@ -95,4 +95,14 @@ public class OfertaControlador {
         return ofertaServicio.buscarOfertaGuestDisponible();
     }
 
+    @GetMapping("/listar-todas-las-ofertas-profesional")
+    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> todasLasOfertasProfesional(String usuario){
+        return ofertaServicio.todasLasOfertasProfesional(usuario);
+    }
+    
+    
+    @GetMapping("/listar-todas-las-ofertas-guest")
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario){
+        return ofertaServicio.todasLasOfertasGuest(usuario);
+    }
 }

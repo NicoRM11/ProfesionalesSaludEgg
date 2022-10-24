@@ -3,7 +3,6 @@ package com.egg.salud.controladores;
 
 
 import com.egg.salud.dto.CrearOfertaDTO;
-import com.egg.salud.dto.RegistroProfesionalDTO;
 
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;

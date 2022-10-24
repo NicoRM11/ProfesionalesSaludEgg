@@ -390,37 +390,37 @@ public class OfertaServicioImpl implements OfertaServicio {
     
     }
 
-//    @Transactional(readOnly = true)
-//    @Override
-//    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario) {
-//        List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
-//        List<ResponseOfertaDisponibleGuestDTO> todasLasOfertasGuestDTO = new ArrayList<>();
-//
-//        for (Oferta oferta : listaOfertaGuest) {
-//
-//            if (oferta.getEstado() == true) {
-//                ResponseOfertaDisponibleGuestDTO ofertaDisponibleDto = new ResponseOfertaDisponibleGuestDTO();
-//
-//                ofertaDisponibleDto.setId(oferta.getId());
-//                ofertaDisponibleDto.setStart(oferta.getStart());
-//                ofertaDisponibleDto.setEnd(oferta.getEnd());
-//                ofertaDisponibleDto.setLocalidad(oferta.getLocalidad());
-//                ofertaDisponibleDto.setModalidad(oferta.getModalidad());
-//                ofertaDisponibleDto.setConsultorio(oferta.getConsultorio());
-//
-//                ofertaDisponibleDto.setApellido(oferta.getProfesional().getApellido());
-//                ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
-//                ofertaDisponibleDto.setTelefono(oferta.getTelefono());
-//                ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
-//
-//                todasLasOfertasGuestDTO.add(ofertaDisponibleDto);
-//            } else {
-//                System.out.println("Manejo de errores");
-//            }
-//
-//        }
-//        return null;
-//
-//    }
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario) {
+        List<Oferta> listaOfertaGuest = ofertaRepositorio.findAll();
+        List<ResponseOfertaDisponibleGuestDTO> todasLasOfertasGuestDTO = new ArrayList<>();
+
+        for (Oferta oferta : listaOfertaGuest) {
+
+            if (oferta.getEstado() == true) {
+                ResponseOfertaDisponibleGuestDTO ofertaDisponibleDto = new ResponseOfertaDisponibleGuestDTO();
+
+                ofertaDisponibleDto.setId(oferta.getId());
+                ofertaDisponibleDto.setStart(oferta.getStart());
+                ofertaDisponibleDto.setEnd(oferta.getEnd());
+                ofertaDisponibleDto.setLocalidad(oferta.getLocalidad());
+                ofertaDisponibleDto.setModalidad(oferta.getModalidad());
+                ofertaDisponibleDto.setConsultorio(oferta.getConsultorio());
+
+                ofertaDisponibleDto.setApellido(oferta.getProfesional().getApellido());
+                ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
+                ofertaDisponibleDto.setTelefono(oferta.getTelefono());
+                ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
+
+                todasLasOfertasGuestDTO.add(ofertaDisponibleDto);
+            } else {
+                System.out.println("Manejo de errores");
+            }
+
+        }
+        return null;
+
+    }
     
 }
