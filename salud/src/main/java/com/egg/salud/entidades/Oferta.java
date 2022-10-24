@@ -29,12 +29,9 @@ public class Oferta {
 
     
     //Revisar el Date para start y end
-    
-    @Temporal(TemporalType.DATE)
-    private Date start;
-    
-    @Temporal(TemporalType.DATE)
-    private Date end;
+
+    private String start;
+    private String end;
     
     private String localidad;
     private String consultorio;

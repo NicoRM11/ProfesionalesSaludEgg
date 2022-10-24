@@ -11,8 +11,8 @@ import lombok.Data;
 public class CrearOfertaDTO {
 
    
-    private Date start;
-    private Date end;
+    private String start;
+    private String end;
     private String localidad;
     
     private String modalidad;

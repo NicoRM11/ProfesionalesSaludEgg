@@ -23,8 +23,8 @@ public class ResponseListaOfertaDTO {
     private String apellido;
     private Long telefonoGuest;
 
-    private Date start;
-    private Date end;
+    private String start;
+    private String end;
     private String localidad;
     private String modalidad;
     private String consultorio;
