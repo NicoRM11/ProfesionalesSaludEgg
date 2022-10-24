@@ -169,8 +169,7 @@ public class OfertaServicioImpl implements OfertaServicio {
         }
 
         Guest asd = new Guest();
-        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO(asd, "asd", "asd", "asd",
-                1L, new Date(), new Date(), new Date(), "asd", "asd", "asd");
+        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO();
 
         List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
         prueba.add(a);
@@ -296,7 +295,7 @@ public class OfertaServicioImpl implements OfertaServicio {
         //
         //Manejo de errores
         //
-        ResponseOfertaAceptadaGuestDTO a = new ResponseOfertaAceptadaGuestDTO(2L, "asd", "asd", 1L, "es", new Date(), new Date(), "as", "as", "as");
+        ResponseOfertaAceptadaGuestDTO a = new ResponseOfertaAceptadaGuestDTO();
 
         List<ResponseOfertaAceptadaGuestDTO> prueba = new ArrayList<>();
         prueba.add(a);

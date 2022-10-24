@@ -18,8 +18,8 @@ public class ResponseOfertaDisponibleProfesionalDTO {
     
     
     private Long id;
-    private Date start;
-     private Date end;
+    private String start;
+     private String end;
      private String localidad;
      private String modalidad;
      private String consultorio;
