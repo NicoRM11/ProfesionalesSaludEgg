@@ -4,7 +4,6 @@
  */
 package com.egg.salud.repositorios;
 
-import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Profesional;
 import java.util.List;
 import java.util.Optional;

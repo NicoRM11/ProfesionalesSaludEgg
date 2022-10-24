@@ -1,22 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.egg.salud.controladores;
 
 import com.egg.salud.dto.CrearOfertaDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
-import com.egg.salud.dto.RequestProfesionalDTO;
-import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
-import com.egg.salud.servicio.GuestServicio;
 import com.egg.salud.servicio.OfertaServicio;
-import com.egg.salud.servicio.ProfesionalServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -106,4 +98,11 @@ public class OfertaControlador {
     public ResponseEntity<List<ResponseOfertaAceptadaGuestDTO>> todasLasOfertasGuest(String usuario){
         return ofertaServicio.todasLasOfertasGuest(usuario);
     }
+    
+    
+    @GetMapping("/listar-ofertas-localidad/{localidad}")
+    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(@PathVariable String localidad){
+       return ofertaServicio.buscarPorLocalidad(localidad);
+    }
+    
 }

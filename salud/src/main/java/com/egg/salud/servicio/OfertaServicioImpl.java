@@ -1,9 +1,7 @@
 package com.egg.salud.servicio;
 
 import com.egg.salud.dto.CrearOfertaDTO;
-import com.egg.salud.dto.RequestGuestDTO;
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
-import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
@@ -15,18 +13,14 @@ import com.egg.salud.entidades.Profesional;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.OfertaRepositorio;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -181,7 +175,7 @@ public class OfertaServicioImpl implements OfertaServicio {
         List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
         prueba.add(a);
         return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
-   
+
     }
 
     @Override
@@ -347,27 +341,26 @@ public class OfertaServicioImpl implements OfertaServicio {
     @Transactional(readOnly = true)
     @Override
     public ResponseEntity<List<ResponseListaOfertaDTO>> todasLasOfertasProfesional(String usuario) {
-        
+
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
-            
+
             List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
-            
-            
+
             List<ResponseListaOfertaDTO> listaProfesionalDTO = new ArrayList<>();
 
             for (Oferta oferta : listaOfertaProfesional) {
 
                 if (oferta.getEstado() == true) {
                     ResponseListaOfertaDTO ofertaAceptadaDto = new ResponseListaOfertaDTO();
-                    
+
                     if (oferta.getDisponible() == false) {
-                       ofertaAceptadaDto.setGuest(oferta.getGuest());
-                       ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
+                        ofertaAceptadaDto.setGuest(oferta.getGuest());
+                        ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
                     } else {
-                      ofertaAceptadaDto.setGuest(new Guest());
-                      ofertaAceptadaDto.setTelefono(null);
+                        ofertaAceptadaDto.setGuest(new Guest());
+                        ofertaAceptadaDto.setTelefono(null);
                     }
                     ofertaAceptadaDto.setEspecialidad(oferta.getEspecialidad());
                     ofertaAceptadaDto.setId(oferta.getId());
@@ -377,16 +370,16 @@ public class OfertaServicioImpl implements OfertaServicio {
                     ofertaAceptadaDto.setModalidad(oferta.getModalidad());
                     ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
                     ofertaAceptadaDto.setDisponible(oferta.getDisponible());
-                    
+
                     listaProfesionalDTO.add(ofertaAceptadaDto);
                 }
             }
             return new ResponseEntity<>(listaProfesionalDTO, HttpStatus.OK);
-            
-        } else{
+
+        } else {
             System.out.println("holu");
-             return null;
-         }
+            return null;
+        }
 
 //        Guest asd = new Guest();
 //        ResponseListaOfertaDTO a = new ResponseListaOfertaDTO
@@ -427,6 +420,36 @@ public class OfertaServicioImpl implements OfertaServicio {
         }
         return null;
 
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(String localidad) {
+
+        List<Oferta> listaOfertas = ofertaRepositorio.buscarPorLocalidad(localidad);
+        List<ResponseOfertaDisponibleGuestDTO> listaResponse = new ArrayList<>();
+
+        for (Oferta aux : listaOfertas) {
+            
+            if (aux.getEstado() == true && aux.getDisponible()== true) {
+            ResponseOfertaDisponibleGuestDTO response = new ResponseOfertaDisponibleGuestDTO();
+            response.setId(aux.getId());
+            response.setStart(aux.getStart());
+            response.setEnd(aux.getEnd());
+            response.setNombre(aux.getProfesional().getNombre());
+            response.setApellido(aux.getProfesional().getApellido());
+            response.setTelefono(aux.getTelefono());
+            response.setLocalidad(aux.getLocalidad());
+            response.setConsultorio(aux.getConsultorio());
+            response.setModalidad(aux.getModalidad());
+            response.setEspecialidad(aux.getEspecialidad());
+             
+            listaResponse.add(response);
+           
+        }
+        }
+         
+        return new ResponseEntity<>(listaResponse , HttpStatus.OK);
+    
     }
     
 }

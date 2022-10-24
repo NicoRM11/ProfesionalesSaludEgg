@@ -1,9 +1,6 @@
 
 package com.egg.salud.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 @Data

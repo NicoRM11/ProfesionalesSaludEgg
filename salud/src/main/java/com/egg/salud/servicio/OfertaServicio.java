@@ -1,10 +1,8 @@
 
 package com.egg.salud.servicio;
 import com.egg.salud.dto.CrearOfertaDTO;
-import com.egg.salud.dto.RequestGuestDTO;
 
 import com.egg.salud.dto.RequestOfertaProfesionalDTO;
-import com.egg.salud.dto.ResponseGuestDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
@@ -46,6 +44,9 @@ public interface OfertaServicio {
     
     
     public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponible();
+    
+    
+    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(String localidad);
 //public ResponseEntity<List<ResponseGuestDTO>> listarOfertaProfesional();
 //    
 //    
