@@ -4,7 +4,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
 export const CustomEvent = (event) => {
-    const bookedIcon = event.event.disponible ? <BookmarkAddedIcon /> : <BookmarkBorderIcon />;
+    const bookedIcon = event.event.disponible ? <BookmarkBorderIcon /> :<BookmarkAddedIcon />;
     return (
         <div className="row">
             <div className="col">{moment(event.event.start).format('hh:mm')}</div>

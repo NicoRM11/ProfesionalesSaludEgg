@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment';
 import DatePicker from "react-datepicker";
@@ -7,7 +7,7 @@ import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
 require('moment/locale/es.js');
 
-const events = [
+/*const events = [
     {
         id: "1",
         modalidad: "Virtual",
@@ -44,24 +44,27 @@ const events = [
         end: new Date(2022, 9, 23),
         disponible: false
     },
-];
+];*/
 
 export const Oferta = () => {
     const localizer = momentLocalizer(moment);
-    const [newEvent, setNewEvent] = useState({ start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:"" });
-    const [allEvents, setAllEvents] = useState(events);
-    const [data,setData] = useState({start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:""});
+    const [newEvent, setNewEvent] = useState({ start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:"", nombre:"",apellido:"",telfonoGuest:"" });
+    const [allEvents, setAllEvents] = useState([]);
+    const [data,setData] = useState({start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:"", nombre:"",apellido:"",telfonoGuest:"" });
     const [selected, setSelected] = useState(); 
-
+    console.log(data);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
 
+    useEffect(() => {
+        cargarOfertas();
+    },[])
     const handleSelected = (event) => {
         setSelected(event);
         Swal.fire(`Modalidad: ${event.modalidad},\n
         Telefono: ${event.telefono}, \n
         Estado: ${event.disponible ? "oferta reservada": "oferta disponible"},\n
-        Paciente: ${event.paciente ? event.paciente : " --"}`)
+        Paciente: ${event.nombre ? event.nombre : " --"}`)
     };
 
     const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
@@ -100,8 +103,8 @@ export const Oferta = () => {
         }
     }
 
-    /*const cargarOfertas = async () => {
-        const URL = `http://localhost:8080/listar-ofertas-profesional-disponibles/${username}`;
+    const cargarOfertas = async () => {
+        const URL = `http://localhost:8080/api/oferta/listar-todas-las-ofertas-profesional/${username}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -112,14 +115,12 @@ export const Oferta = () => {
             );
             console.log(response);
             if (response.status === 200) {
-                response.data.password = `${password}`;
-                setdata(response.data);
-                
+                setAllEvents(response.data); 
             }
         } catch (error) {
             console.log(error)
         }
-    }*/
+    }
 
     return (
         <div className="myCustomHeight">
@@ -177,7 +178,7 @@ export const Oferta = () => {
                     day: "Día"
                 }}
                 eventPropGetter={(event) => {
-                    const backgroundColor = event.disponible ? '#66bf4f' : '#ec6434';
+                    const backgroundColor = event.disponible ? '#ec6434' : '#66bf4f';
                     return { style: { backgroundColor } }
                 }}
             />
