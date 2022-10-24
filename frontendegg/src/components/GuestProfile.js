@@ -188,10 +188,12 @@ export const GuestProfile = () => {
                                 />
                                 <div className='botones mt-2'>
 
-                                    <IconButton color="primary" aria-label="upload picture" component="label" onChange={handleSubmitImage}>
-                                        <input hidden accept="image/*" type="file" onClick={handleImageChange} />
+                                    <IconButton color="primary" aria-label="upload picture" component="label" onChange={handleImageChange}>
+                                        <input hidden accept="image/*" type="file" />
                                         <PhotoCamera color="success" />
                                     </IconButton>
+
+                                    <Button variant="outline-success" onClick={handleSubmitImage}>Subir imagen</Button>{' '}
                                     
                                 </div>
 
