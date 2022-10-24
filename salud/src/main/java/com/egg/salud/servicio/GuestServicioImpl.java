@@ -63,6 +63,7 @@ public class GuestServicioImpl implements GuestServicio {
         guest.setNacionalidad(requestDto.getNacionalidad());
         guest.setLocalidad(requestDto.getLocalidad());
         guest.setEstado(true);
+        guest.setUrlFoto("");
 
         guest.setRol(Rol.GUEST);
 

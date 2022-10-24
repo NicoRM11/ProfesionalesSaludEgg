@@ -64,6 +64,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
         profesional.setEspecialidad(requestProfesionalDTO.getEspecialidad());
         profesional.setMatricula(requestProfesionalDTO.getMatricula());
         profesional.setNacionalidad(requestProfesionalDTO.getNacionalidad());
+        profesional.setUrlFoto("");
         profesional.setEstado(true);
 
 
