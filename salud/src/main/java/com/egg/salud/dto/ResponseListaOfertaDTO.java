@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 public class ResponseListaOfertaDTO {
     
     private Long id;
-    //private Guest guest;
+    private Guest guest;
     private Long telefono;
-    private String nombre;
-    private String apellido;
-    private Long telefonoGuest;
+//    private String nombre;
+//    private String apellido;
+//    private Long telefonoGuest;
 
     private String start;
     private String end;

@@ -1,5 +1,7 @@
 package com.egg.salud.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,7 @@ public class Oferta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_guest", nullable = true)
    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
