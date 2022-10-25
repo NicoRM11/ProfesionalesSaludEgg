@@ -25,6 +25,8 @@ export const ProfesionalProfile = () => {
         cargarPerfil();
     }, []);
 
+    console.log(data);
+    console.log(image);
     const cargarPerfil = async () => {
         const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
         try {

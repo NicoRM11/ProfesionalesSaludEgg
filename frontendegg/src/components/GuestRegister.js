@@ -26,7 +26,7 @@ export const GuestRegister = () => {
     try {
       const response = await axios.post(URL,data)
       console.log(response);
-      if (response.status === 201) {
+      if (response.status === 200) {
         Swal.fire(
           'Registrado!',
           'El usuario ha sido guardado exitosamente',
@@ -36,11 +36,11 @@ export const GuestRegister = () => {
       }
 
     } catch (error) {
-      if (error.response.status === 406) {
+      if (error.response.status === 406 ||error.response.status === 404) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: `No se pudo registrar, ${error.response.data} !`,
+          text: `No se pudo registrar, ${error.response.data.messages[0]} !`,
         })
       }
       console.log(error)

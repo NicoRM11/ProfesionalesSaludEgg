@@ -16,14 +16,14 @@ require('moment/locale/es.js');
         consultorio: "",
         localidad: "Escobar",
         telefono: "15122331",
-        start: new Date(2022, 10, 1),
-        end: new Date(2022, 10, 1),
-        disponible: true
+        start: new Date("2022-10-26T13:00:00.000+00:00"),
+        end: new Date("2022-10-26T14:00:00.000+00:00"),
+        disponible: false
     },
     {
         id: "2",
         modalidad: "Virtual",
-        paciente: "",
+        paciente: "Juan Perez",
         especialidad: "Cardiologia",
         consultorio: "",
         localidad: "Escobar",
@@ -42,64 +42,66 @@ require('moment/locale/es.js');
         telefono: "15884333",
         start: new Date(2022, 9, 20),
         end: new Date(2022, 9, 23),
-        disponible: false
+        disponible: true
     },
 ];*/
 
 export const Oferta = () => {
     const localizer = momentLocalizer(moment);
-    const [newEvent, setNewEvent] = useState({ start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:"", nombre:"",apellido:"",telfonoGuest:"" });
+    const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", nombre: "", apellido: "", telfonoGuest: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
-    const [data,setData] = useState({start:"", end:"",consultorio:"", modalidad:"", telefono:"", localidad:"", nombre:"",apellido:"",telfonoGuest:"" });
-    const [selected, setSelected] = useState(); 
-    console.log(data);
+    const [estado, setEstado] = useState(false)
+
+    const [data, setData] = useState({ start: "", end: "", consultorio: "", modalidad: "", telefono: "", localidad: "", nombre: "", apellido: "", telfonoGuest: "" });
+    const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
 
     useEffect(() => {
         cargarOfertas();
-    },[])
+    }, [estado])
+
     const handleSelected = (event) => {
         setSelected(event);
         Swal.fire(`Modalidad: ${event.modalidad},\n
         Telefono: ${event.telefono}, \n
-        Estado: ${event.disponible ? "oferta reservada": "oferta disponible"},\n
-        Paciente: ${event.nombre ? event.nombre : " --"}`)
+        Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"},\n
+        Paciente: ${event.paciente ? event.paciente : " --"}`)
     };
 
     const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setAllEvents([...allEvents, newEvent]);
-        setData({start:newEvent.start,consultorio:newEvent.consultorio, end:newEvent.end, modalidad:newEvent.modalidad, telefono:newEvent.telefono, localidad:newEvent.localidad})
-        if(data.telefono!==""){
-        try {
-            const response = await axios.post(URL, data, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
-                }
-            })
-
-            console.log(response);
-            if (response.status === 200) {
-                Swal.fire(
-                    'Excelente!',
-                    'La oferta ha sido creada exitosamente',
-                    'success'
-                )
-            }
-
-        } catch (error) {
-            if (error.response.status === 406) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo crear, ${error.response.data} !`,
+        setNewEvent({ ...newEvent, disponible: true })
+        setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
+        if (data.telefono !== "") {
+            try {
+                const response = await axios.post(URL, data, {
+                    auth: {
+                        username: `${username}`,
+                        password: `${password}`
+                    }
                 })
+                console.log(response);
+                if (response.status === 201) {
+                    Swal.fire(
+                        'Excelente!',
+                        'La oferta ha sido creada exitosamente',
+                        'success'
+                    )
+                    setEstado(true);
+                }
+
+            } catch (error) {
+                if (error.response.status === 406) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `No se pudo crear, ${error.response.data} !`,
+                    })
+                }
+                console.log(error)
             }
-            console.log(error)
-        }
         }
     }
 
@@ -115,12 +117,19 @@ export const Oferta = () => {
             );
             console.log(response);
             if (response.status === 200) {
-                setAllEvents(response.data); 
+                response.data.map((oferta) => {
+                    oferta.start = new Date(oferta.start);
+                    oferta.end = new Date(oferta.end);
+                    setNewEvent({ ...newEvent, oferta })
+                    console.log(oferta)
+                })
+                setAllEvents(response.data);
             }
         } catch (error) {
             console.log(error)
         }
     }
+
 
     return (
         <div className="myCustomHeight">
@@ -131,10 +140,10 @@ export const Oferta = () => {
                         <input className="form-control rounded-2" required type="text" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
                     </div>
                     <div className="col">
-                        <input className="form-control rounded-2"  type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
+                        <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
                     </div>
                     <div className="col">
-                        <input className="form-control rounded-2"  type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
+                        <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
                     </div>
                     <div className="col">
                         <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
@@ -144,11 +153,11 @@ export const Oferta = () => {
                         </select>
                     </div>
                     <div className="col">
-                        <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="Pp" showTimeSelect selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
+                        <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
 
                     </div>
                     <div className="col">
-                        <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="Pp" showTimeSelect selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
+                        <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
 
                     </div>
                     <div className="col-auto">
