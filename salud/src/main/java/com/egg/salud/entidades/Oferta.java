@@ -19,7 +19,7 @@ public class Oferta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_guest", nullable = true)
    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
