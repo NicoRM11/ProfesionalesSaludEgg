@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 
 export const GuestRegister = () => {
   const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "" });
+  let navigate = useNavigate();
 
   const handleChange = ({ target }) => {
     setdata({
@@ -24,20 +26,21 @@ export const GuestRegister = () => {
     try {
       const response = await axios.post(URL,data)
       console.log(response);
-      if (response.status === 201) {
+      if (response.status === 200) {
         Swal.fire(
           'Registrado!',
           'El usuario ha sido guardado exitosamente',
           'success'
         )
+        navigate('/login');
       }
 
     } catch (error) {
-      if (error.response.status === 406) {
+      if (error.response.status === 406 ||error.response.status === 404) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: `No se pudo registrar, ${error.response.data} !`,
+          text: `No se pudo registrar, ${error.response.data.messages[0]} !`,
         })
       }
       console.log(error)

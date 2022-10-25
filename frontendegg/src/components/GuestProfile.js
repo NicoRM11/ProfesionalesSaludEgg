@@ -5,21 +5,35 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
+import Avatar from "@mui/material/Avatar";
+import { storage } from "./firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import IconButton from '@mui/material/IconButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
+
+
 
 
 export const GuestProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
-
     const [edicion, setEdicion] = useState(false);
-
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const [image, setImage] = useState(null);
+    //const [url, setUrl] = useState(null);
+
+    let navigate = useNavigate()
+    console.log(data);
+    console.log(image);
 
     useEffect(() => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/${username}`;
+    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
@@ -29,28 +43,45 @@ export const GuestProfile = () => {
                 }
             }
             );
-            console.log(response.data)
-            setdata(response.data)
-
+            console.log(response);
+            if (response.status === 200) {
+                response.data.password = `${password}`;
+                setdata(response.data);
+                
+            }
         } catch (error) {
-
             console.log(error)
         }
     }
 
+
+
     const handleChange = ({ target }) => {
-        /*setEdicion(true);
+        setEdicion(true);
         setdata({
             ...data,
             [target.name]: target.value
-        })*/
+        })
+    }
+    const handleChangeNewPassword = ({ target }) => {
+        setEdicion(true);
+        setdata({
+            ...data,
+            password: target.value
+        })
     }
 
-
     const handleSubmit = async (e) => {
+        const URL = `http://localhost:8080/api/guest/${username}`;
         e.preventDefault();
         try {
-            const response = await axios.post(URL, data)
+            const response = await axios.put(URL, data, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
+
             console.log(response);
             if (response.status === 200) {
                 Swal.fire(
@@ -61,35 +92,116 @@ export const GuestProfile = () => {
             }
 
         } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `No se pudo modificar !`,
+                })
+            
+            console.log(error)
+        }
+
+    }
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.delete(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
+
+            console.log(response);
+            if (response.status === 200) {
+                Swal.fire(
+                    'Se ha dado de baja exitosamente!',
+                    'Lo vamos a extrañar',
+                    'success'
+                )
+                navigate('/login');
+            }
+
+        } catch (error) {
             if (error.response.status === 406) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `No se pudo modificar, ${error.response.data} !`,
+                    text: `No se pudo eliminar la cuenta, ${error.response.data} !`,
                 })
             }
             console.log(error)
         }
     }
+    /*Imagenes*/
+
+    const handleImageChange = (e) => {
+        
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    }
+
+    const handleSubmitImage = () => {
+
+        /* Imagen */
+        
+        const imageRef = ref(storage, `image/${username}`);
+        uploadBytes(imageRef, image)
+            .then(() => {
+                getDownloadURL(imageRef).then((url) => {
+                    setdata({...data,urlFoto:url})
+                    //setUrl(url)
+                    //console.log(url);
+                })
+                    .catch(error => {
+                        console.log(error.message, "error getting the image url");
+                    });
+
+                setImage(null);
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
+            setEdicion(true);
+    }
+
+   // console.log(image)
     return (
 
         <section className="container py-5">
 
             <div className="row justify-content-center align-items-center">
-
                 <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
-
                     <Row className="h2 text-center mt-4">
                         <Form.Label>Editar Perfil</Form.Label>
                     </Row>
 
+
                     <Row className="h2 text-center">
 
-                        <div className="encabezado">
+                        <div className="encabezado mb-5">
 
-                            <div className='imagenGuest'>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqOlXhmKitASX-qEad_rY7QpUiJLD2GNjntA15AU&s" />
+                            <div className='imagenGuest '>
+                                <Avatar
+                                    alt="Imagen Perfil"
+                                    src={data.urlFoto}
+                                    sx={{ width: 150, height: 150 }}
+                                />
+                                <div className='botones mt-2'>
+
+                                    <IconButton color="primary" aria-label="upload picture" component="label" onChange={handleImageChange}>
+                                        <input hidden accept="image/*" type="file" />
+                                        <PhotoCamera color="success" />
+                                    </IconButton>
+
+                                    <Button variant="outline-success" onClick={handleSubmitImage}>Subir imagen</Button>{' '}
+                                    
+                                </div>
+
                             </div>
+
 
                             <div className='datosUsuario'>
                                 <Row className="mb-4">
@@ -106,7 +218,7 @@ export const GuestProfile = () => {
                                 <Row>
 
                                     <Col md={6}>
-                                        <Form.Control type="number" name="dni" placeholder="DNI" value={data.dni} required onChange={handleChange} disabled />
+                                        <Form.Control type="number" name="dni" placeholder="DNI" value={data.dni} onChange={handleChange} disabled />
                                     </Col>
                                 </Row>
                             </div>
@@ -126,7 +238,7 @@ export const GuestProfile = () => {
                             <Col md={1}></Col>
                             <Col md={4}>
                                 <Form.Label>Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" placeholder="Contraseña" value={data.password} required onChange={handleChange} />
+                                <Form.Control type="password" name="password" placeholder="Contraseña" value={data.password} disabled onChange={handleChange} />
                             </Col>
                         </Row>
                         <Row className="mb-4">
@@ -136,8 +248,8 @@ export const GuestProfile = () => {
                             </Col>
                             <Col md={1}></Col>
                             <Col md={4}>
-                                <Form.Label>Nueva Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" required onChange={handleChange} />
+                                <Form.Label>Cambiar Contraseña</Form.Label>
+                                <Form.Control type="password" name="password" placeholder="Nueva Contraseña" onChange={handleChangeNewPassword} />
                             </Col>
                         </Row>
                         <Row className="mb-4">
@@ -173,8 +285,8 @@ export const GuestProfile = () => {
             </div>
 
             <div className='text-center mt-3'>
-                <a className="darseDeBaja" href="#">Darse de baja
-                </a>
+                <button className="btn darseDeBaja" onClick={handleDelete}>Darse de baja
+                </button>
             </div>
         </section>
     )
