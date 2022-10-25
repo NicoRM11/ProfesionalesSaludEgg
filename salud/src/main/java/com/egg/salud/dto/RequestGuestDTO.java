@@ -2,7 +2,6 @@ package com.egg.salud.dto;
 
 import lombok.Data;
 
-import java.util.Date;
 
 @Data
 public class RequestGuestDTO {
@@ -13,9 +12,10 @@ public class RequestGuestDTO {
     private Integer dni;
     private String password;
     private String obra_social;
-    private long telefono;
+    private Long telefono;
     private String fecha_nac;
     private String nacionalidad;
     private String localidad;
+    private String urlFoto;
 
 }

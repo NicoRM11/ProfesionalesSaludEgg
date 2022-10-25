@@ -1,41 +1,46 @@
 package com.egg.salud.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name="oferta")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Oferta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idGuest", nullable = false)
-    private Guest id_user;
+    @ManyToOne
+    @JoinColumn(name = "id_guest", nullable = true)
+   //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
+    private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProfesional", nullable = false)
-    private Profesional id_profesional;
+    @JoinColumn(name = "id_profesional", nullable = false)
+    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
+    private Profesional profesional;
 
     
-    //Revisar el Date para fecha y hora
+    //Revisar el Date para start y end
+
+    private String start;
+    private String end;
     
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
-    
-    @Temporal(TemporalType.TIME)
-    private Date hora;
-    
-    private String ubicacion;
+    private String localidad;
+    private String consultorio;
     private String modalidad;
     private String especialidad;
-    private Integer telefono;
+    private Long telefono;
+    private Boolean disponible;
     private Boolean estado;
 
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class ResponseGuestDTO {
-    private String usuario;
+   private String usuario;
    private String password;
    private String nombre;
    private String apellido;

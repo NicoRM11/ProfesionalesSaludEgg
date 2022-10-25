@@ -8,6 +8,8 @@ import com.egg.salud.entidades.Profesional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,6 +25,13 @@ public interface ProfesionalRepositorio extends JpaRepository <Profesional, Long
 
     public Boolean existsByDni(Integer dni);
     
+    public Optional<Profesional> findById(String usuario); 
+    
     public Optional<Profesional> findByUsuario(String usuario);
+    
+    //public Optional<Profesional> findById(String usuario);
+
+    @Query("SELECT p FROM profesional p WHERE p.especialidad = :especialidad")
+    public List<Profesional> listaPorEspecialidad(@Param("especialidad") String especialidad);
 
 }

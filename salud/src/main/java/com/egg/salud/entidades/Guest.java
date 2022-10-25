@@ -2,9 +2,9 @@
 package com.egg.salud.entidades;
 
 import com.egg.salud.enumeraciones.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Data;
@@ -22,7 +22,7 @@ public class Guest extends Usuario{
    private Integer dni;
    
    private String obra_social;
-   private long telefono;
+   private Long telefono;
    
    @Temporal(TemporalType.DATE)
    private Date fecha_nac;
@@ -31,7 +31,8 @@ public class Guest extends Usuario{
    private String urlFoto;
    private String localidad;
    
-    @OneToMany(mappedBy ="id_user", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy ="guest", cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Oferta> oferta;
 
     public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {

@@ -1,14 +1,15 @@
 
 package com.egg.salud.controladores;
 
-import com.egg.salud.dto.RegistroProfesionalDTO;
+
+
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
+import com.egg.salud.servicio.OfertaServicio;
 import com.egg.salud.servicio.ProfesionalServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,29 +28,41 @@ public class ProfesionalControlador {
     @Autowired
     private ProfesionalServicio profesionalServicio;
     
+    @Autowired
+    private OfertaServicio ofertaServicio;
+    
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrar(@RequestBody RegistroProfesionalDTO registroProfesionalDTO){
+    public ResponseEntity<?> registrar(@RequestBody RequestProfesionalDTO requestProfesionalDTO) throws Exception{
 
-        return profesionalServicio.registrarUsuario(registroProfesionalDTO);
+        return ResponseEntity.ok().body(profesionalServicio.registrarUsuario(requestProfesionalDTO));
     }
     
     @PutMapping("/{usuario}")
-    public ResponseEntity<?> modificar(@RequestBody RequestProfesionalDTO requestProfesionalDTO , @PathVariable(name = "usuario")String usuario){
-        return profesionalServicio.modificarUsuario(usuario , requestProfesionalDTO);
+    public ResponseEntity<?> modificar(@RequestBody RequestProfesionalDTO requestProfesionalDTO , @PathVariable(name = "usuario")String usuario) throws Exception{
+        return ResponseEntity.ok().body(profesionalServicio.modificarUsuario(usuario, requestProfesionalDTO));
     }
     
     @DeleteMapping("/{usuario}")
-    public ResponseEntity<?> eliminar(@PathVariable(name = "usuario") String id){
-        return profesionalServicio.eliminarUsuario(id);
+    public ResponseEntity<?> eliminar(@PathVariable(name = "usuario") String usuario) throws Exception{
+        return ResponseEntity.ok().body(profesionalServicio.eliminarUsuario(usuario));
     }
     
     @GetMapping("/lista")
-    public ResponseEntity<List<ResponseProfesionalDTO>> listar(){
-        return profesionalServicio.listar();
+    public ResponseEntity<List<ResponseProfesionalDTO>> listar() throws Exception{
+        return ResponseEntity.ok().body(profesionalServicio.listar());
     }
 
-    @GetMapping("/{usuario}")
-    public ResponseEntity<?>buscarPorEmail(@PathVariable String usuario){
-        return profesionalServicio.buscarPorEmail(usuario);
+    @GetMapping("/detalle/{usuario}")
+    public ResponseEntity<?>buscarPorEmail(@PathVariable String usuario) throws Exception{
+        return ResponseEntity.ok().body(profesionalServicio.buscarPorEmail(usuario));
     }
+
+    @GetMapping("/listar/{especialidad}")
+    public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(@PathVariable(name= "especialidad") String especialidad) throws Exception{
+        return ResponseEntity.ok().body(profesionalServicio.listarEspecialidad(especialidad));
+    }
+    
+    
+    
+    
 }
