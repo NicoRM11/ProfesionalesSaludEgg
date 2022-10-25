@@ -6,6 +6,7 @@
 package com.egg.salud.dto;
 
 import com.egg.salud.entidades.Guest;
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,8 @@ public class ResponseListaOfertaDTO {
     private String apellido;
     private Long telefonoGuest;
 
-    private String start;
-    private String end;
+    private Timestamp start;
+    private Timestamp end;
     private String localidad;
     private String modalidad;
     private String consultorio;

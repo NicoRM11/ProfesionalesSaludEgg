@@ -4,6 +4,7 @@
  */
 package com.egg.salud.dto;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.Data;
 
@@ -15,8 +16,8 @@ import lombok.Data;
 public class ResponseOfertaDisponibleGuestDTO {
 
     private Long id;
-    private String start;
-    private String end;
+    private Timestamp start;
+    private Timestamp end;
     private String localidad;
     private String modalidad;
     private String consultorio;
