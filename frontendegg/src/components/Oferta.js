@@ -7,52 +7,14 @@ import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
 require('moment/locale/es.js');
 
-/*const events = [
-    {
-        id: "1",
-        modalidad: "Virtual",
-        paciente: "Serena Williams", // recibir objeto guest
-        especialidad: "Ginecologia",
-        consultorio: "",
-        localidad: "Escobar",
-        telefono: "15122331",
-        start: new Date("2022-10-26T13:00:00.000+00:00"),
-        end: new Date("2022-10-26T14:00:00.000+00:00"),
-        disponible: false
-    },
-    {
-        id: "2",
-        modalidad: "Virtual",
-        paciente: "Juan Perez",
-        especialidad: "Cardiologia",
-        consultorio: "",
-        localidad: "Escobar",
-        telefono: "15122331",
-        start: new Date(2022, 9, 7),
-        end: new Date(2022, 9, 10),
-        disponible: false
-    },
-    {
-        id: "3",
-        modalidad: "Presencial",
-        paciente: "",
-        especialidad: "Clinica",
-        consultorio: "",
-        localidad: "Escobar",
-        telefono: "15884333",
-        start: new Date(2022, 9, 20),
-        end: new Date(2022, 9, 23),
-        disponible: true
-    },
-];*/
 
 export const Oferta = () => {
     const localizer = momentLocalizer(moment);
-    const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", nombre: "", apellido: "", telfonoGuest: "", disponible: true });
+    const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
-    const [estado, setEstado] = useState(false)
+    const [estado, setEstado] = useState(1)
 
-    const [data, setData] = useState({ start: "", end: "", consultorio: "", modalidad: "", telefono: "", localidad: "", nombre: "", apellido: "", telfonoGuest: "" });
+    const [data, setData] = useState({ start: "", end: "", consultorio: "", modalidad: "", telefono: "", localidad: "", guest: [] });
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
@@ -63,14 +25,53 @@ export const Oferta = () => {
 
     const handleSelected = (event) => {
         setSelected(event);
-        Swal.fire(`Modalidad: ${event.modalidad},\n
-        Telefono: ${event.telefono}, \n
-        Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"},\n
-        Paciente: ${event.paciente ? event.paciente : " --"}`)
+        Swal.fire({
+            title: `Modalidad: ${event.modalidad}\n
+        Telefono: ${event.telefono}\n
+        Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
+        ----------------------\n
+        Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
+        Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
+            showCancelButton: true,
+            confirmButtonColor: '#da1e31',
+            confirmButtonText: 'Eliminar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarOferta(event);
+                Swal.fire('Oferta Eliminada!', '', 'success')
+            } 
+        })
     };
 
-    const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
+    const eliminarOferta = async(event)=> {
+        const URL = `http://localhost:8080/api/oferta/${username}/${event.id}`;
+        try {
+            const response = await axios.delete(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            })
+            if (response.status === 200) {
+                Swal.fire('Oferta Eliminada!', '', 'success')
+                setEstado(estado+1);
+            }
+
+        } catch (error) {
+            if (error.response.status === 406) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `No se pudo eliminar!`,
+                })
+            }
+            console.log(error)
+        }
+    }
+
+ 
     const handleSubmit = async (e) => {
+        const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
         e.preventDefault();
         setNewEvent({ ...newEvent, disponible: true })
         setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
@@ -82,14 +83,13 @@ export const Oferta = () => {
                         password: `${password}`
                     }
                 })
-                console.log(response);
                 if (response.status === 201) {
                     Swal.fire(
                         'Excelente!',
                         'La oferta ha sido creada exitosamente',
                         'success'
                     )
-                    setEstado(true);
+                    setEstado(estado+1);
                 }
 
             } catch (error) {
@@ -115,13 +115,11 @@ export const Oferta = () => {
                 }
             }
             );
-            console.log(response);
             if (response.status === 200) {
                 response.data.map((oferta) => {
                     oferta.start = new Date(oferta.start);
                     oferta.end = new Date(oferta.end);
                     setNewEvent({ ...newEvent, oferta })
-                    console.log(oferta)
                 })
                 setAllEvents(response.data);
             }
@@ -137,7 +135,7 @@ export const Oferta = () => {
             <form onSubmit={handleSubmit}>
                 <div className="row justify-content-center" style={{ position: "relative", zIndex: "999" }}>
                     <div className="col">
-                        <input className="form-control rounded-2" required type="text" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
+                        <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
                     </div>
                     <div className="col">
                         <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
