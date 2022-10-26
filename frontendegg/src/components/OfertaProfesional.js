@@ -8,7 +8,7 @@ import axios from 'axios';
 require('moment/locale/es.js');
 
 
-export const Oferta = () => {
+export const OfertaProfesional = () => {
     const localizer = momentLocalizer(moment);
     const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
@@ -39,11 +39,11 @@ export const Oferta = () => {
             if (result.isConfirmed) {
                 eliminarOferta(event);
                 Swal.fire('Oferta Eliminada!', '', 'success')
-            } 
+            }
         })
     };
 
-    const eliminarOferta = async(event)=> {
+    const eliminarOferta = async (event) => {
         const URL = `http://localhost:8080/api/oferta/${username}/${event.id}`;
         try {
             const response = await axios.delete(URL, {
@@ -54,7 +54,7 @@ export const Oferta = () => {
             })
             if (response.status === 200) {
                 Swal.fire('Oferta Eliminada!', '', 'success')
-                setEstado(estado+1);
+                setEstado(estado + 1);
             }
 
         } catch (error) {
@@ -69,7 +69,7 @@ export const Oferta = () => {
         }
     }
 
- 
+
     const handleSubmit = async (e) => {
         const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
         e.preventDefault();
@@ -89,7 +89,7 @@ export const Oferta = () => {
                         'La oferta ha sido creada exitosamente',
                         'success'
                     )
-                    setEstado(estado+1);
+                    setEstado(estado + 1);
                 }
 
             } catch (error) {
@@ -130,39 +130,42 @@ export const Oferta = () => {
 
 
     return (
-        <div className="myCustomHeight">
+        <div className="container-xxl">
             <h1 className="text-center">Calendario</h1>
             <form onSubmit={handleSubmit}>
-                <div className="row justify-content-center" style={{ position: "relative", zIndex: "999" }}>
-                    <div className="col">
+                <div className="row justify-content-center">
+                    <div className="col-md-2">
                         <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
                     </div>
-                    <div className="col">
-                        <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
+                    <div className="col-md-2">
+                        <input className="form-control rounded-2"  type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
                     </div>
-                    <div className="col">
+                    <div className="col-md-2">
                         <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
                     </div>
-                    <div className="col">
+                    <div className="col-md-2">
                         <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
                             <option value="Modalidad">Modalidad</option>
                             <option value="Virtual">Virtual</option>
                             <option value="Presencial">Presencial</option>
                         </select>
                     </div>
-                    <div className="col">
+                </div>
+                <div className="row justify-content-center mt-2" style={{ position: "relative", zIndex: "999" }}>
+                    <div className="col-md-2">
                         <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
 
                     </div>
-                    <div className="col">
+                    <div className="col-md-2">
                         <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
 
                     </div>
-                    <div className="col-auto">
+                    <div className="col-md-2">
                         <button className="btn btn-success">
                             Crear Oferta
                         </button>
                     </div>
+                    <div className="col-md-2"></div>
                 </div>
             </form>
             <Calendar
@@ -173,7 +176,7 @@ export const Oferta = () => {
                 components={{ event: CustomEvent }}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 600, margin: "50px" }}
+                style={{ height: 600, margin: "20px" }}
                 min={moment('2018-02-23 09:00:00').toDate()}
                 max={moment('2018-02-23 19:00:00').toDate()}
                 messages={{

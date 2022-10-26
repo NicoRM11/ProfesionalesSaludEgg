@@ -144,14 +144,22 @@ export const Cartilla = () => {
                 <Form className="Formulario col-md-10 col-xxl-10 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
 
                     <div className='px-5'>
-                        <Row className="h2 text-center mt-4">
+                        <Row className=" text-center mt-4">
 
                             <Col md={4}>
+                                <Form.Label >Localidad</Form.Label>
                                 <Form.Control type="text" name="Localidad" placeholder="Localidad" required onChange={handleChange} />
                             </Col>
 
                             <Col md={4}>
-                                <Form.Control type="text" name="Especialidad" placeholder="Especialidad" required onChange={handleChange} />
+                                <Form.Label >Especialidad</Form.Label>
+                                <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
+                                    <option selected>Todas</option>
+                                    <option value="Pediatria">Pediatria</option>
+                                    <option value="Ginecologia">Ginecología</option>
+                                    <option value="Clinica">Clinica</option>
+                                    <option value="Cardiologia">Cardiologia</option>
+                                </select>
                             </Col>
 
 
@@ -167,7 +175,7 @@ export const Cartilla = () => {
 
                     <Row className='mt-5 mb-4 px-4'>
                         <Col>
-                        <Card style={{ width: '14rem' }}>
+                            <Card style={{ width: '14rem' }}>
                                 <Card.Img variant="top" src="" />
                                 <Card.Body>
                                     <Card.Title>Card Title</Card.Title>

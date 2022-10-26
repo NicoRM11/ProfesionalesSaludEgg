@@ -27,7 +27,7 @@ const Login = () => {
         navigate('/GuestProfile');
       }
       if(rol==='ROLE_PROFESIONAL'){
-        navigate('/ProfesionalProfile');
+        navigate('/Oferta/Profesional');
       }
       
 
