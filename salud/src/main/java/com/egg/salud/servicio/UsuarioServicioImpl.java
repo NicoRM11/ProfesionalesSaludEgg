@@ -7,6 +7,7 @@ import com.egg.salud.entidades.Usuario;
 import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.exceptions.ResourceNotFoundException;
 import com.egg.salud.exceptions.UserIsExistsException;
+import com.egg.salud.mapper.MapperAdmin;
 import com.egg.salud.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private MapperAdmin mapper;
 
     @Transactional
     @Override
@@ -39,12 +42,7 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
         if (usuarioRepositorio.existsByUsuario(request.getUsuario())) {
             throw new UserIsExistsException("el email de usuario ya existe");
         } else {
-            Usuario u = new Usuario();
-            u.setUsuario(request.getUsuario());
-            u.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
-            u.setEstado(true);
-            u.setRol(Rol.ADMIN);
-
+            Usuario u = mapper.map(request);
             usuarioRepositorio.save(u);
             return "usuario registrado exitosamente";
         }
@@ -74,17 +72,9 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
     public List<ResponseUsuarioDTO> listarAdmin() {
 
         List<Usuario> listaUsuario = usuarioRepositorio.findAll();
-        List<ResponseUsuarioDTO> listaResponse = new ArrayList<>();
-
-        for (Usuario aux : listaUsuario) {
-            if (aux.getRol().toString().equals("ADMIN")) {
-                ResponseUsuarioDTO response = new ResponseUsuarioDTO();
-                response.setUsuario(aux.getUsuario());
-                response.setRol(aux.getRol());
-                response.setEstado(aux.getEstado());
-                listaResponse.add(response);
-            }
-        }
+        
+        List<ResponseUsuarioDTO> listaResponse = mapper.map(listaUsuario);
+        
         return listaResponse;
     }
 
@@ -162,10 +152,7 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
 
         if (busqueda.isPresent()) {
             Usuario u = busqueda.get();
-            ResponseUsuarioDTO response = new ResponseUsuarioDTO();
-            response.setUsuario(u.getUsuario());
-            response.setEstado(u.getEstado());
-            response.setRol(u.getRol());
+            ResponseUsuarioDTO response = mapper.map(u);
             return response;
         } else {
             throw new ResourceNotFoundException("el email ingresado no se encuentra");
