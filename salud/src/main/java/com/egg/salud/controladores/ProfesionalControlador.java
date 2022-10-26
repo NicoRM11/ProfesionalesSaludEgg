@@ -57,7 +57,7 @@ public class ProfesionalControlador {
         return ResponseEntity.ok().body(profesionalServicio.buscarPorEmail(usuario));
     }
 
-    @GetMapping("/listar/{especialidad}")
+    @GetMapping("/lista/{especialidad}")
     public ResponseEntity<List<ResponseProfesionalDTO>> listarEspecialidad(@PathVariable(name= "especialidad") String especialidad) throws Exception{
         return ResponseEntity.ok().body(profesionalServicio.listarEspecialidad(especialidad));
     }
