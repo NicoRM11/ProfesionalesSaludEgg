@@ -24,7 +24,7 @@ public class Oferta {
    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_profesional", nullable = false)
     //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Profesional profesional;

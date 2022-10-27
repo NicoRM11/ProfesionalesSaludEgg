@@ -1,6 +1,7 @@
 package com.egg.salud.entidades;
 
 import com.egg.salud.enumeraciones.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +35,7 @@ public class Profesional extends Usuario {
     private String domicilio;
 
     @OneToMany(mappedBy = "profesional", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Oferta> oferta;
 
     public Profesional(Long id, String usuario, String password, Boolean estado, Rol rol, String nombre, String apellido, String urlFoto, String nacionalidad, String especialidad, String matricula, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta) {

@@ -7,6 +7,7 @@ import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaGuestDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
 import com.egg.salud.entidades.Profesional;
@@ -356,10 +357,10 @@ public class OfertaServicioImpl implements OfertaServicio {
 
                     if (oferta.getDisponible() == false) {
                         ofertaAceptadaDto.setGuest(oferta.getGuest());
-                   } else {
+                    } else {
                         ofertaAceptadaDto.setGuest(new Guest());
                     }
-                    
+
                     ofertaAceptadaDto.setTelefono(oferta.getTelefono());
                     ofertaAceptadaDto.setEspecialidad(oferta.getEspecialidad());
                     ofertaAceptadaDto.setId(oferta.getId());
@@ -428,27 +429,111 @@ public class OfertaServicioImpl implements OfertaServicio {
         List<ResponseOfertaDisponibleGuestDTO> listaResponse = new ArrayList<>();
 
         for (Oferta aux : listaOfertas) {
-            
-            if (aux.getEstado() == true && aux.getDisponible()== true) {
-            ResponseOfertaDisponibleGuestDTO response = new ResponseOfertaDisponibleGuestDTO();
-            response.setId(aux.getId());
-            response.setStart(aux.getStart());
-            response.setEnd(aux.getEnd());
-            response.setNombre(aux.getProfesional().getNombre());
-            response.setApellido(aux.getProfesional().getApellido());
-            response.setTelefono(aux.getTelefono());
-            response.setLocalidad(aux.getLocalidad());
-            response.setConsultorio(aux.getConsultorio());
-            response.setModalidad(aux.getModalidad());
-            response.setEspecialidad(aux.getEspecialidad());
-             
-            listaResponse.add(response);
-           
+
+            if (aux.getEstado() == true && aux.getDisponible() == true) {
+                ResponseOfertaDisponibleGuestDTO response = new ResponseOfertaDisponibleGuestDTO();
+                response.setId(aux.getId());
+                response.setStart(aux.getStart());
+                response.setEnd(aux.getEnd());
+                response.setNombre(aux.getProfesional().getNombre());
+                response.setApellido(aux.getProfesional().getApellido());
+                response.setTelefono(aux.getTelefono());
+                response.setLocalidad(aux.getLocalidad());
+                response.setConsultorio(aux.getConsultorio());
+                response.setModalidad(aux.getModalidad());
+                response.setEspecialidad(aux.getEspecialidad());
+
+                listaResponse.add(response);
+
+            }
         }
-        }
-         
-        return new ResponseEntity<>(listaResponse , HttpStatus.OK);
-    
+
+        return new ResponseEntity<>(listaResponse, HttpStatus.OK);
+
     }
-    
+
+    @Override
+    public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad, String especialidad) {
+
+        List<ResponseOfertaGuestDTO> listaResponse = new ArrayList();
+
+        if (localidad.equals(" ") && !especialidad.isEmpty()) {
+            List<Oferta> filtroBusqueda = ofertaRepositorio.buscarPorEspecialidad(especialidad);
+            for (Oferta aux : filtroBusqueda) {
+                if (aux.getEstado() && aux.getDisponible()) {
+                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
+                    response.setId(aux.getId());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setModalidad(aux.getModalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setProfesional(aux.getProfesional());
+                    response.setTelefono(aux.getTelefono());
+                    listaResponse.add(response);
+                }
+            }
+            return new ResponseEntity(listaResponse, HttpStatus.OK);
+
+        } else if (!localidad.isEmpty() && especialidad.equals(" ")) {
+            List<Oferta> filtroBusqueda = ofertaRepositorio.buscarPorLocalidad(localidad);
+            for (Oferta aux : filtroBusqueda) {
+                if (aux.getEstado() && aux.getDisponible()) {
+                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
+                    response.setId(aux.getId());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setModalidad(aux.getModalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setProfesional(aux.getProfesional());
+                    response.setTelefono(aux.getTelefono());
+                    listaResponse.add(response);
+                }
+            }
+            return new ResponseEntity(listaResponse, HttpStatus.OK);
+
+        } else if (localidad.equals("") && especialidad.equals("")) {
+            System.out.println("holu");
+            List<Oferta> filtroBusqueda = ofertaRepositorio.findAll();
+            System.out.println("holu");
+            for (Oferta aux : filtroBusqueda) {
+                if (aux.getEstado() && aux.getDisponible()) {
+                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
+                    response.setId(aux.getId());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setModalidad(aux.getModalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setProfesional(aux.getProfesional());
+                    response.setTelefono(aux.getTelefono());
+                    listaResponse.add(response);
+                }
+            }
+            return new ResponseEntity(listaResponse, HttpStatus.OK);
+
+        } else if (!localidad.isEmpty() && !especialidad.isEmpty()) {
+            List<Oferta> filtroBusqueda = ofertaRepositorio.filtroBusqueda(especialidad, localidad);
+            for (Oferta aux : filtroBusqueda) {
+                if (aux.getEstado() && aux.getDisponible()) {
+                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
+                    response.setId(aux.getId());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setModalidad(aux.getModalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setProfesional(aux.getProfesional());
+                    response.setTelefono(aux.getTelefono());
+                    listaResponse.add(response);
+                }
+            }
+            return new ResponseEntity(listaResponse, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.OK);
+        }
+
+    }
 }
