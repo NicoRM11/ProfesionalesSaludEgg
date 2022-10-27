@@ -5,38 +5,30 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import lupa from '../images/lupa.png';
 
-
-
 import Card from 'react-bootstrap/Card';
-import { height } from '@mui/system';
-import { imageListClasses } from '@mui/material';
-
-
-
-
-
-
+import Localidades from './Localidades';
 
 export const Cartilla = () => {
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
+    const [data, setdata] = useState({ localidad: "-", especialidad: "-" });
+    const [profesionales, setProfesionales] = useState([]);
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-    const [image, setImage] = useState(null);
-    const [url, setUrl] = useState(null);
 
     let navigate = useNavigate()
     console.log(data);
 
+
+
+
     useEffect(() => {
         cargarPerfil();
     }, []);
-
-    const URL = `http://localhost:8080/api/guest/${username}`;
     const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/oferta/listar/${data.localidad}/${data.especialidad}`
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -45,96 +37,30 @@ export const Cartilla = () => {
                 }
             }
             );
-            if (response.status === 202) {
-                response.data.password = `${password}`;
-                setdata(response.data);
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
-
-    const handleChange = ({ target }) => {
-        setEdicion(true);
-        setdata({
-            ...data,
-            [target.name]: target.value
-        })
-    }
-    const handleChangeNewPassword = ({ target }) => {
-        setEdicion(true);
-        setdata({
-            ...data,
-            password: target.value
-        })
-    }
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.put(URL, data, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
-                }
-            })
-
-            console.log(response);
             if (response.status === 200) {
-                Swal.fire(
-                    'Excelente!',
-                    'El usuario ha sido modificado exitosamente',
-                    'success'
-                )
+                setProfesionales(response.data);
+                console.log(response);
             }
-
         } catch (error) {
-            if (error.response.status === 406) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo modificar, ${error.response.data} !`,
-                })
-            }
-            console.log(error)
-        }
-
-    }
-
-    const handleDelete = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.delete(URL, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
-                }
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: ` ${error.response.data} !`,
             })
-
-            console.log(response);
-            if (response.status === 200) {
-                Swal.fire(
-                    'Se ha dado de baja exitosamente!',
-                    'Lo vamos a extrañar',
-                    'success'
-                )
-                navigate('/login');
-            }
-
-        } catch (error) {
-            if (error.response.status === 406) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo eliminar la cuenta, ${error.response.data} !`,
-                })
-            }
             console.log(error)
         }
     }
 
-    console.log(image)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        cargarPerfil();
+    }
+
+    const handleOferta = (profesional) => {
+        localStorage.setItem('profesional', JSON.stringify(profesional));
+        navigate('/Oferta/guest');
+    }
+
     return (
 
         <section className="container py-5">
@@ -148,118 +74,59 @@ export const Cartilla = () => {
 
                             <Col md={4}>
                                 <Form.Label >Localidad</Form.Label>
-                                <Form.Control type="text" name="Localidad" placeholder="Localidad" required onChange={handleChange} />
+                                {/* <Form.Control type="text" name="localidad" placeholder="Localidad"  onChange={(e) => setdata({ ...data, localidad: e.target.value })} /> */}
+
+                                <select className="form-select" value={data.localidad} name="especialidad" aria-label="Default select example" onChange={(e) => setdata({ ...data, localidad: e.target.value })}>
+                                    <option value="-">Todas</option>
+                                    {Localidades.map((localidad, index) =>
+                                        <option key={index} value={localidad}>{localidad}</option>
+                                    )}
+                                </select>
+
                             </Col>
 
                             <Col md={4}>
                                 <Form.Label >Especialidad</Form.Label>
-                                <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
-                                    <option selected>Todas</option>
+                                <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={(e) => setdata({ ...data, especialidad: e.target.value })}>
+                                    <option value="-">Todas</option>
                                     <option value="Pediatria">Pediatria</option>
                                     <option value="Ginecologia">Ginecología</option>
                                     <option value="Clinica">Clinica</option>
                                     <option value="Cardiologia">Cardiologia</option>
                                 </select>
                             </Col>
-
-
                             <Col className='justify-content-sm-end'>
 
-                                <button type="button" className="px-4 btn btn-light">
+                                <button type="submit" className="px-4 btn btn-light">
                                     <img src={lupa} width="19" height="19" />
                                 </button>
                             </Col>
 
                         </Row>
                     </div>
+                    <div className="card-group">
+                        {
+                            profesionales && profesionales.map(p =>
 
-                    <Row className='mt-5 mb-4 px-4'>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-
-                        </Col>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="holder.js/100px180" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Row className='mt-5 mb-4 px-4'>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="holder.js/100px180" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="holder.js/100px180" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src="" />
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
-                                    <Button variant="primary">Go somewhere</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
+                                <Row key={p.id} className='mt-5 mb-4 px-4 text-black'>
+                                    <Col>
+                                        <Card style={{ width: '14rem' }}>
+                                            <Card.Img variant="top" src={p.urlFoto} style={{ width: '14rem', height: '14rem' }} />
+                                            <Card.Body >
+                                                <Card.Title>{p.nombre} {p.apellido}</Card.Title>
+                                                <Card.Text>
+                                                    Especialidad: {p.especialidad}
+                                                </Card.Text>
+                                                <Button  variant="success" onClick={() => handleOferta(p.usuario)}>Ver Ofertas</Button>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            )
+                        }
+                    </div>
                 </Form>
             </div>
-
-
         </section>
     )
 }

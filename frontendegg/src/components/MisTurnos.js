@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 require('moment/locale/es.js');
 
-export const OfertaGuest = () => {
+export const MisTurnos = () => {
     const localizer = momentLocalizer(moment);
     const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
@@ -16,9 +16,7 @@ export const OfertaGuest = () => {
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-    const profesional = JSON.parse(localStorage.getItem('profesional'))
 
-    let navigate = useNavigate()
 
     useEffect(() => {
         cargarOfertas();
@@ -30,41 +28,40 @@ export const OfertaGuest = () => {
             title: `Modalidad: ${event.modalidad}\n
         Telefono: ${event.telefono}\n
         ----------------------\n
-        Doctor: ${event.profesional.nombre ? event.profesional.nombre : " --"} ${event.profesional.apellido ? event.profesional.apellido : " --"}\n 
-        Especialidad: ${event.especialidad ? event.especialidad: "--"}`,
+        `,
             showCancelButton: true,
             confirmButtonColor: 'success',
-            confirmButtonText: 'Tomar turno',
+            confirmButtonText: 'Cancelar turno',
         }).then((result) => {
             if (result.isConfirmed) {
-                tomarOferta(event);
-                
+                cancelarOferta(event);
+
             }
         })
     };
 
-    const tomarOferta = async (event) => {
-        const URL = `http://localhost:8080/api/oferta/aceptar-oferta-guest/${username}/${event.id}`;
+    const cancelarOferta = async (event) => {
+        const URL = `http://localhost:8080/api/oferta/cancelar-oferta-guest/${username}/${event.id}`;
         try {
-            const response = await axios.put(URL, {
+            const response = await axios.delete(URL, {
                 auth: {
                     username: `${username}`,
                     password: `${password}`
                 }
             })
             if (response.status === 200) {
-                Swal.fire('Turno tomado!', '', 'success')
+                Swal.fire('Turno cancelado!', '', 'success')
                 setEstado(estado + 1);
             }
 
         } catch (error) {
-            
+
             console.log(error)
         }
     }
 
     const cargarOfertas = async () => {
-        const URL = `http://localhost:8080/api/oferta/listarOfertasProfesional/${profesional}`;
+        const URL = `http://localhost:8080/api/oferta/listar-ofertas-guest/${username}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -86,9 +83,8 @@ export const OfertaGuest = () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: ` ${error.response.data } !`,
+                text: ` ${error.response.data} !`,
             })
-            navigate('/cartilla');
             console.log(error)
         }
     }
@@ -96,7 +92,7 @@ export const OfertaGuest = () => {
 
     return (
         <div className="container-xxl">
-            <h1 className="text-center">Turnos disponibles</h1>
+            <h1 className="text-center">Mis Turnos</h1>
             <Calendar
                 localizer={localizer}
                 events={allEvents}

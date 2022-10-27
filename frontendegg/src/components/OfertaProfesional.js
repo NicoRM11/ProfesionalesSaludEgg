@@ -18,7 +18,7 @@ export const OfertaProfesional = () => {
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-
+ 
     useEffect(() => {
         cargarOfertas();
     }, [estado])
@@ -52,6 +52,7 @@ export const OfertaProfesional = () => {
                     password: `${password}`
                 }
             })
+            
             if (response.status === 200) {
                 Swal.fire('Oferta Eliminada!', '', 'success')
                 setEstado(estado + 1);
@@ -90,6 +91,7 @@ export const OfertaProfesional = () => {
                         'success'
                     )
                     setEstado(estado + 1);
+                    console.log(response)
                 }
 
             } catch (error) {
