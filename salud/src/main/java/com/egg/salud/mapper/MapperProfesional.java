@@ -51,7 +51,8 @@ public class MapperProfesional {
     public ResponseProfesionalDTO map (Profesional profesional){
 
         ResponseProfesionalDTO response = new ResponseProfesionalDTO();
-
+        
+        response.setId(profesional.getId());
         response.setApellido(profesional.getApellido());
         response.setDomicilio(profesional.getDomicilio());
         response.setMatricula(profesional.getMatricula());
