@@ -9,6 +9,7 @@ import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseOfertaProfesionalDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public interface OfertaServicio {
     public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponible();
     
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad , String especialidad);
+    
+    public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(String usuario);
 //public ResponseEntity<List<ResponseGuestDTO>> listarOfertaProfesional();
 //    
 //    

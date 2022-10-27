@@ -33,6 +33,9 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     @Query("SELECT o FROM oferta o WHERE o.guest.usuario = :usuario")
     public List<Oferta> listaPorGuest(@Param("usuario") String usuario);
     
+    @Query("SELECT o FROM oferta o WHERE o.profesional.usuario = :usuario AND o.disponible = 1")
+    public List<Oferta> ofertaProfesionalDisponible(@Param("usuario") String usuario);
+    
     @Query("SELECT o.profesional FROM oferta o WHERE o.localidad = :localidad AND o.disponible = 1 GROUP BY o.profesional.id")
     public List<Profesional> buscarPorLocalidad(@Param("localidad") String localidad);
     

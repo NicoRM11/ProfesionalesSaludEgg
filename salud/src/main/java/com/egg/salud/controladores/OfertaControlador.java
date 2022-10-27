@@ -9,6 +9,7 @@ import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseOfertaProfesionalDTO;
 import com.egg.salud.servicio.OfertaServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +105,12 @@ public class OfertaControlador {
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(@PathVariable String localidad , @PathVariable String especialidad){
         return ofertaServicio.filtroBusqueda(localidad, especialidad);
     }
+    
+    
+    @GetMapping("listarOfertasProfesional/{usuario}")
+    public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(@PathVariable String usuario){
+       return ofertaServicio.ofertasProfesionalDisponibles(usuario);
+    }
+    
     
 }

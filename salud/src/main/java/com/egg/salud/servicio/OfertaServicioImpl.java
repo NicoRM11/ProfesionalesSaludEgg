@@ -8,6 +8,7 @@ import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
@@ -483,14 +484,14 @@ public class OfertaServicioImpl implements OfertaServicio {
         } else if (!localidad.equals("-") && !especialidad.equals("-")) {
 
             List<Profesional> filtroBusqueda = ofertaRepositorio.filtroBusqueda(especialidad, localidad);
-            
+
             for (Profesional aux : filtroBusqueda) {
                 if (aux.getEstado()) {
                     ResponseProfesionalDTO response = mapperProfesional.map(aux);
                     listaProfesional.add(response);
                 }
             }
-            
+
             if (listaProfesional.size() < 1) {
                 return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
             } else {
@@ -499,5 +500,42 @@ public class OfertaServicioImpl implements OfertaServicio {
 
         }
         return null;
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(String usuario) {
+
+        Optional<Profesional> profesional = profesionalRepositorio.findByUsuario(usuario);
+
+        if (profesional.isPresent()) {
+
+            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario);
+
+            if (listaOferta.size() < 1) {
+                return new ResponseEntity("No hay ofertas del profesional disponibles", HttpStatus.NOT_FOUND);
+            } else {
+                List<ResponseOfertaProfesionalDTO> listaResponse = new ArrayList();
+                for (Oferta aux : listaOferta) {
+                    ResponseOfertaProfesionalDTO response = new ResponseOfertaProfesionalDTO();
+                    response.setId(aux.getId());
+                    response.setProfesional(aux.getProfesional());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setModalidad(aux.getModalidad());
+                    response.setEspecialidad(aux.getEspecialidad());
+                    response.setTelefono(aux.getTelefono());
+                    response.setDisponible(aux.getDisponible());
+                    response.setEstado(aux.getEstado());
+                    listaResponse.add(response);
+                }
+                return new ResponseEntity(listaResponse, HttpStatus.OK);
+
+            }
+        } else {
+            return new ResponseEntity("No se encuentra al profesional", HttpStatus.NOT_FOUND);
+        }
+
     }
 }

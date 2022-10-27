@@ -5,27 +5,23 @@
  */
 package com.egg.salud.dto;
 
-import com.egg.salud.entidades.Guest;
+import com.egg.salud.entidades.Profesional;
 import java.sql.Timestamp;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ResponseListaOfertaDTO {
+public class ResponseOfertaProfesionalDTO {
     
     private Long id;
-    private Guest guest;
-    private Long telefono;
-
+    private Profesional profesional;
     private Timestamp start;
     private Timestamp end;
     private String localidad;
-    private String modalidad;
     private String consultorio;
+    private String modalidad;
     private String especialidad;
+    private Long telefono;
     private Boolean disponible;
+    private Boolean estado;
     
 }
