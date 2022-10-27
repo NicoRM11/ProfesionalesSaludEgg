@@ -37,8 +37,6 @@ public interface OfertaServicio {
     
     public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarOfertaGuestDisponible();
     
-    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(String localidad);
-    
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad , String especialidad);
 //public ResponseEntity<List<ResponseGuestDTO>> listarOfertaProfesional();
 //    

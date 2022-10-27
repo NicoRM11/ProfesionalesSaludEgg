@@ -5,6 +5,7 @@
 package com.egg.salud.repositorios;
 
 import com.egg.salud.entidades.Oferta;
+import com.egg.salud.entidades.Profesional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,13 +33,13 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     @Query("SELECT o FROM oferta o WHERE o.guest.usuario = :usuario")
     public List<Oferta> listaPorGuest(@Param("usuario") String usuario);
     
-    @Query("SELECT o FROM oferta o WHERE o.localidad = :localidad")
-    public List<Oferta> buscarPorLocalidad(@Param("localidad") String localidad);
+    @Query("SELECT o.profesional FROM oferta o WHERE o.localidad = :localidad AND o.disponible = 1 GROUP BY o.profesional.id")
+    public List<Profesional> buscarPorLocalidad(@Param("localidad") String localidad);
     
-    @Query("SELECT o FROM oferta o WHERE o.profesional.especialidad = :especialidad")
-    public List<Oferta> buscarPorEspecialidad(@Param("especialidad") String especialidad);
+    @Query("SELECT o.profesional FROM oferta o WHERE o.profesional.especialidad = :especialidad  AND o.disponible = 1 GROUP BY o.profesional.id")
+    public List<Profesional> buscarPorEspecialidad(@Param("especialidad") String especialidad);
     
-    @Query("SELECT o FROM oferta o WHERE o.profesional = (SELECT u.id FROM profesional u WHERE u.especialidad = :especialidad) AND o.localidad = :localidad")
-    public List<Oferta> filtroBusqueda(@Param("especialidad") String especialidad , @Param("localidad") String localidad);
+    @Query("SELECT o.profesional FROM oferta o WHERE o.profesional.especialidad = :especialidad AND o.localidad = :localidad AND o.disponible = 1 GROUP BY o.profesional.id")
+    public List<Profesional> filtroBusqueda(@Param("especialidad") String especialidad , @Param("localidad") String localidad);
     //@Query("SELECT o FROM oferta o WHERE o.id_profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario)")
 }

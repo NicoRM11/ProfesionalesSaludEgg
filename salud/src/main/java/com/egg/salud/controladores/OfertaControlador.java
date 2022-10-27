@@ -100,12 +100,6 @@ public class OfertaControlador {
         return ofertaServicio.todasLasOfertasGuest(usuario);
     }
     
-    
-    @GetMapping("/listar-ofertas-localidad/{localidad}")
-    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(@PathVariable String localidad){
-       return ofertaServicio.buscarPorLocalidad(localidad);
-    }
-    
     @GetMapping("listar/{localidad}/{especialidad}")
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(@PathVariable String localidad , @PathVariable String especialidad){
         return ofertaServicio.filtroBusqueda(localidad, especialidad);

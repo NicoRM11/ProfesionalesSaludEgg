@@ -8,9 +8,11 @@ import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
 import com.egg.salud.entidades.Profesional;
+import com.egg.salud.mapper.MapperProfesional;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.OfertaRepositorio;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
@@ -44,6 +46,9 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Autowired
     private OfertaRepositorio ofertaRepositorio;
+
+    @Autowired
+    private MapperProfesional mapperProfesional;
 
     @Override
     @Transactional
@@ -423,117 +428,76 @@ public class OfertaServicioImpl implements OfertaServicio {
     }
 
     @Override
-    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(String localidad) {
-
-        List<Oferta> listaOfertas = ofertaRepositorio.buscarPorLocalidad(localidad);
-        List<ResponseOfertaDisponibleGuestDTO> listaResponse = new ArrayList<>();
-
-        for (Oferta aux : listaOfertas) {
-
-            if (aux.getEstado() == true && aux.getDisponible() == true) {
-                ResponseOfertaDisponibleGuestDTO response = new ResponseOfertaDisponibleGuestDTO();
-                response.setId(aux.getId());
-                response.setStart(aux.getStart());
-                response.setEnd(aux.getEnd());
-                response.setNombre(aux.getProfesional().getNombre());
-                response.setApellido(aux.getProfesional().getApellido());
-                response.setTelefono(aux.getTelefono());
-                response.setLocalidad(aux.getLocalidad());
-                response.setConsultorio(aux.getConsultorio());
-                response.setModalidad(aux.getModalidad());
-                response.setEspecialidad(aux.getEspecialidad());
-
-                listaResponse.add(response);
-
-            }
-        }
-
-        return new ResponseEntity<>(listaResponse, HttpStatus.OK);
-
-    }
-
-    @Override
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad, String especialidad) {
 
-        List<ResponseOfertaGuestDTO> listaResponse = new ArrayList();
+        List<ResponseProfesionalDTO> listaProfesional = new ArrayList<>();
 
-        if (localidad.equals(" ") && !especialidad.isEmpty()) {
-            List<Oferta> filtroBusqueda = ofertaRepositorio.buscarPorEspecialidad(especialidad);
-            for (Oferta aux : filtroBusqueda) {
-                if (aux.getEstado() && aux.getDisponible()) {
-                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
-                    response.setId(aux.getId());
-                    response.setStart(aux.getStart());
-                    response.setEnd(aux.getEnd());
-                    response.setLocalidad(aux.getLocalidad());
-                    response.setModalidad(aux.getModalidad());
-                    response.setConsultorio(aux.getConsultorio());
-                    response.setProfesional(aux.getProfesional());
-                    response.setTelefono(aux.getTelefono());
-                    listaResponse.add(response);
+        if (localidad.equals("-") && !especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = ofertaRepositorio.buscarPorEspecialidad(especialidad);
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
                 }
             }
-            return new ResponseEntity(listaResponse, HttpStatus.OK);
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
 
-        } else if (!localidad.isEmpty() && especialidad.equals(" ")) {
-            List<Oferta> filtroBusqueda = ofertaRepositorio.buscarPorLocalidad(localidad);
-            for (Oferta aux : filtroBusqueda) {
-                if (aux.getEstado() && aux.getDisponible()) {
-                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
-                    response.setId(aux.getId());
-                    response.setStart(aux.getStart());
-                    response.setEnd(aux.getEnd());
-                    response.setLocalidad(aux.getLocalidad());
-                    response.setModalidad(aux.getModalidad());
-                    response.setConsultorio(aux.getConsultorio());
-                    response.setProfesional(aux.getProfesional());
-                    response.setTelefono(aux.getTelefono());
-                    listaResponse.add(response);
+        } else if (!localidad.equals("-") && especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = ofertaRepositorio.buscarPorLocalidad(localidad);
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
                 }
             }
-            return new ResponseEntity(listaResponse, HttpStatus.OK);
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
 
-        } else if (localidad.equals("") && especialidad.equals("")) {
-            System.out.println("holu");
-            List<Oferta> filtroBusqueda = ofertaRepositorio.findAll();
-            System.out.println("holu");
-            for (Oferta aux : filtroBusqueda) {
-                if (aux.getEstado() && aux.getDisponible()) {
-                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
-                    response.setId(aux.getId());
-                    response.setStart(aux.getStart());
-                    response.setEnd(aux.getEnd());
-                    response.setLocalidad(aux.getLocalidad());
-                    response.setModalidad(aux.getModalidad());
-                    response.setConsultorio(aux.getConsultorio());
-                    response.setProfesional(aux.getProfesional());
-                    response.setTelefono(aux.getTelefono());
-                    listaResponse.add(response);
+        } else if (localidad.equals("-") && especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = profesionalRepositorio.findAll();
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
                 }
             }
-            return new ResponseEntity(listaResponse, HttpStatus.OK);
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
 
-        } else if (!localidad.isEmpty() && !especialidad.isEmpty()) {
-            List<Oferta> filtroBusqueda = ofertaRepositorio.filtroBusqueda(especialidad, localidad);
-            for (Oferta aux : filtroBusqueda) {
-                if (aux.getEstado() && aux.getDisponible()) {
-                    ResponseOfertaGuestDTO response = new ResponseOfertaGuestDTO();
-                    response.setId(aux.getId());
-                    response.setStart(aux.getStart());
-                    response.setEnd(aux.getEnd());
-                    response.setLocalidad(aux.getLocalidad());
-                    response.setModalidad(aux.getModalidad());
-                    response.setConsultorio(aux.getConsultorio());
-                    response.setProfesional(aux.getProfesional());
-                    response.setTelefono(aux.getTelefono());
-                    listaResponse.add(response);
+        } else if (!localidad.equals("-") && !especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = ofertaRepositorio.filtroBusqueda(especialidad, localidad);
+            
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
                 }
             }
-            return new ResponseEntity(listaResponse, HttpStatus.OK);
+            
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
 
-        } else {
-            return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.OK);
         }
-
+        return null;
     }
 }
