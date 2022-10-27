@@ -17,6 +17,8 @@ import com.egg.salud.mapper.MapperProfesional;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.OfertaRepositorio;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
+
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -444,7 +446,7 @@ public class OfertaServicioImpl implements OfertaServicio {
                 }
             }
             if (listaProfesional.size() < 1) {
-                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity(listaProfesional, HttpStatus.OK);
             }
@@ -460,7 +462,7 @@ public class OfertaServicioImpl implements OfertaServicio {
                 }
             }
             if (listaProfesional.size() < 1) {
-                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity(listaProfesional, HttpStatus.OK);
             }
@@ -476,7 +478,7 @@ public class OfertaServicioImpl implements OfertaServicio {
                 }
             }
             if (listaProfesional.size() < 1) {
-                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity(listaProfesional, HttpStatus.OK);
             }
@@ -493,7 +495,7 @@ public class OfertaServicioImpl implements OfertaServicio {
             }
 
             if (listaProfesional.size() < 1) {
-                return new ResponseEntity("No se encontraron ofertas para la busqueda", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity(listaProfesional, HttpStatus.OK);
             }
@@ -508,8 +510,9 @@ public class OfertaServicioImpl implements OfertaServicio {
         Optional<Profesional> profesional = profesionalRepositorio.findByUsuario(usuario);
 
         if (profesional.isPresent()) {
-
-            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario);
+            Date date = new Date();
+            Timestamp fechaDeHoy = new Timestamp(date.getTime());
+            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario,fechaDeHoy);
 
             if (listaOferta.size() < 1) {
                 return new ResponseEntity("No hay ofertas del profesional disponibles", HttpStatus.NOT_FOUND);
