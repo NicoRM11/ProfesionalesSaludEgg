@@ -75,6 +75,7 @@ export const OfertaProfesional = () => {
         const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
         e.preventDefault();
         setNewEvent({ ...newEvent, disponible: true })
+        console.log(data);
         setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
         if (data.telefono !== "") {
             try {
@@ -91,7 +92,7 @@ export const OfertaProfesional = () => {
                         'success'
                     )
                     setEstado(estado + 1);
-                    console.log(response)
+                    //console.log(response)
                 }
 
             } catch (error) {
