@@ -37,6 +37,10 @@ public class Guest extends Usuario{
     @JsonIgnore
     private List<Oferta> oferta;
 
+    @OneToMany
+    @JsonIgnore
+    private List<FicheroGuest> ficheroGuest;
+
     public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {
         super(id, usuario, password, estado, rol);
         this.nombre = nombre;
