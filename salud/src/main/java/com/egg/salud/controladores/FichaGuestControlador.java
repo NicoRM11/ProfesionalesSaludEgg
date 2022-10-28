@@ -32,7 +32,7 @@ public class FichaGuestControlador {
     private FicheroGuestServicio ficheroServicio;
     
     
-    @PostMapping("/crear-oferta/{usuarioProfesional}/{usuarioGuest}")
+    @PostMapping("/crear-ficha/{usuarioProfesional}/{usuarioGuest}")
     public String crearFicha(@RequestBody RequestFicheroDTO request,@PathVariable (name= "usuarioGuest") String usuarioGuest,@PathVariable (name= "usuarioProfesional") String usuarioProfesional) throws Exception{
         
         return ficheroServicio.crearFichero(request, usuarioGuest, usuarioProfesional);

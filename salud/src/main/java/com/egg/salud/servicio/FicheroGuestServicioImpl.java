@@ -27,7 +27,7 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
     
     
     @Override
-    public String crearFichero(RequestFicheroDTO request, String usuarioProfesional, String usuarioGuest) throws Exception{
+    public String crearFichero(RequestFicheroDTO request, String usuarioGuest,String usuarioProfesional) throws Exception{
         
         Optional<Guest> busqueda = guestRepositorio.findByUsuario(usuarioGuest);
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuarioProfesional);
@@ -35,6 +35,7 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
         if (busqueda.isPresent() && respuesta.isPresent()) {
             
             Guest guest = busqueda.get();
+            Profesional profesional = respuesta.get();
             
             if (guest.getEstado()) {
                 
@@ -42,6 +43,8 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
                 fichero.setGuest(guest);
                 fichero.setDescripcion(request.getDescripcion());
                 fichero.setFechaConsulta(request.getFechaConsulta());
+                fichero.setEstado(true);
+                fichero.setProfesional(profesional);
                 
                 ficheroRepositorio.save(fichero);
                 return "Fichero creado correctamente";
@@ -65,7 +68,7 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
             Profesional profesional = busqueda.get();
             FicheroGuest fichero = respuesta.get();
             
-            if( fichero.getId().equals(profesional.getFicheroGuest())){
+            if( fichero.getProfesional().getId().equals(profesional.getId())){
             
             if (fichero.getEstado()) {
                 
@@ -75,7 +78,7 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
                 ficheroRepositorio.save(fichero);
                 return "Fichero eliminado correctamente";
             } }else {
-              throw new UserIsExistsException("usuario dado de baja");
+              throw new UserIsExistsException("la ficha medica del paciente no le corresponde a dicho profesional ");
             }
         } else {
             throw new ResourceNotFoundException("usuario no encontrado");
