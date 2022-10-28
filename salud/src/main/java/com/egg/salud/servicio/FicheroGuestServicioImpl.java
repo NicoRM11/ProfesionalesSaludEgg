@@ -4,6 +4,7 @@ import com.egg.salud.dto.RequestFicheroDTO;
 import com.egg.salud.dto.ResponseFicheroDTO;
 import com.egg.salud.entidades.FicheroGuest;
 import com.egg.salud.entidades.Guest;
+import com.egg.salud.entidades.Profesional;
 import com.egg.salud.exceptions.ResourceNotFoundException;
 import com.egg.salud.exceptions.UserIsExistsException;
 import com.egg.salud.repositorios.FicheroGuestRepositorio;
@@ -24,12 +25,14 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
     @Autowired
     private GuestRepositorio guestRepositorio;
     
+    
     @Override
-    public String crearFichero(RequestFicheroDTO request, String usuario) throws Exception{
+    public String crearFichero(RequestFicheroDTO request, String usuarioProfesional, String usuarioGuest) throws Exception{
         
-        Optional<Guest> busqueda = guestRepositorio.findByUsuario(usuario);
+        Optional<Guest> busqueda = guestRepositorio.findByUsuario(usuarioGuest);
+        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuarioProfesional);
         
-        if (busqueda.isPresent()) {
+        if (busqueda.isPresent() && respuesta.isPresent()) {
             
             Guest guest = busqueda.get();
             
@@ -52,7 +55,32 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
     
     @Override
     public String eliminarFichero(String usuario, Long id)  throws Exception{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Optional<Profesional> busqueda = profesionalRepositorio.findByUsuario(usuario);
+        Optional<FicheroGuest> respuesta = ficheroRepositorio.findById(id);
+                      
+        
+        if (busqueda.isPresent() && respuesta.isPresent()) {
+             
+            Profesional profesional = busqueda.get();
+            FicheroGuest fichero = respuesta.get();
+            
+            if( fichero.getId().equals(profesional.getFicheroGuest())){
+            
+            if (fichero.getEstado()) {
+                
+                fichero.setEstado(false);
+               
+                
+                ficheroRepositorio.save(fichero);
+                return "Fichero eliminado correctamente";
+            } }else {
+              throw new UserIsExistsException("usuario dado de baja");
+            }
+        } else {
+            throw new ResourceNotFoundException("usuario no encontrado");
+        }
+        return null;
     }
     
     @Override

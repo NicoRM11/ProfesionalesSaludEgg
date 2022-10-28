@@ -27,8 +27,14 @@ public class FicheroGuest {
     private Timestamp fechaConsulta;
 
     @ManyToOne
-    @JoinColumn(name = "id_guest", nullable = false)
+    @JoinColumn(name = "id_guest", nullable = true)
     private Guest guest;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_profesional", nullable = true)
+    private Profesional profesional;
+    
 
+    private Boolean estado;
 
 }

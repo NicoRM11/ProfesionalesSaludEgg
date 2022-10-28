@@ -37,6 +37,10 @@ public class Profesional extends Usuario {
     @OneToMany(mappedBy = "profesional", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Oferta> oferta;
+    
+    @OneToMany(mappedBy ="profesional", cascade=CascadeType.ALL)
+    @JsonIgnore
+    private List<FicheroGuest> ficheroGuest;
 
     public Profesional(Long id, String usuario, String password, Boolean estado, Rol rol, String nombre, String apellido, String urlFoto, String nacionalidad, String especialidad, String matricula, Integer dni, Date fecha_nac, String domicilio, List<Oferta> oferta) {
         super(id, usuario, password, estado, rol);

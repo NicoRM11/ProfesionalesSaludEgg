@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface FicheroGuestServicio {
     
-    public String crearFichero(RequestFicheroDTO request , String usuario) throws Exception;
+    public String crearFichero(RequestFicheroDTO request , String usuarioaGuest, String usuarioProfesional) throws Exception;
     
-    public String eliminarFichero(String usuario , Long id) throws Exception;
+   public String eliminarFichero(String usuario , Long id) throws Exception;
     
     public List<ResponseFicheroDTO> listaFicheroGuest(String usuario) throws Exception;
     
