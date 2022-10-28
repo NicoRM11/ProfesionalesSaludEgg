@@ -167,4 +167,32 @@ Link{
   font-weight: 500;
 }
 
+.botonesI{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5%;
+  
+
+}
+
+.botonI{
+  background-color: #98CFA1;
+  border: none;
+  border-radius:10px;
+  font-size: 2em;
+  color: #FFFFFF;
+  font-weight: 400;
+  
+  width: 30vw;
+  height: 15vh;
+  
+  
+
+}
+
+
+
+
+
+
 

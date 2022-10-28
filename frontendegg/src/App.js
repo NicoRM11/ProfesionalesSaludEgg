@@ -20,7 +20,7 @@ import { MisTurnos } from './components/MisTurnos';
 function App() {
   return (
     <div className="">
-        <Navbar></Navbar>
+        
         <Routes>
           <Route exact path="/inicio" element={<Inicio />} />
           <Route exact path="/register" element={<Main />} />
