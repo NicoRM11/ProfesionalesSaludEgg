@@ -1,7 +1,8 @@
 package com.egg.salud.servicio;
 
 import com.egg.salud.dto.RequestFicheroDTO;
-import com.egg.salud.dto.ResponseFicheroDTO;
+import com.egg.salud.dto.ResponseFicheroGuestDTO;
+import com.egg.salud.dto.ResponseFicheroProfesionalDTO;
 import java.util.List;
 
 public interface FicheroGuestServicio {
@@ -10,9 +11,9 @@ public interface FicheroGuestServicio {
     
    public String eliminarFichero(String usuario , Long id) throws Exception;
     
-    public List<ResponseFicheroDTO> listaFicheroGuest(String usuario) throws Exception;
+    public List<ResponseFicheroProfesionalDTO> listaFicheroGuest(String usuario) throws Exception;
     
-    public List<ResponseFicheroDTO> listaFicheroProfesional(String usuario , String especialidad) throws Exception;
+    public List<ResponseFicheroGuestDTO> listaFicheroProfesional(String usuario , String especialidad) throws Exception;
     
     
 }

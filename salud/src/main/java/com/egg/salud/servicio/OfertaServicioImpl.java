@@ -291,6 +291,8 @@ public class OfertaServicioImpl implements OfertaServicio {
                     ofertaAceptadaDto.setModalidad(oferta.getModalidad());
                     ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
                     ofertaAceptadaDto.setTelefono(oferta.getTelefono());
+                    ofertaAceptadaDto.setApellidoProfesional(oferta.getProfesional().getApellido());
+                    ofertaAceptadaDto.setNombreProfesional(oferta.getProfesional().getNombre());
 
                     listaOfertaAceptadaGuestDTO.add(ofertaAceptadaDto);
                 } else {
@@ -336,6 +338,8 @@ public class OfertaServicioImpl implements OfertaServicio {
                 ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
                 ofertaDisponibleDto.setTelefono(oferta.getTelefono());
                 ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
+                ofertaDisponibleDto.setApellidoProfesional(oferta.getProfesional().getApellido());
+                ofertaDisponibleDto.setNombreProfesional(oferta.getProfesional().getNombre());
 
                 listaOfertaDisponibleGuestDTO.add(ofertaDisponibleDto);
             } else {

@@ -3,17 +3,12 @@ package com.egg.salud.entidades;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 import lombok.Data;
-import javax.persistence.ManyToOne;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "fichero_guest")
 @AllArgsConstructor
 @NoArgsConstructor
 public class FicheroGuest {

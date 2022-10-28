@@ -31,5 +31,6 @@ public class ResponseOfertaAceptadaGuestDTO {
     private String localidad;
     private String modalidad;
     private String consultorio;
-
+    private String nombreProfesional;
+    private String apellidoProfesional;
 }

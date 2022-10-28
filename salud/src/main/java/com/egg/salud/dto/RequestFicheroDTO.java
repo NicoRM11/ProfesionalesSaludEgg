@@ -8,7 +8,7 @@ public class RequestFicheroDTO {
     
     private String descripcion;
     private Timestamp fechaConsulta;
-    
 
+    
      
 }

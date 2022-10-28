@@ -1,19 +1,17 @@
 package com.egg.salud.dto;
 
-import com.egg.salud.entidades.Guest;
 import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
-public class ResponseFicheroDTO {
+public class ResponseFicheroGuestDTO {
    
-    private Guest guest;
+    private String nombreGuest;
+    private String apellidoGuest;
+    private String obra_social;
+    private Integer dni;
     private Timestamp fechaConsulta;
     private String descripcion;
-    
-    
-    
-    
     
     
 }

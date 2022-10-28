@@ -26,5 +26,7 @@ public class ResponseOfertaDisponibleGuestDTO {
     private String apellido;
     private Long telefono;
     private String especialidad;
+    private String nombreProfesional;
+    private String apellidoProfesional;
 
 }
