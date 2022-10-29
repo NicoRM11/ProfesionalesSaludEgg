@@ -19,7 +19,17 @@ public class AdminControlador {
     public ResponseEntity<?> listar(){
         return ResponseEntity.ok().body(usuarioServicio.listarAdmin());
     }
+    
+    @GetMapping("/listaUsuarios")
+    public ResponseEntity<?> listaUsuarios() throws Exception{
+        return ResponseEntity.ok().body(usuarioServicio.listarGuest());
+    }
 
+    @GetMapping("/listaProfesionales")
+    public ResponseEntity<?> listaProfesionales() throws Exception{
+        return ResponseEntity.ok().body(usuarioServicio.listarProfesional());
+    }
+    
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody RequestUsuarioDTO request) throws Exception{
         return ResponseEntity.ok().body(usuarioServicio.registrarAdmin(request));
