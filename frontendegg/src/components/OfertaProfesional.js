@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import Swal from 'sweetalert2';
 import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 require('moment/locale/es.js');
 
 
@@ -18,7 +19,8 @@ export const OfertaProfesional = () => {
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
- 
+
+    let navigate = useNavigate();
     useEffect(() => {
         cargarOfertas();
     }, [estado])
@@ -33,12 +35,17 @@ export const OfertaProfesional = () => {
         Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
         Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
             showCancelButton: true,
+            denyButtonText: "Ver Fichas",
+            denyButtonColor: "#1c86d1",
+            showDenyButton: true,
             confirmButtonColor: '#da1e31',
             confirmButtonText: 'Eliminar',
         }).then((result) => {
             if (result.isConfirmed) {
                 eliminarOferta(event);
                 Swal.fire('Oferta Eliminada!', '', 'success')
+            }else if (result.isDenied) {
+                navigate('/Ficha/lista/paciente');
             }
         })
     };
@@ -72,10 +79,9 @@ export const OfertaProfesional = () => {
 
 
     const handleSubmit = async (e) => {
-        const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
         e.preventDefault();
+        const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
         setNewEvent({ ...newEvent, disponible: true })
-        console.log(data);
         setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
         if (data.telefono !== "") {
             try {

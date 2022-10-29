@@ -27,18 +27,19 @@ export const OfertaGuest = () => {
     const handleSelected = (event) => {
         setSelected(event);
         Swal.fire({
-            title: `Modalidad: ${event.modalidad}\n
-        Telefono: ${event.telefono}\n
-        ----------------------\n
-        Doctor: ${event.profesional.nombre ? event.profesional.nombre : " --"} ${event.profesional.apellido ? event.profesional.apellido : " --"}\n 
-        Especialidad: ${event.especialidad ? event.especialidad: "--"}`,
+            title: ` Doctor: ${event.profesional.nombre ? event.profesional.nombre : " --"} ${event.profesional.apellido ? event.profesional.apellido : " --"}\n 
+            Especialidad: ${event.especialidad ? event.especialidad : "--"}\n
+            Modalidad: ${event.modalidad}\n
+            ${event.modalidad==="Presencial" ? `Consultorio: ${event.consultorio}\n`: ""}
+            Horario: ${moment(event.start).format('HH:mm')} hs\n
+            Telefono: ${event.telefono}`,
             showCancelButton: true,
             confirmButtonColor: 'success',
             confirmButtonText: 'Tomar turno',
         }).then((result) => {
             if (result.isConfirmed) {
                 tomarOferta(event);
-                
+
             }
         })
     };
@@ -58,7 +59,7 @@ export const OfertaGuest = () => {
             }
 
         } catch (error) {
-            
+
             console.log(error)
         }
     }
@@ -86,7 +87,7 @@ export const OfertaGuest = () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: ` ${error.response.data } !`,
+                text: ` ${error.response.data} !`,
             })
             navigate('/cartilla');
             console.log(error)

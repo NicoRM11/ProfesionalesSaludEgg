@@ -16,6 +16,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { OfertaGuest } from './components/OfertaGuest';
 import { MisTurnos } from './components/MisTurnos';
+import { FichaGuest } from './components/FichaGuest';
+import { FichaProfesional } from './components/FichaProfesional';
 
 function App() {
   return (
@@ -31,7 +33,8 @@ function App() {
           <Route  path="/Oferta/guest" element={<OfertaGuest />} />
           <Route  path="/misTurnos" element={<MisTurnos />} />
           <Route exact path="/Cartilla" element={<Cartilla />} />
-          
+          <Route exact path="/Ficha/lista" element={<FichaGuest />} />
+          <Route exact path="/Ficha/lista/paciente" element={<FichaProfesional />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
         <Footer></Footer>
