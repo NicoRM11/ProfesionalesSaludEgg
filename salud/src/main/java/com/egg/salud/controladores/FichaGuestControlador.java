@@ -44,15 +44,15 @@ public class FichaGuestControlador {
         return ResponseEntity.ok().body(ficheroServicio.eliminarFichero(usuario, id));
     }
     
-    @GetMapping("/listaGuest/{usuario}")
-    public ResponseEntity<?> listaFicheroGuest(@PathVariable String usuario) throws Exception{
-        return ResponseEntity.ok().body(ficheroServicio.listaFicheroGuest(usuario));
+    @GetMapping("/listaGuest/{usuario}/{especialidad}")
+    public ResponseEntity<?> listarFicheroGuest(@PathVariable String usuario,@PathVariable String especialidad) throws Exception{
+        return ResponseEntity.ok().body(ficheroServicio.listaFicheroGuest(usuario,especialidad));
     }
-    
-    @GetMapping("/listaProfesional/{usuario}/{especialidad}")
-    public ResponseEntity<?> listaFicheroGuest(@PathVariable String usuario , @PathVariable String especialidad) throws Exception{
-        return ResponseEntity.ok().body(ficheroServicio.listaFicheroProfesional(usuario, especialidad));
+
+    @GetMapping("/lista/guest/{usuario}/{especialidad}")
+    public ResponseEntity<?> listarFicheroGuestForProfesional(@PathVariable String usuario,@PathVariable String especialidad) throws Exception{
+        return ResponseEntity.ok().body(ficheroServicio.listarFicheroGuestForProfesional(usuario,especialidad));
     }
-    
+
     
 }

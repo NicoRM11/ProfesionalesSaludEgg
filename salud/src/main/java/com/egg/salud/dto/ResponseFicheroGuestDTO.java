@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class ResponseFicheroGuestDTO {
-   
+    private Long id;
     private String nombreGuest;
     private String apellidoGuest;
     private String obra_social;

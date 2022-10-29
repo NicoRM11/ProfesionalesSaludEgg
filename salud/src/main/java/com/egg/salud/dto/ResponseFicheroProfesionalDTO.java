@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ResponseFicheroProfesionalDTO {
-     
+    private Long id;
     private String nombreProfesional;
     private String apellidoProfesional;
     private String especialidad;

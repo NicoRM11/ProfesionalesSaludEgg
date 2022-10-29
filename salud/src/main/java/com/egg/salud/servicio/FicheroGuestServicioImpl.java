@@ -88,33 +88,36 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
     }
 
     @Override
-    public List<ResponseFicheroProfesionalDTO> listaFicheroGuest(String usuario) throws Exception {
+    public List<ResponseFicheroProfesionalDTO> listaFicheroGuest(String usuario, String especialidad) throws Exception {
 
         Optional<Guest> busqueda = guestRepositorio.findByUsuario(usuario);
-
+        List<FicheroGuest> listaFichero = new ArrayList<>();
         if (busqueda.isPresent()) {
             Guest guest = busqueda.get();
             if (guest.getEstado()) {
-                List<FicheroGuest> listaFichero = ficheroRepositorio.listaFicheroGuest(usuario);
-
-                List<ResponseFicheroProfesionalDTO> listaResponse = new ArrayList<>();
-
-                for (FicheroGuest aux : listaFichero) {
-                    ResponseFicheroProfesionalDTO response = new ResponseFicheroProfesionalDTO();
-                    response.setDescripcion(aux.getDescripcion());
-                    response.setFechaConsulta(aux.getFechaConsulta());
-                    response.setNombreProfesional(aux.getProfesional().getNombre());
-                    response.setApellidoProfesional(aux.getProfesional().getApellido());
-                    response.setEspecialidad(aux.getProfesional().getEspecialidad());
-
-                    listaResponse.add(response);
+                if(especialidad.equals("-")) {
+                    listaFichero= ficheroRepositorio.listaFicheroGuest(usuario);
+                }else{
+                    listaFichero = ficheroRepositorio.FicherosByUsuarioByEspecialidad(usuario,especialidad);
                 }
-                if (listaFichero.size() < 1) {
-                    throw new DataNotFoundException("No se encuentran registros");
-                } else {
-                    return listaResponse;
-                }
+                    List<ResponseFicheroProfesionalDTO> listaResponse = new ArrayList<>();
 
+                    for (FicheroGuest aux : listaFichero) {
+                        ResponseFicheroProfesionalDTO response = new ResponseFicheroProfesionalDTO();
+                        response.setId(aux.getId());
+                        response.setDescripcion(aux.getDescripcion());
+                        response.setFechaConsulta(aux.getFechaConsulta());
+                        response.setNombreProfesional(aux.getProfesional().getNombre());
+                        response.setApellidoProfesional(aux.getProfesional().getApellido());
+                        response.setEspecialidad(aux.getProfesional().getEspecialidad());
+
+                        listaResponse.add(response);
+                    }
+                    if (listaFichero.size() < 1) {
+                        throw new DataNotFoundException("No se encuentran registros");
+                    } else {
+                        return listaResponse;
+                    }
             } else {
                 throw new UserIsExistsException("Usuario dado de baja");
             }
@@ -125,46 +128,42 @@ public class FicheroGuestServicioImpl implements FicheroGuestServicio {
     }
 
     @Override
-    public List<ResponseFicheroGuestDTO> listaFicheroProfesional(String usuario, String especialidad) throws Exception {
-
-        Optional<Profesional> busqueda = profesionalRepositorio.findByUsuario(usuario);
-        List<ResponseFicheroGuestDTO> listaResponse = new ArrayList();
-
+    public List<ResponseFicheroGuestDTO> listarFicheroGuestForProfesional(String usuario, String especialidad) throws Exception {
+        Optional<Guest> busqueda = guestRepositorio.findByUsuario(usuario);
+        List<FicheroGuest> listaFichero;
         if (busqueda.isPresent()) {
-            Profesional profesional = busqueda.get();
-            if (especialidad.equals("-")) {
-                List<FicheroGuest> listaFichero = ficheroRepositorio.listaFicheroProfesional(usuario);
+            Guest guest = busqueda.get();
+            if (guest.getEstado()) {
+                if(especialidad.equals("-")) {
+                    listaFichero= ficheroRepositorio.listaFicheroGuest(usuario);
+                }else{
+                    listaFichero = ficheroRepositorio.FicherosByUsuarioByEspecialidad(usuario,especialidad);
+                }
+                List<ResponseFicheroGuestDTO> listaResponse = new ArrayList<>();
+
                 for (FicheroGuest aux : listaFichero) {
                     ResponseFicheroGuestDTO response = new ResponseFicheroGuestDTO();
-
+                    response.setId(aux.getId());
+                    response.setDescripcion(aux.getDescripcion());
                     response.setFechaConsulta(aux.getFechaConsulta());
-                    response.setObra_social(aux.getGuest().getObra_social());
                     response.setNombreGuest(aux.getGuest().getNombre());
                     response.setApellidoGuest(aux.getGuest().getApellido());
-                    response.setDescripcion(aux.getDescripcion());
                     response.setDni(aux.getGuest().getDni());
+                    response.setObra_social(aux.getGuest().getObra_social());
+
                     listaResponse.add(response);
                 }
-                return listaResponse;
+                if (listaFichero.size() < 1) {
+                    throw new DataNotFoundException("No se encuentran registros");
+                } else {
+                    return listaResponse;
+                }
             } else {
-                List<FicheroGuest> listaFichero = ficheroRepositorio.listaFicheroProfesionalEspecialidad(usuario, especialidad);
-                for (FicheroGuest aux : listaFichero) {
-                    ResponseFicheroGuestDTO response = new ResponseFicheroGuestDTO();
-
-                    response.setFechaConsulta(aux.getFechaConsulta());
-                    response.setObra_social(aux.getGuest().getObra_social());
-                    response.setNombreGuest(aux.getGuest().getNombre());
-                    response.setApellidoGuest(aux.getGuest().getApellido());
-                    response.setDescripcion(aux.getDescripcion());
-                    response.setDni(aux.getGuest().getDni());
-                    listaResponse.add(response);
-                }
-                return listaResponse;
+                throw new UserIsExistsException("Usuario dado de baja");
             }
-
         } else {
-            throw new ResourceNotFoundException("no se encontró al usuario");
+            throw new ResourceNotFoundException("No se encontró al usuario");
         }
     }
-
 }
+

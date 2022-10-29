@@ -22,7 +22,7 @@ public interface OfertaServicio {
     
     public ResponseEntity<?> eliminarOfertaProfesional(Long id, String usuario);
 
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(String usuario);
+
     
     public ResponseEntity<List<ResponseListaOfertaDTO>> todasLasOfertasProfesional(String usuario);
     

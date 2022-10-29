@@ -11,9 +11,9 @@ public interface FicheroGuestServicio {
     
    public String eliminarFichero(String usuario , Long id) throws Exception;
     
-    public List<ResponseFicheroProfesionalDTO> listaFicheroGuest(String usuario) throws Exception;
-    
-    public List<ResponseFicheroGuestDTO> listaFicheroProfesional(String usuario , String especialidad) throws Exception;
-    
+    public List<ResponseFicheroProfesionalDTO> listaFicheroGuest(String usuario, String especialidad) throws Exception;
+
+    public List<ResponseFicheroGuestDTO> listarFicheroGuestForProfesional(String usuario, String especialidad) throws Exception;
+
     
 }

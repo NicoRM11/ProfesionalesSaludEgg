@@ -57,11 +57,7 @@ public class OfertaControlador {
     public ResponseEntity<?> eliminarOfertaProfesional(@PathVariable(name = "id") Long id,@PathVariable (name= "usuario") String usuario){
         return ofertaServicio.eliminarOfertaProfesional(id, usuario);
     }
-    
-    @GetMapping("/listar-ofertas-profesional/{usuario}")
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(@PathVariable(name = "usuario") String usuario){
-        return ofertaServicio.buscarOfertaProfesionalAceptadas(usuario);
-    }
+
     
     @GetMapping("/listar-ofertas-profesional-disponibles")
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(){

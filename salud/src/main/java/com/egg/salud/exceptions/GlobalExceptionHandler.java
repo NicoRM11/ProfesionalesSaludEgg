@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataNotFoundException(DataNotFoundException e){
        
         ErrorResponse error = buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(error , HttpStatus.OK);
+        return new ResponseEntity<>(error , HttpStatus.NOT_FOUND);
     
     }
     

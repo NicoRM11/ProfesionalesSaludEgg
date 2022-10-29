@@ -28,9 +28,8 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     public Optional<List<Oferta>> findByDisponible(Boolean disponible);
     
     //@Query("SELECT o FROM oferta o WHERE o.profesional = :profesional")
-    @Query("SELECT o FROM oferta o WHERE o.profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario)")
-    //@Query("SELECT o FROM oferta o WHERE o.profesional.usuario = :usuario")
-    public List<Oferta> listaPorProfesional(@Param("usuario") String usuario);
+    @Query("SELECT o FROM oferta o WHERE o.profesional.usuario=:usuario and o.start>=:fechaDeHoy")
+    public List<Oferta> listaPorProfesional(@Param("usuario") String usuario,@Param("fechaDeHoy") Timestamp fechaDeHoy);
     
     @Query("SELECT o FROM oferta o WHERE o.guest.usuario = :usuario")
     public List<Oferta> listaPorGuest(@Param("usuario") String usuario);

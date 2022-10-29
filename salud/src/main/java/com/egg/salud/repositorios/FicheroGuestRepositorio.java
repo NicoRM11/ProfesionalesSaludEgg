@@ -23,6 +23,10 @@ public interface FicheroGuestRepositorio extends JpaRepository <FicheroGuest , L
     
     @Query("SELECT f FROM fichero_guest f WHERE f.profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario) AND f.profesional.especialidad = :especialidad")
     public List<FicheroGuest> listaFicheroProfesionalEspecialidad(@Param("usuario") String usuario , @Param("especialidad") String especialidad);
-    
+
+
+    @Query("SELECT f FROM fichero_guest f WHERE f.profesional.especialidad =:especialidad and f.guest.usuario =:usuario")
+    public List<FicheroGuest> FicherosByUsuarioByEspecialidad(@Param("usuario") String usuario , @Param("especialidad") String especialidad);
+
     // @Query("SELECT IF( w FROM ficheroGuest w WHERE w.profesional.usuario = :usuario AND w.id = :id , 'TRUE' , 'FALSE')" )
 }
