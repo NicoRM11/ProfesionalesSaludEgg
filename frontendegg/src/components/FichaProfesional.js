@@ -13,9 +13,12 @@ import Card from 'react-bootstrap/Card';
 
 export const FichaProfesional = () => {
     const [data, setdata] = useState([]);
+    const [descripcion, setDescripcion] = useState({ descripcion: '' });
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-
+    const especialidad = JSON.parse(localStorage.getItem('especialidad'))
+    const paciente = JSON.parse(localStorage.getItem('paciente'))
+    const nombreApellido = JSON.parse(localStorage.getItem('nombreApellido'))
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -24,7 +27,7 @@ export const FichaProfesional = () => {
 
 
     const cargarFichas = async () => {
-        const URL = `http://localhost:8080/api/fichero/listaProfesional/${username}/{especialidad}`;
+        const URL = `http://localhost:8080/api/fichero/lista/guest/${paciente}/${especialidad}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -50,7 +53,33 @@ export const FichaProfesional = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        cargarFichas();
+        crearFicha(e)
+        
+    }
+
+    const crearFicha = async () => {
+        const URL = `http://localhost:8080/api/fichero/crear-ficha/${username}/${paciente}`;
+        try {
+            const response = await axios.post(URL,descripcion, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            }
+            );
+            console.log(response);
+            if (response.status === 200) {
+                //setdata(response.data);
+                cargarFichas();
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: ` ${error.response.data.messages[0]}!`,
+            })
+            console.log(error)
+        }
     }
 
     return (
@@ -60,7 +89,22 @@ export const FichaProfesional = () => {
             <div className="row justify-content-center align-items-center">
 
                 <Form className="Formulario col-md-10 col-xxl-10 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+
+                    <div className="row">
+                    <div className="col-md-2 text-center">
+                            <label >Paciente</label>
+                            <input className="form-control rounded-2" value={nombreApellido} type="text" placeholder="Nombre" disabled />
+                        </div>
+                        <div className="col-md-6">
+                            <textarea className="form-control rounded-2" required type="text" placeholder="Descripcion" value={descripcion.descripcion} onChange={(e) => setDescripcion({ ...descripcion, descripcion: e.target.value })} />
+                        </div>
+                        <div className="col-md-2">
+                            <button className="btn btn-success" type="submit">Crear Ficha</button>
+                        </div>
+                    </div>
                     <div className="card-group">
+
+
                         {
                             data && data.map(o =>
 
@@ -68,9 +112,12 @@ export const FichaProfesional = () => {
                                     <Col>
                                         <Card style={{ width: '14rem' }}>
                                             <Card.Body >
-                                                <Card.Title> DR.{o.nombreProfesional} {o.apellidoProfesional}</Card.Title>
+                                                <Card.Title> {o.nombreGuest} {o.apellidoGuest}</Card.Title>
                                                 <Card.Text>
-                                                    Especialidad: {o.especialidad}
+                                                    Obra social: {o.obra_social}
+                                                </Card.Text>
+                                                <Card.Text>
+                                                    DNI: {o.dni}
                                                 </Card.Text>
                                                 <Card.Text>
                                                     Descripcion: {o.descripcion}

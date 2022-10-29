@@ -13,6 +13,7 @@ import Card from 'react-bootstrap/Card';
 
 export const FichaGuest = () => {
     const [data, setdata] = useState([]);
+    const [especialidad, setEspecialidad] = useState({especialidad:"-"});
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
 
@@ -24,7 +25,7 @@ export const FichaGuest = () => {
 
 
     const cargarFichas = async () => {
-        const URL = `http://localhost:8080/api/fichero/listaGuest/${username}`;
+            const URL = `http://localhost:8080/api/fichero/listaGuest/${username}/${especialidad.especialidad}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -32,8 +33,7 @@ export const FichaGuest = () => {
                     password: `${password}`
                 }
             }
-            );
-            console.log(response);
+            );            
             if (response.status === 200) {
                 setdata(response.data);
                 console.log(response);
@@ -66,7 +66,7 @@ export const FichaGuest = () => {
 
                             <Col md={4}>
                                 <Form.Label >Especialidad</Form.Label>
-                                <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={(e) => setdata({ ...data, especialidad: e.target.value })}>
+                                <select className="form-select" value={especialidad} name="especialidad" aria-label="Default select example" onChange={(e) => setEspecialidad({ ...especialidad, especialidad: e.target.value })}>
                                     <option value="-">Todas</option>
                                     <option value="Pediatria">Pediatria</option>
                                     <option value="Ginecologia">Ginecología</option>

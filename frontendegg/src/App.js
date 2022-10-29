@@ -34,7 +34,7 @@ function App() {
           <Route  path="/misTurnos" element={<MisTurnos />} />
           <Route exact path="/Cartilla" element={<Cartilla />} />
           <Route exact path="/Ficha/lista" element={<FichaGuest />} />
-          <Route exact path="/Ficha/lista/paciente" element={<FichaProfesional />} />
+          <Route exact path="/Ficha/lista/paciente" element={<FichaProfesional />} /> 
           <Route path="*" element={<Error404 />} />
         </Routes>
         <Footer></Footer>

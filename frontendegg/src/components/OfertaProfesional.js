@@ -20,6 +20,7 @@ export const OfertaProfesional = () => {
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
 
+    
     let navigate = useNavigate();
     useEffect(() => {
         cargarOfertas();
@@ -27,27 +28,51 @@ export const OfertaProfesional = () => {
 
     const handleSelected = (event) => {
         setSelected(event);
-        Swal.fire({
-            title: `Modalidad: ${event.modalidad}\n
-        Telefono: ${event.telefono}\n
-        Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
-        ----------------------\n
-        Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
-        Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
-            showCancelButton: true,
-            denyButtonText: "Ver Fichas",
-            denyButtonColor: "#1c86d1",
-            showDenyButton: true,
-            confirmButtonColor: '#da1e31',
-            confirmButtonText: 'Eliminar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                eliminarOferta(event);
-                Swal.fire('Oferta Eliminada!', '', 'success')
-            }else if (result.isDenied) {
-                navigate('/Ficha/lista/paciente');
-            }
-        })
+        if(event.disponible){
+            Swal.fire({
+                title: `Modalidad: ${event.modalidad}\n
+            Telefono: ${event.telefono}\n
+            Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
+            ----------------------\n
+            Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
+            Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
+                showCancelButton: true,
+                confirmButtonColor: '#da1e31',
+                confirmButtonText: 'Eliminar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarOferta(event);
+                    Swal.fire('Oferta Eliminada!', '', 'success')
+                }
+            })
+        }else{
+            Swal.fire({
+                title: `Modalidad: ${event.modalidad}\n
+            Telefono: ${event.telefono}\n
+            Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
+            ----------------------\n
+            Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
+            Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
+                showCancelButton: true,
+                denyButtonText: "Ver Fichas",
+                denyButtonColor: "#1c86d1",
+                showDenyButton: true,
+                confirmButtonColor: '#da1e31',
+                confirmButtonText: 'Eliminar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarOferta(event);
+                    Swal.fire('Oferta Eliminada!', '', 'success')
+                }else if (result.isDenied) {
+                    const nombreApellido = `${event.guest.nombre} ${event.guest.apellido}`;
+                    localStorage.setItem('nombreApellido', JSON.stringify(nombreApellido));
+                    localStorage.setItem('especialidad', JSON.stringify(event.especialidad));
+                    localStorage.setItem('paciente', JSON.stringify(event.guest.usuario));
+                    navigate('/Ficha/lista/paciente');
+                }
+            })
+        }
+        
     };
 
     const eliminarOferta = async (event) => {
@@ -91,6 +116,7 @@ export const OfertaProfesional = () => {
                         password: `${password}`
                     }
                 })
+                
                 if (response.status === 201) {
                     Swal.fire(
                         'Excelente!',
@@ -124,6 +150,7 @@ export const OfertaProfesional = () => {
                 }
             }
             );
+            console.log(response)
             if (response.status === 200) {
                 response.data.map((oferta) => {
                     oferta.start = new Date(oferta.start);
