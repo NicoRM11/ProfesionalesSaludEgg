@@ -10,53 +10,29 @@ import { GuestProfile } from './GuestProfile';
 
 
 
-export const NavSesionGuest = () => {
-
-    const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", localidad: "", nacionalidad: "", apellido: "", telefono: "", obra_social: "", dni: "", urlFoto: "" });
-    
-    const username = JSON.parse(localStorage.getItem('usuario'))
-    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
-
-
-    const cargarPerfil = async () => {
-        try {
-            const response = await axios.get(URL, {
-                auth: {
-                    username: `${username}`,
-                }
-            }
-            );
-            console.log(response);
-            if (response.status === 200) {
-                setdata(response.data);
-                
-            }
-        } catch (error) {
-            console.log(error)
-        }
-        
-    }
-
-
-
-
+export const NavSesionGuest = ({ data }) => {
 
     return (
         <div className="nav-item active d-flex flex-row align-items-center">
 
-            
-
-            <Link to={'/GuestProfile'} className="text-decoration-none ">
-                
+            <div class="dropdown">
+                <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 <Avatar className=""
                     alt="Imagen Perfil"
                     src={data.urlFoto}
                     sx={{ width: 40, height: 40 }}
                 />
-                    
-                </Link>
-                <h6 className="text-white m-2 "> Hola, {data.nombre}</h6>
-            
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><Link to={'/Cartilla'} className=" dropdown-item h-3 ml-2  btn">Cartilla</Link></li>
+                    <li><Link to={'/misTurnos'} className="dropdown-item h-3 ml-2 btn ">Mis Turnos</Link></li>
+                    <li><Link to={'/Ficha/lista'} className="dropdown-item h-3 ml-2 btn ">Mis Fichas</Link></li>
+                    <li><Link to={'/GuestProfile'} className="dropdown-item h-3 ml-2 btn ">Mi Perfil</Link></li>
+                </ul>
+            </div>
+
+            <h6 className="text-white m-2 "> Hola, {data.nombre}</h6>
+
 
 
         </div>

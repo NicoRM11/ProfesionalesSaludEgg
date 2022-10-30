@@ -68,6 +68,7 @@ export const OfertaProfesional = () => {
                     localStorage.setItem('nombreApellido', JSON.stringify(nombreApellido));
                     localStorage.setItem('especialidad', JSON.stringify(event.especialidad));
                     localStorage.setItem('paciente', JSON.stringify(event.guest.usuario));
+                    localStorage.setItem('fechaConsulta', JSON.stringify(event.start));
                     navigate('/Ficha/lista/paciente');
                 }
             })
@@ -106,8 +107,8 @@ export const OfertaProfesional = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
-        setNewEvent({ ...newEvent, disponible: true })
         setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
+        console.log(newEvent);
         if (data.telefono !== "") {
             try {
                 const response = await axios.post(URL, data, {

@@ -24,7 +24,7 @@ const Login = () => {
       localStorage.setItem('usuario', JSON.stringify(usuario));
       localStorage.setItem('password', JSON.stringify(password));
       if(rol==='ROLE_GUEST'){
-        navigate('/Cartilla');
+        navigate('/inicio');
       }
       if(rol==='ROLE_PROFESIONAL'){
         navigate('/Oferta/Profesional');

@@ -9,10 +9,40 @@ import slide3 from '../images/slider3.jpg';
 import Button from 'react-bootstrap/Button';
 import { Col } from 'react-bootstrap/Col';
 import { MisTurnos } from './MisTurnos';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 
 const Inicio = () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'))
+    const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const [data,setdata] = useState({});
+
+    useEffect(() => {
+        cargarPerfil();
+    }, []);
+
+    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
+    const cargarPerfil = async () => {
+        try {
+            const response = await axios.get(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            }
+            );
+            console.log(response);
+            if (response.status === 200) {
+                response.data.password = `${password}`;
+                setdata(response.data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     return (
 
 
@@ -39,7 +69,7 @@ const Inicio = () => {
                         id="navbarnav">
                         <ul className="navbar-nav">
                             {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
-                            <NavSesionGuest></NavSesionGuest>
+                            <NavSesionGuest data={data}></NavSesionGuest>
                         </ul>
                     </div>
                 </div>
@@ -50,7 +80,9 @@ const Inicio = () => {
                 <Carousel>
                     <Carousel.Item>
                         <img
-                            className="d-block w-100"
+                            className="rounded-2"
+                            height="500"
+                            width="1200"
                             src={slide1}
                             alt="First slide"
                         />
@@ -61,7 +93,9 @@ const Inicio = () => {
                     </Carousel.Item>
                     <Carousel.Item>
                         <img
-                            className="d-block w-100"
+                            className="rounded-2"
+                            height="500"
+                            width="1200"
                             src={slide2}
                             alt="Second slide"
                         />
@@ -73,7 +107,9 @@ const Inicio = () => {
                     </Carousel.Item>
                     <Carousel.Item>
                         <img
-                            className="d-block w-100"
+                            className="rounded-2"
+                            height="500"
+                            width="1200"
                             src={slide3}
                             alt="Third slide"
                         />

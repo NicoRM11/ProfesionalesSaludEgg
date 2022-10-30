@@ -12,13 +12,17 @@ import lupa from '../images/lupa.png';
 import Card from 'react-bootstrap/Card';
 
 export const FichaProfesional = () => {
-    const [data, setdata] = useState([]);
-    const [descripcion, setDescripcion] = useState({ descripcion: '' });
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     const especialidad = JSON.parse(localStorage.getItem('especialidad'))
     const paciente = JSON.parse(localStorage.getItem('paciente'))
     const nombreApellido = JSON.parse(localStorage.getItem('nombreApellido'))
+    const fechaConsulta = JSON.parse(localStorage.getItem('fechaConsulta'))
+
+    const [data, setdata] = useState([]);
+    const [newFicha, setNewFicha] = useState({ descripcion: '',fechaConsulta: new Date(fechaConsulta)});
+    
+    
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -60,7 +64,7 @@ export const FichaProfesional = () => {
     const crearFicha = async () => {
         const URL = `http://localhost:8080/api/fichero/crear-ficha/${username}/${paciente}`;
         try {
-            const response = await axios.post(URL,descripcion, {
+            const response = await axios.post(URL,newFicha, {
                 auth: {
                     username: `${username}`,
                     password: `${password}`
@@ -96,7 +100,7 @@ export const FichaProfesional = () => {
                             <input className="form-control rounded-2" value={nombreApellido} type="text" placeholder="Nombre" disabled />
                         </div>
                         <div className="col-md-6">
-                            <textarea className="form-control rounded-2" required type="text" placeholder="Descripcion" value={descripcion.descripcion} onChange={(e) => setDescripcion({ ...descripcion, descripcion: e.target.value })} />
+                            <textarea className="form-control rounded-2" required type="text" placeholder="Descripcion" value={newFicha.descripcion} onChange={(e) => setNewFicha({ ...newFicha, descripcion: e.target.value })} />
                         </div>
                         <div className="col-md-2">
                             <button className="btn btn-success" type="submit">Crear Ficha</button>

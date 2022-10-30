@@ -5,13 +5,15 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 import Avatar from "@mui/material/Avatar";
 import { storage } from "./firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { NavSesionGuest } from './NavSesionGuest';
 
 
 
@@ -33,8 +35,9 @@ export const GuestProfile = () => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
+    
     const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/guest/detalle/${username}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -169,6 +172,36 @@ export const GuestProfile = () => {
 
    // console.log(image)
     return (
+        <>
+        <nav className="navbar  navbar-expand-sm" >
+                <div className="container-xxl">
+                    <div className="navbar-brand mb-0 h1 text-white" href="#">
+                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                    </div>
+
+                    <button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarnav"
+                        className="navbar-toggler"
+                        aria-controls="navbarnav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse flex-row-reverse"
+                        id="navbarnav">
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionGuest data={data}></NavSesionGuest>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        
+        
 
         <section className="container py-5">
 
@@ -289,7 +322,9 @@ export const GuestProfile = () => {
                 </button>
             </div>
         </section>
-    )
+        </>
+        )
+    
 }
 
 
