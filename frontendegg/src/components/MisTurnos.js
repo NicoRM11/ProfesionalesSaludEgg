@@ -14,7 +14,7 @@ export const MisTurnos = () => {
     const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
     const [estado, setEstado] = useState(1)
-    const [data,setdata] = useState({});
+    const [data, setdata] = useState({});
 
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
@@ -29,7 +29,7 @@ export const MisTurnos = () => {
         cargarPerfil();
     }, []);
 
-    
+
     const cargarPerfil = async () => {
         const URL = `http://localhost:8080/api/guest/detalle/${username}`;
         try {
@@ -44,7 +44,7 @@ export const MisTurnos = () => {
             if (response.status === 200) {
                 response.data.password = `${password}`;
                 setdata(response.data);
-                
+
             }
         } catch (error) {
             console.log(error)
@@ -54,10 +54,10 @@ export const MisTurnos = () => {
     const handleSelected = (event) => {
         setSelected(event);
         Swal.fire({
-            title: ` Doctor: ${event.nombreProfesional ? event.nombreProfesional : " --"} ${event.apellidoProfesional ? event.apellidoProfesional: " --"}\n 
+            title: ` Doctor: ${event.nombreProfesional ? event.nombreProfesional : " --"} ${event.apellidoProfesional ? event.apellidoProfesional : " --"}\n 
             Especialidad: ${event.especialidad ? event.especialidad : "--"}\n
             Modalidad: ${event.modalidad}\n
-            ${event.modalidad==="Presencial" ? `Consultorio: ${event.consultorio}\n`: ""}
+            ${event.modalidad === "Presencial" ? `Consultorio: ${event.consultorio}\n` : ""}
             Horario: ${moment(event.start).format('HH:mm')} hs\n
             Telefono: ${event.telefono}`,
             showCancelButton: true,

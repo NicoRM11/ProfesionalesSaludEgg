@@ -16,7 +16,7 @@ import { useState } from 'react';
 const Inicio = () => {
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
-    const [data,setdata] = useState({});
+    const [data, setdata] = useState({});
 
     useEffect(() => {
         cargarPerfil();
@@ -87,8 +87,8 @@ const Inicio = () => {
                             alt="First slide"
                         />
                         <Carousel.Caption>
-                            <h3>First slide label</h3>
-                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            <h3 className="text-dark">Gestion online de turnos</h3>
+                            <p className="text-dark">Turnos con modalidad online y presencial a un click.</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -101,8 +101,8 @@ const Inicio = () => {
                         />
 
                         <Carousel.Caption>
-                            <h3>Second slide label</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <h3 className="text-dark">Todos los especialistas que necesita en un solo lugar</h3>
+                            <p className="text-dark">Contamos con los mejores profesionales de la zona.</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -115,34 +115,29 @@ const Inicio = () => {
                         />
 
                         <Carousel.Caption>
-                            <h3>Third slide label</h3>
-                            <p>
-                                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                            </p>
+                            <h3 className="text-dark">El mejor equipo de trabajo</h3>
+                            <h6 className="text-dark">
+                                Contamos con evaluaciones de satisfaccion de cada personal para poder asegurarnos que reciba la mejor atencion.
+                            </h6>
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>
-
-                <div className='botonesI'>
-
+                {username!=="" ? <div className='botonesI'>
                     <div>
-                    <Link to="/MisTurnos">
-                         <button className='botonI'>Mis Turnos</button>  
-                    </Link>
-                    
+                        <Link to="/MisTurnos">
+                            <button className='botonI'>Mis Turnos</button>
+                        </Link>
                     </div>
 
-                    
                     <div className='boton2'>
-                    <Link to="/Cartilla">
-                         <button className='botonI'>Cartilla</button>  
-                    </Link>
-                    
+                        <Link to="/Cartilla">
+                            <button className='botonI'>Cartilla</button>
+                        </Link>
                     </div>
-
-                    
-
                 </div>
+                : <></>}
+                
+
             </div>
         </div>
 

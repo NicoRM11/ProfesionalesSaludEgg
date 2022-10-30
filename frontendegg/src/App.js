@@ -25,7 +25,7 @@ function App() {
     <div className="">
         
         <Routes>
-          <Route exact path="/inicio" element={<Inicio />} />
+          <Route exact path="/inicio" forceRefresh={true} element={<Inicio />} />
           <Route exact path="/register" element={<Main />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/GuestProfile" element={<GuestProfile />} />
