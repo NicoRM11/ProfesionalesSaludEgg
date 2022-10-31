@@ -231,6 +231,26 @@ public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService 
         return listaProfesionalDto;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResponseUsuarioDTO> listaUsuariosCompleta() throws Exception {
+       
+        List<Usuario> listaUsuario = usuarioRepositorio.findAll();
+        
+        List<ResponseUsuarioDTO> listaResponse = new ArrayList();
+        
+        for (Usuario aux : listaUsuario) {
+            ResponseUsuarioDTO response = new ResponseUsuarioDTO();
+            response.setEstado(aux.getEstado());
+            response.setRol(aux.getRol());
+            response.setUsuario(aux.getUsuario());
+            listaResponse.add(response);
+        }
+        return listaResponse;
+    }
+    
+    
+
     
     
     

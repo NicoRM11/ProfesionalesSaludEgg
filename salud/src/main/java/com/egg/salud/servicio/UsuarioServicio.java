@@ -28,5 +28,7 @@ public interface UsuarioServicio {
     public ResponseUsuarioDTO buscarUsuario(String usuario) throws Exception;
     
     public String altaUsuario(String usuario) throws Exception;
+    
+    public List<ResponseUsuarioDTO> listaUsuariosCompleta() throws Exception;
 
 }
