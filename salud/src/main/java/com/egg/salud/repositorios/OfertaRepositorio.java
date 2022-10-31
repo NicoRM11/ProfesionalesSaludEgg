@@ -46,4 +46,7 @@ public interface OfertaRepositorio extends JpaRepository <Oferta, Long> {
     @Query("SELECT o.profesional FROM oferta o WHERE o.profesional.especialidad = :especialidad AND o.localidad = :localidad GROUP BY o.profesional.id")
     public List<Profesional> filtroBusqueda(@Param("especialidad") String especialidad , @Param("localidad") String localidad);
     //@Query("SELECT o FROM oferta o WHERE o.id_profesional = (SELECT u.id FROM usuario u WHERE u.usuario = :usuario)")
+    
+    @Query("SELECT o FROM oferta o WHERE o.start >= :fechaDeHoy")
+    public List<Oferta> listaCompleta(@Param("fechaDeHoy") Timestamp fechaDeHoy);
 }

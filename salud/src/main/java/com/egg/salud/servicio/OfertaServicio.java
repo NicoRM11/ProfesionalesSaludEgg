@@ -6,6 +6,7 @@ import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaAdmin;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
@@ -41,6 +42,8 @@ public interface OfertaServicio {
     public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad , String especialidad);
     
     public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(String usuario);
+    
+    public List<ResponseOfertaAdmin> listadoCompletoOfertas() throws Exception;
 //public ResponseEntity<List<ResponseGuestDTO>> listarOfertaProfesional();
 //    
 //    

@@ -5,6 +5,7 @@ import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaAdmin;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaGuestDTO;
@@ -13,6 +14,7 @@ import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
 import com.egg.salud.entidades.Profesional;
+import com.egg.salud.exceptions.DataNotFoundException;
 import com.egg.salud.mapper.MapperProfesional;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.OfertaRepositorio;
@@ -313,9 +315,9 @@ public class OfertaServicioImpl implements OfertaServicio {
 
         if (respuesta.isPresent()) {
             Date date = new Date();
-            Timestamp fechaDeHoy = new Timestamp(date.getTime()-((540*60)*1000));
+            Timestamp fechaDeHoy = new Timestamp(date.getTime() - ((540 * 60) * 1000));
             System.out.println(fechaDeHoy);
-            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario,fechaDeHoy);
+            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario, fechaDeHoy);
 
             List<ResponseListaOfertaDTO> listaProfesionalDTO = new ArrayList<>();
 
@@ -473,7 +475,7 @@ public class OfertaServicioImpl implements OfertaServicio {
         if (profesional.isPresent()) {
             Date date = new Date();
             Timestamp fechaDeHoy = new Timestamp(date.getTime());
-            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario,fechaDeHoy);
+            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario, fechaDeHoy);
 
             if (listaOferta.size() < 1) {
                 return new ResponseEntity("No hay ofertas del profesional disponibles", HttpStatus.NOT_FOUND);
@@ -499,6 +501,45 @@ public class OfertaServicioImpl implements OfertaServicio {
             }
         } else {
             return new ResponseEntity("No se encuentra al profesional", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @Override
+    public List<ResponseOfertaAdmin> listadoCompletoOfertas() throws Exception {
+
+        Date date = new Date();
+        Timestamp fechaDeHoy = new Timestamp(date.getTime() - ((540 * 60)* 1000));
+        List<Oferta> listaOfertas = ofertaRepositorio.listaCompleta(fechaDeHoy);
+     
+        if (listaOfertas.size() >= 1) {
+            List<ResponseOfertaAdmin> listaResponse = new ArrayList();
+            for (Oferta aux : listaOfertas) {
+                
+                if (aux.getEstado()) {
+                   ResponseOfertaAdmin response =  new ResponseOfertaAdmin();
+                   response.setId(aux.getId());
+                   response.setNombreGuest(aux.getGuest().getNombre());
+                   response.setApellidoGuest(aux.getGuest().getApellido());
+                   response.setObra_social(aux.getGuest().getObra_social());
+                   response.setNombreProfesional(aux.getProfesional().getNombre());
+                   response.setApellidoProfesional(aux.getProfesional().getApellido());
+                   response.setStart(aux.getStart());
+                   response.setEnd(aux.getEnd());
+                   response.setLocalidad(aux.getLocalidad());
+                   response.setConsultorio(aux.getConsultorio());
+                   response.setModalidad(aux.getModalidad());
+                   response.setEspecialidad(aux.getEspecialidad());
+                   response.setTelefono(aux.getTelefono());
+                   response.setDisponible(aux.getDisponible());
+                   response.setEstado(aux.getEstado());
+                   listaResponse.add(response);
+                }
+            }
+            return listaResponse;
+
+        } else {
+          throw new DataNotFoundException("No se encuentran ofertas");
         }
 
     }
