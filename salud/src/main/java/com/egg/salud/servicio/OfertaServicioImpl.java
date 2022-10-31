@@ -514,16 +514,13 @@ public class OfertaServicioImpl implements OfertaServicio {
      
         if (listaOfertas.size() >= 1) {
             List<ResponseOfertaAdmin> listaResponse = new ArrayList();
+
             for (Oferta aux : listaOfertas) {
-                
                 if (aux.getEstado()) {
                    ResponseOfertaAdmin response =  new ResponseOfertaAdmin();
                    response.setId(aux.getId());
-                   response.setNombreGuest(aux.getGuest().getNombre());
-                   response.setApellidoGuest(aux.getGuest().getApellido());
-                   response.setObra_social(aux.getGuest().getObra_social());
-                   response.setNombreProfesional(aux.getProfesional().getNombre());
-                   response.setApellidoProfesional(aux.getProfesional().getApellido());
+                   response.setProfesional(aux.getProfesional());
+                   response.setGuest(aux.getGuest());
                    response.setStart(aux.getStart());
                    response.setEnd(aux.getEnd());
                    response.setLocalidad(aux.getLocalidad());

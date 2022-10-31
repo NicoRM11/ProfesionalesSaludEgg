@@ -1,17 +1,17 @@
 package com.egg.salud.dto;
 
 import java.sql.Timestamp;
+
+import com.egg.salud.entidades.Guest;
+import com.egg.salud.entidades.Profesional;
 import lombok.Data;
 
 @Data
 public class ResponseOfertaAdmin {
   
      private Long id;
-     private String nombreGuest;
-     private String apellidoGuest;
-     private String obra_social;
-     private String nombreProfesional;
-     private String apellidoProfesional;
+     private Guest guest;
+     private Profesional profesional;
      private Timestamp start;
      private Timestamp end;
      private String localidad;
