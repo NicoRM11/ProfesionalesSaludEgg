@@ -115,7 +115,7 @@ export const ProfesionalProfile = () => {
                     'Lo vamos a extrañar',
                     'success'
                 )
-                navigate('/login');
+                handleLogout();
             }
 
         } catch (error) {
@@ -157,6 +157,17 @@ export const ProfesionalProfile = () => {
                 console.log(error.message);
             })
         setEdicion(true);
+    }
+
+    const handleLogout = () => {
+        localStorage.setItem('rol', JSON.stringify(""));
+        localStorage.setItem('usuario', JSON.stringify(""));
+        localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('nombreApellido', JSON.stringify(""));
+        localStorage.setItem('especialidad', JSON.stringify(""));
+        localStorage.setItem('fechaConsulta', JSON.stringify(""));
+        localStorage.setItem('paciente', JSON.stringify(""));
+        navigate('/inicio');
     }
     return (
         <>

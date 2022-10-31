@@ -11,11 +11,13 @@ export const Error404 = () => {
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        {rol==="ROLE_PROFESIONAL"?
-                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
-                        :
-                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link> 
-                        }
+                        {rol==="ROLE_PROFESIONAL" &&
+                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link> }
+                        {rol==="ROLE_ADMIN" &&
+                        <Link to="/listar/usuarios"> <img src={logo} width="150" height="50" /> </Link> }
+                        {rol==="ROLE_GUEST" &&
+                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>  }
+                        
                     </div>
 
                     <button

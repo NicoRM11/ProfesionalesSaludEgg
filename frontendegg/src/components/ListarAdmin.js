@@ -156,7 +156,7 @@ export const ListarAdmin = () => {
         <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/listar/usuarios"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button

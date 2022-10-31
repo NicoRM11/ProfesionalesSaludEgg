@@ -37,119 +37,30 @@ export const OfertasAdmin = () => {
         setSelected(event);
         if (event.disponible) {
             Swal.fire({
-                title: `Modalidad: ${event.modalidad}\n
+                title: `DR: ${event.profesional.nombre} ${event.profesional.apellido}\n
+                Modalidad: ${event.modalidad}\n
             Telefono: ${event.telefono}\n
             Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
             ----------------------\n
-            Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
-            Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
-                showCancelButton: true,
-                confirmButtonColor: '#da1e31',
-                confirmButtonText: 'Eliminar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    eliminarOferta(event);
-                    Swal.fire('Oferta Eliminada!', '', 'success')
-                }
+            Paciente:  --\n 
+            Obra social: --`,
             })
         } else {
             Swal.fire({
-                title: `Modalidad: ${event.modalidad}\n
+                title: `DR: ${event.profesional.nombre} ${event.profesional.apellido}\n
+                Modalidad: ${event.modalidad}\n
             Telefono: ${event.telefono}\n
             Estado: ${event.disponible === false ? "oferta reservada" : "oferta disponible"}
             ----------------------\n
             Paciente: ${event.guest.nombre ? event.guest.nombre : " --"} ${event.guest.apellido ? event.guest.apellido : " --"}\n 
             Obra social: ${event.guest.obra_social ? event.guest.obra_social : "--"}`,
-                showCancelButton: true,
-                denyButtonText: "Ver Fichas",
-                denyButtonColor: "#1c86d1",
-                showDenyButton: true,
-                confirmButtonColor: '#da1e31',
-                confirmButtonText: 'Eliminar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    eliminarOferta(event);
-                    Swal.fire('Oferta Eliminada!', '', 'success')
-                } else if (result.isDenied) {
-                    const nombreApellido = `${event.guest.nombre} ${event.guest.apellido}`;
-                    localStorage.setItem('nombreApellido', JSON.stringify(nombreApellido));
-                    localStorage.setItem('especialidad', JSON.stringify(event.especialidad));
-                    localStorage.setItem('paciente', JSON.stringify(event.guest.usuario));
-                    localStorage.setItem('fechaConsulta', JSON.stringify(event.start));
-                    navigate('/Ficha/lista/paciente');
-                }
             })
         }
 
     };
 
-    const eliminarOferta = async (event) => {
-        const URL = `http://localhost:8080/api/oferta/${username}/${event.id}`;
-        try {
-            const response = await axios.delete(URL, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
-                }
-            })
-
-            if (response.status === 200) {
-                Swal.fire('Oferta Eliminada!', '', 'success')
-                setEstado(estado + 1);
-            }
-
-        } catch (error) {
-            if (error.response.status === 406) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `No se pudo eliminar!`,
-                })
-            }
-            console.log(error)
-        }
-    }
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const URL = `http://localhost:8080/api/oferta/crear-oferta/${username}`;
-        setData({ start: newEvent.start, consultorio: newEvent.consultorio, end: newEvent.end, modalidad: newEvent.modalidad, telefono: newEvent.telefono, localidad: newEvent.localidad })
-        console.log(newEvent);
-        if (data.telefono !== "") {
-            try {
-                const response = await axios.post(URL, data, {
-                    auth: {
-                        username: `${username}`,
-                        password: `${password}`
-                    }
-                })
-
-                if (response.status === 201) {
-                    Swal.fire(
-                        'Excelente!',
-                        'La oferta ha sido creada exitosamente',
-                        'success'
-                    )
-                    setEstado(estado + 1);
-                    //console.log(response)
-                }
-
-            } catch (error) {
-                if (error.response.status === 406) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: `No se pudo crear, ${error.response.data} !`,
-                    })
-                }
-                console.log(error)
-            }
-        }
-    }
-
     const cargarOfertas = async () => {
-        const URL = `http://localhost:8080/api/oferta/listar-todas-las-ofertas-profesional/${username}`;
+        const URL = `http://localhost:8080/api/oferta/listarOfertas`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -172,33 +83,7 @@ export const OfertasAdmin = () => {
         }
     }
 
-    
-    useEffect(() => {
-        cargarPerfil();
-    }, []);
-
     const [dataUsuario,setdata] = useState({});
-
-    const cargarPerfil = async () => {
-        const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
-        try {
-            const response = await axios.get(URL, {
-                auth: {
-                    username: `${username}`,
-                    password: `${password}`
-                }
-            }
-            );
-            console.log(response);
-            if (response.status === 200) {
-                response.data.password = `${password}`;
-                setdata(response.data);
-
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
 
 
@@ -209,7 +94,7 @@ export const OfertasAdmin = () => {
         <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/listar/usuarios"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button
@@ -238,42 +123,7 @@ export const OfertasAdmin = () => {
             <div className="container-xxl">
                 <div className='calendario  mt-5'>
                 <h1 className=" text-center text-white mt-4 mb-4">Calendario</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="row justify-content-center">
-                        <div className="col-md-2">
-                            <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
-                        </div>
-                        <div className="col-md-2">
-                            <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
-                        </div>
-                        <div className="col-md-2">
-                            <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
-                        </div>
-                        <div className="col-md-2">
-                            <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
-                                <option value="Modalidad">Modalidad</option>
-                                <option value="Virtual">Virtual</option>
-                                <option value="Presencial">Presencial</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center mt-2" style={{ position: "relative", zIndex: "999" }}>
-                        <div className="col-md-2">
-                            <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
-
-                        </div>
-                        <div className="col-md-2">
-                            <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
-
-                        </div>
-                        <div className="col-md-2">
-                            <button className="btn btn-success">
-                                Crear Oferta
-                            </button>
-                        </div>
-                        <div className="col-md-2"></div>
-                    </div>
-                </form>
+                
                 
 
                 </div>

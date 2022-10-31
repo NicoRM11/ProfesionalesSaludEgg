@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import { NavSesionProfesional } from './NavSesionProfesional';
 import { Error404 } from './Error404';
+import Localidades from './Localidades';
 
 
 require('moment/locale/es.js');
@@ -249,7 +250,13 @@ export const OfertaProfesional = () => {
                             <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
                         </div>
                         <div className="col-md-2">
-                            <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
+                            
+                            <select className="form-select" value={newEvent.localidad} name="especialidad" aria-label="Default select example" onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })}>
+                                <option value="-">Todas</option>
+                                {Localidades.map((localidad, index) =>
+                                    <option key={index} value={localidad}>{localidad}</option>
+                                )}
+                            </select>
                         </div>
                         <div className="col-md-2">
                             <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />

@@ -59,8 +59,6 @@ export const GuestProfile = () => {
         }
     }
 
-
-
     const handleChange = ({ target }) => {
         setEdicion(true);
         setdata({
@@ -110,6 +108,7 @@ export const GuestProfile = () => {
 
     const handleDelete = async (e) => {
         e.preventDefault();
+        const URL = `http://localhost:8080/api/guest/${username}`;
         try {
             const response = await axios.delete(URL, {
                 auth: {
@@ -125,7 +124,7 @@ export const GuestProfile = () => {
                     'Lo vamos a extrañar',
                     'success'
                 )
-                navigate('/login');
+                handleLogout();
             }
 
         } catch (error) {
@@ -170,6 +169,14 @@ export const GuestProfile = () => {
                 console.log(error.message);
             })
             setEdicion(true);
+    }
+
+    const handleLogout = () => {
+        localStorage.setItem('rol', JSON.stringify(""));
+        localStorage.setItem('usuario', JSON.stringify(""));
+        localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('profesional', JSON.stringify(""));
+        navigate('/inicio');
     }
 
    // console.log(image)

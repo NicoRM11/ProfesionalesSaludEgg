@@ -137,13 +137,13 @@ export const InicioProfesional = () => {
                 </div>
                 {username !== "" ? <div className='botonesI'>
                     <div>
-                        <Link to="/MisTurnos">
+                        <Link to="/Oferta/profesional">
                             <button className='botonI'>Manejar Turnos</button>
                         </Link>
                     </div>
 
                     <div className='boton2'>
-                        <Link to="/cartilla">
+                        <Link to="/ProfesionalProfile">
                             <button className='botonI'>Mi perfil</button>
                         </Link>
                     </div>
