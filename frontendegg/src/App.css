@@ -214,9 +214,16 @@ Link{
 
 .calendario{
   background-color: #98CFA1;
-  border-radius: 5px;
+  border-radius: 15px;
   padding: 5px 0 25px 0;
   
+}
+
+
+
+.lupita{
+  margin-top: 29px;
+ text-align: end;
 }
 
 

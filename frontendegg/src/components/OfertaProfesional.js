@@ -235,7 +235,7 @@ export const OfertaProfesional = () => {
 
 
             <div className="container-xxl">
-                <div className='calendario mt-5'>
+                <div className='calendario  mt-5'>
                 <h1 className=" text-center text-white mt-4 mb-4">Calendario</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="row justify-content-center">

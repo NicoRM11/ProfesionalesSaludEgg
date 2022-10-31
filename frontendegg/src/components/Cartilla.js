@@ -122,6 +122,7 @@ export const Cartilla = () => {
                 <div className="row justify-content-center align-items-center">
 
                     <Form className="Formulario col-md-10 col-xxl-10 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+                    <h1 className="border-bottom text-center text-white mt-3 mb-5">Cartilla Médica</h1>
 
                         <div className='px-5'>
                             <Row className=" text-center mt-4">
@@ -149,7 +150,8 @@ export const Cartilla = () => {
                                         <option value="Cardiologia">Cardiologia</option>
                                     </select>
                                 </Col>
-                                <Col className='justify-content-sm-end'>
+                                <Col md={4} className="lupita ">
+                                    
 
                                     <button type="submit" className="px-4 btn btn-light">
                                         <img src={lupa} width="19" height="19" />
@@ -158,11 +160,11 @@ export const Cartilla = () => {
 
                             </Row>
                         </div>
-                        <div className="card-group">
+                        <div className="card-group justify-content-around">
                             {
                                 profesionales && profesionales.map(p =>
 
-                                    <Row key={p.id} className='mt-5 mb-4 px-4 text-black'>
+                                    <Row key={p.id} className='mt-5 mb-4 px-2 text-black '>
                                         <Col>
                                             <Card style={{ width: '14rem' }}>
                                                 <Card.Img variant="top" src={p.urlFoto} style={{ width: '14rem', height: '14rem' }} />
