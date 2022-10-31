@@ -173,7 +173,7 @@ Link{
 .botonesI{
   display: flex;
   justify-content: space-around;
-  margin-top: 5%;
+  margin-top: 5px;
   
 
 }
@@ -195,16 +195,15 @@ Link{
 
 .presentacion{
 
-  margin: 50px 150px;
+  margin: 30px 150px;
   background-color: #98CFA1;
-  padding: 55px;
+  padding: 10px;
   border-radius:10px;
-  
   
 }
 
 .carousel{
-  padding: 0 25px 0 25px;
+  padding: 0 25px 10px 25px;
   
   
 }
@@ -229,8 +228,24 @@ Link{
  text-align: end;
 }
 
+.integrantes{
+  margin-right: 15px;
+}
 
 
+.desarrolladores .integrantes h6{
+  font-weight: 400;
+ 
+}
 
+.titulosAdmin{
+  background-color: #98CFA1;
+  border-radius: 15px;
+  padding: 5px;
+  color: #FFFFFF;
+  
+}
 
-
+.titulosAdmin h1{
+  padding: 55px;
+}

@@ -182,6 +182,7 @@ export const ListarAdmin = () => {
             </nav>
             <div className="row justify-content-center mt-5">
                 <div className="col-11 text-center ">
+                    <h1 className='titulosAdmin'>Listado Pacientes</h1>
                     <table className="table tabla rounded-2 text-white table-striped">
                         <thead >
                             <tr>
@@ -226,6 +227,7 @@ export const ListarAdmin = () => {
 
             <div className="row justify-content-center mt-5 ">
                 <div className="col-11 text-center">
+                <h1 className='titulosAdmin'>Listado Profesionales</h1>
                     <table className="table tabla rounded-2 text-white table-striped">
                         <thead >
                             <tr>
