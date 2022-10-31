@@ -14,6 +14,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { NavSesionGuest } from './NavSesionGuest';
+import { Error404 } from './Error404';
 
 
 
@@ -24,6 +25,7 @@ export const GuestProfile = () => {
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     const [image, setImage] = useState(null);
     //const [url, setUrl] = useState(null);
 
@@ -172,6 +174,8 @@ export const GuestProfile = () => {
 
    // console.log(image)
     return (
+        <>
+        {rol==="ROLE_GUEST" ? 
         <>
         <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
@@ -322,6 +326,10 @@ export const GuestProfile = () => {
                 </button>
             </div>
         </section>
+        </>
+        :
+        <Error404></Error404>    
+    }
         </>
         )
     

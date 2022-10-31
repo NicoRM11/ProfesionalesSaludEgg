@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-
-import axios from 'axios';
+import superAdmin from '../images/superAdmin.jpg';
 import Avatar from "@mui/material/Avatar";
-
-
-
 
 
 
@@ -27,30 +23,26 @@ export const NavSesionAdmin = ({ data }) => {
         <div className="nav-item active d-flex flex-row align-items-center">
             {username !== "" ?
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
-                                src={data.urlFoto}
+                                src={superAdmin}
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><Link to={'/ListarAdmin'} className="dropdown-item h-3 ml-2 btn ">Listar Usuarios</Link></li>
-                            
-                            {/* 
-                            <li><Link to={-} className="dropdown-item h-3 ml-2 btn ">-</Link></li>
-                            <li><Link to={-} className="dropdown-item h-3 ml-2 btn ">-</Link></li>
-                            */}
-                            <li><hr class="dropdown-divider" /></li>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><Link to={'/Listar/usuarios'} className="dropdown-item h-3 ml-2 btn ">Listar Usuarios</Link></li>
+                            <li><Link to={'/ofertas/listado'} className="dropdown-item h-3 ml-2 btn ">Calendario Ofertas</Link></li>
+                            <li><hr className="dropdown-divider" /></li>
                             <li><button className="dropdown-item h-3 ml-2 btn " onClick={handleLogout}>Cerrar Sesion</button></li>
                         </ul>
                     </div>
-                    <h6 className="text-white m-2 "> Hola, {data.nombre}</h6>
+                    <h6 className="text-white m-2 "> Hola, Admin!</h6>
                 </>
                 :
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
@@ -58,7 +50,7 @@ export const NavSesionAdmin = ({ data }) => {
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to={'/login'} className=" dropdown-item h-3 ml-2  btn">Iniciar Sesion</Link></li>
                             <li><Link to={'/register'} className="dropdown-item h-3 ml-2 btn ">Registrarse</Link></li>
                         </ul>

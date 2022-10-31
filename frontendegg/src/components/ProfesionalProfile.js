@@ -14,12 +14,14 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { NavSesionProfesional } from './NavSesionProfesional';
+import { Error404 } from './Error404';
 
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     let navigate = useNavigate();
     const [image, setImage] = useState(null);
 
@@ -158,10 +160,12 @@ export const ProfesionalProfile = () => {
     }
     return (
         <>
+        {rol==="ROLE_PROFESIONAL" ? 
+        <>
         <nav className="navbar  navbar-expand-sm" >
         <div className="container-xxl">
             <div className="navbar-brand mb-0 h1 text-white" href="#">
-                <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
+                <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
             </div>
 
             <button
@@ -309,6 +313,11 @@ export const ProfesionalProfile = () => {
                 </button>
             </div>
         </section>
+        </>
+        :
+        <Error404></Error404>
+        }
+        
         </>
     )
 }

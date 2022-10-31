@@ -7,15 +7,12 @@ import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
-import { NavSesionProfesional } from './NavSesionProfesional';
+import { NavSesionAdmin } from './NavSesionAdmin';
 import { Error404 } from './Error404';
-
 
 require('moment/locale/es.js');
 
-
-
-export const OfertaProfesional = () => {
+export const OfertasAdmin = () => {
     const localizer = momentLocalizer(moment);
     const [newEvent, setNewEvent] = useState({ start: null, end: null, consultorio: "", modalidad: "", telefono: "", localidad: "", disponible: true });
     const [allEvents, setAllEvents] = useState([]);
@@ -207,7 +204,7 @@ export const OfertaProfesional = () => {
 
     return (
         <>
-        {rol==="ROLE_PROFESIONAL" ? 
+        {rol==="ROLE_ADMIN" ?
         <>
         <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
@@ -231,7 +228,7 @@ export const OfertaProfesional = () => {
                         id="navbarnav">
                         <ul className="navbar-nav">
                             {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
-                            <NavSesionProfesional data={dataUsuario}></NavSesionProfesional>
+                            <NavSesionAdmin data={dataUsuario}></NavSesionAdmin>
                         </ul>
                     </div>
                 </div>

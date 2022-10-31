@@ -30,7 +30,10 @@ const Login = () => {
         navigate('/inicio');
       }
       if(rol==='ROLE_PROFESIONAL'){
-        navigate('/Oferta/Profesional');
+        navigate('/inicio/Profesional');
+      }
+      if(rol==='ROLE_ADMIN'){
+        navigate('/listar/usuarios');
       }
       
 

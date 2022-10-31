@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-
-import axios from 'axios';
 import Avatar from "@mui/material/Avatar";
 
 
@@ -19,6 +17,10 @@ export const NavSesionProfesional = ({ data }) => {
         localStorage.setItem('rol', JSON.stringify(""));
         localStorage.setItem('usuario', JSON.stringify(""));
         localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('nombreApellido', JSON.stringify(""));
+        localStorage.setItem('especialidad', JSON.stringify(""));
+        localStorage.setItem('fechaConsulta', JSON.stringify(""));
+        localStorage.setItem('paciente', JSON.stringify(""));
         navigate('/inicio');
     }
 
@@ -26,7 +28,7 @@ export const NavSesionProfesional = ({ data }) => {
         <div className="nav-item active d-flex flex-row align-items-center">
             {username !== "" ?
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
@@ -34,11 +36,10 @@ export const NavSesionProfesional = ({ data }) => {
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to={'/Oferta/Profesional'} className="dropdown-item h-3 ml-2 btn ">Manejar Turnos</Link></li>
-                            <li><Link to={'/Ficha/lista/paciente'} className="dropdown-item h-3 ml-2 btn ">Mis Fichas</Link></li>
                             <li><Link to={'/ProfesionalProfile'} className="dropdown-item h-3 ml-2 btn ">Mi Perfil</Link></li>
-                            <li><hr class="dropdown-divider" /></li>
+                            <li><hr className="dropdown-divider" /></li>
                             <li><button className="dropdown-item h-3 ml-2 btn " onClick={handleLogout}>Cerrar Sesion</button></li>
                         </ul>
                     </div>
@@ -46,7 +47,7 @@ export const NavSesionProfesional = ({ data }) => {
                 </>
                 :
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
@@ -54,7 +55,7 @@ export const NavSesionProfesional = ({ data }) => {
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to={'/login'} className=" dropdown-item h-3 ml-2  btn">Iniciar Sesion</Link></li>
                             <li><Link to={'/register'} className="dropdown-item h-3 ml-2 btn ">Registrarse</Link></li>
                         </ul>

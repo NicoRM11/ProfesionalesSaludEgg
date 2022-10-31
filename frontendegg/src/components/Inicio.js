@@ -142,7 +142,7 @@ const Inicio = () => {
                     </div>
 
                     <div className='boton2'>
-                        <Link to="/Cartilla">
+                        <Link to="/cartilla">
                             <button className='botonI'>Cartilla</button>
                         </Link>
                     </div>

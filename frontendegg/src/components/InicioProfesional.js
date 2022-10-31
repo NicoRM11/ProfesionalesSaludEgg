@@ -18,6 +18,7 @@ export const InicioProfesional = () => {
 
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     const [data, setdata] = useState({});
 
     useEffect(() => {
@@ -52,7 +53,7 @@ export const InicioProfesional = () => {
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button
@@ -135,21 +136,6 @@ export const InicioProfesional = () => {
 
                 </div>
 
-
-                {username !== "" ? <div className='botonesI'>
-                    <div>
-                        <Link to="/MisTurnos">
-                            <button className='botonI'>Mis Turnos</button>
-                        </Link>
-                    </div>
-
-                    <div className='boton2'>
-                        <Link to="/Cartilla">
-                            <button className='botonI'>Cartilla</button>
-                        </Link>
-                    </div>
-                </div>
-                    : <></>}
 
                 <div className='formulario container mt-5 '>
                     <h3 className='textoPasos'>¿Cómo usar la página?</h3>

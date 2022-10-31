@@ -7,6 +7,7 @@ import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavSesionGuest } from './NavSesionGuest';
+import { Error404 } from './Error404';
 require('moment/locale/es.js');
 
 export const MisTurnos = () => {
@@ -19,6 +20,7 @@ export const MisTurnos = () => {
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
 
 
     useEffect(() => {
@@ -61,6 +63,7 @@ export const MisTurnos = () => {
             Horario: ${moment(event.start).format('HH:mm')} hs\n
             Telefono: ${event.telefono}`,
             showCancelButton: true,
+            cancelButtonText: "Salir",
             confirmButtonColor: 'success',
             confirmButtonText: 'Cancelar turno',
         }).then((result) => {
@@ -123,7 +126,9 @@ export const MisTurnos = () => {
 
     return (
         <div >
-            <nav className="navbar  navbar-expand-sm" >
+            {rol==="ROLE_GUEST" ?
+            <>
+                <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
                         <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
@@ -175,6 +180,13 @@ export const MisTurnos = () => {
                     return { style: { backgroundColor } }
                 }}
             />
+            </>
+            : 
+            <Error404></Error404>
+        
+        
+        }
+            
         </div>
     )
 }

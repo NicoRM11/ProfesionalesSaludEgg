@@ -11,6 +11,7 @@ import lupa from '../images/lupa.png';
 
 import Card from 'react-bootstrap/Card';
 import { NavSesionGuest } from './NavSesionGuest';
+import { Error404 } from './Error404';
 
 export const FichaGuest = () => {
     const [fichas, setFichas] = useState([]);
@@ -18,6 +19,7 @@ export const FichaGuest = () => {
     const [especialidad, setEspecialidad] = useState({ especialidad: "-" });
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -82,7 +84,9 @@ export const FichaGuest = () => {
 
     return (
         <>
-            <nav className="navbar  navbar-expand-sm" >
+        {rol==="ROLE_GUEST" ? 
+        <>
+         <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
                         <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
@@ -169,6 +173,10 @@ export const FichaGuest = () => {
                     </Form>
                 </div>
             </section>
+        </>   
+        :
+        <Error404></Error404> 
+    }
         </>
     )
 }

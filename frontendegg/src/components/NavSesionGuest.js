@@ -19,6 +19,7 @@ export const NavSesionGuest = ({ data }) => {
         localStorage.setItem('rol', JSON.stringify(""));
         localStorage.setItem('usuario', JSON.stringify(""));
         localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('profesional', JSON.stringify(""));
         navigate('/inicio');
     }
 
@@ -26,7 +27,7 @@ export const NavSesionGuest = ({ data }) => {
         <div className="nav-item active d-flex flex-row align-items-center">
             {username !== "" ?
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
@@ -34,12 +35,12 @@ export const NavSesionGuest = ({ data }) => {
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><Link to={'/Cartilla'} className=" dropdown-item h-3 ml-2  btn">Cartilla</Link></li>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><Link to={'/cartilla'} className=" dropdown-item h-3 ml-2  btn">Cartilla</Link></li>
                             <li><Link to={'/misTurnos'} className="dropdown-item h-3 ml-2 btn ">Mis Turnos</Link></li>
                             <li><Link to={'/Ficha/lista'} className="dropdown-item h-3 ml-2 btn ">Mis Fichas</Link></li>
                             <li><Link to={'/GuestProfile'} className="dropdown-item h-3 ml-2 btn ">Mi Perfil</Link></li>
-                            <li><hr class="dropdown-divider" /></li>
+                            <li><hr className="dropdown-divider" /></li>
                             <li><button className="dropdown-item h-3 ml-2 btn " onClick={handleLogout}>Cerrar Sesion</button></li>
                         </ul>
                     </div>
@@ -47,7 +48,7 @@ export const NavSesionGuest = ({ data }) => {
                 </>
                 :
                 <>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
@@ -55,7 +56,7 @@ export const NavSesionGuest = ({ data }) => {
                                 sx={{ width: 40, height: 40 }}
                             />
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to={'/login'} className=" dropdown-item h-3 ml-2  btn">Iniciar Sesion</Link></li>
                             <li><Link to={'/register'} className="dropdown-item h-3 ml-2 btn ">Registrarse</Link></li>
                         </ul>

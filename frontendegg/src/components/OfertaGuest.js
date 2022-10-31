@@ -7,6 +7,7 @@ import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavSesionGuest } from './NavSesionGuest';
+import { Error404 } from './Error404';
 require('moment/locale/es.js');
 
 export const OfertaGuest = () => {
@@ -20,6 +21,7 @@ export const OfertaGuest = () => {
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     const profesional = JSON.parse(localStorage.getItem('profesional'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
 
     let navigate = useNavigate()
 
@@ -63,6 +65,7 @@ export const OfertaGuest = () => {
             Horario: ${moment(event.start).format('HH:mm')} hs\n
             Telefono: ${event.telefono}`,
             showCancelButton: true,
+            cancelButtonText: "Salir",
             confirmButtonColor: 'success',
             confirmButtonText: 'Tomar turno',
         }).then((result) => {
@@ -126,6 +129,8 @@ export const OfertaGuest = () => {
 
     return (
         <>
+        {rol==="ROLE_GUEST" ? 
+        <>
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
@@ -181,6 +186,11 @@ export const OfertaGuest = () => {
                     }}
                 />
             </div>
+        </>
+        :
+        <Error404></Error404>
+        }
+            
         </>
     )
 }

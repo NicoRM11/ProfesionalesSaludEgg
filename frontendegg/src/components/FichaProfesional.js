@@ -12,6 +12,7 @@ import lupa from '../images/lupa.png';
 import Card from 'react-bootstrap/Card';
 import logo from '../images/logo.png';
 import { NavSesionProfesional } from './NavSesionProfesional';
+import { Error404 } from './Error404';
 
 
 export const FichaProfesional = () => {
@@ -21,6 +22,7 @@ export const FichaProfesional = () => {
     const paciente = JSON.parse(localStorage.getItem('paciente'))
     const nombreApellido = JSON.parse(localStorage.getItem('nombreApellido'))
     const fechaConsulta = JSON.parse(localStorage.getItem('fechaConsulta'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
 
     const [data, setdata] = useState([]);
     const [newFicha, setNewFicha] = useState({ descripcion: '',fechaConsulta: new Date(fechaConsulta)});
@@ -118,10 +120,12 @@ export const FichaProfesional = () => {
 
     return (
         <>
+        {rol==="ROLE_PROFESIONAL" ? 
+            <>
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button
@@ -198,6 +202,11 @@ export const FichaProfesional = () => {
                 </Form>
             </div>
         </section>
+            </>
+            :
+            <Error404></Error404>
+        }
+            
         </>
     )
 }
