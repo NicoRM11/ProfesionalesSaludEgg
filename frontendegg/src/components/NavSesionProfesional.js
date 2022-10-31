@@ -29,12 +29,14 @@ export const NavSesionProfesional = ({ data }) => {
             {username !== "" ?
                 <>
                     <div className="dropdown">
-                        <button className="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button className="btn d-flex flex-row " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <Avatar className=""
                                 alt="Imagen Perfil"
                                 src={data.urlFoto}
                                 sx={{ width: 40, height: 40 }}
                             />
+                            <i className="bi bi-caret-down-square m-2 text-secondary"></i>
+
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to={'/Oferta/Profesional'} className="dropdown-item h-3 ml-2 btn ">Manejar Turnos</Link></li>

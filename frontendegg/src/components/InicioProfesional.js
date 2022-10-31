@@ -135,13 +135,23 @@ export const InicioProfesional = () => {
                     </div>
 
                 </div>
+                {username !== "" ? <div className='botonesI'>
+                    <div>
+                        <Link to="/MisTurnos">
+                            <button className='botonI'>Manejar Turnos</button>
+                        </Link>
+                    </div>
 
-
-                <div className='formulario container mt-5 '>
-                    <h3 className='textoPasos'>¿Cómo usar la página?</h3>
-
-
+                    <div className='boton2'>
+                        <Link to="/cartilla">
+                            <button className='botonI'>Mi perfil</button>
+                        </Link>
+                    </div>
                 </div>
+                    : <></>}
+
+
+
 
             </div>
         </div>

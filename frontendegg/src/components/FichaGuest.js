@@ -119,8 +119,9 @@ export const FichaGuest = () => {
                 <div className="row justify-content-center align-items-center">
 
                     <Form className="Formulario col-md-10 col-xxl-10 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
+                    <h1 className="border-bottom text-center text-white mt-3 mb-5">Mis Fichas</h1>
 
-                        <div className='px-5'>
+                        <div className='px-5 '>
                             <Row className=" text-center">
                             <Col md={4}>
                             <Form.Label >Especialidad</Form.Label>
@@ -137,7 +138,7 @@ export const FichaGuest = () => {
                                         <option value="Cardiologia">Cardiologia</option>
                                     </select>
                                 </Col>
-                                <Col md={2}>
+                                <Col md={2} className='d-flex justify-content-end'>
                                     <button type="submit" className="btn btn-light">
                                         <img src={lupa} width="19" height="19" />
                                     </button>
@@ -145,13 +146,13 @@ export const FichaGuest = () => {
 
                             </Row>
                         </div>
-                        <div className="card-group">
+                        <div className="card-group justify-content-around">
                             {
                                 fichas && fichas.map(o =>
 
                                     <Row key={o.id} className='mt-5 mb-4 px-4 text-black'>
                                         <Col>
-                                            <Card style={{ width: '14rem' }}>
+                                            <Card style={{ width: '15rem' }}>
                                                 <Card.Body >
                                                     <Card.Title> DR.{o.nombreProfesional} {o.apellidoProfesional}</Card.Title>
                                                     <Card.Text>

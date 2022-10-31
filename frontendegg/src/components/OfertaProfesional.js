@@ -21,6 +21,8 @@ export const OfertaProfesional = () => {
     const [allEvents, setAllEvents] = useState([]);
     const [estado, setEstado] = useState(1)
 
+    console.log(newEvent);
+
     
     const [data, setData] = useState({ start: "", end: "", consultorio: "", modalidad: "", telefono: "", localidad: "", guest: [] });
     const [selected, setSelected] = useState();

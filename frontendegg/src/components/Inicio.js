@@ -65,72 +65,76 @@ const Inicio = () => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
-                    <div className="collapse navbar-collapse flex-row-reverse"
+                    <div className="text-white h6 collapse navbar-collapse flex-row-reverse"
                         id="navbarnav">
-                        <ul className="navbar-nav">
-                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
-                            <NavSesionGuest data={data}></NavSesionGuest>
-                        </ul>
-                    </div>
+
+
+                            <ul className="navbar-nav">
+                                {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                                <NavSesionGuest data={data}></NavSesionGuest>
+                            </ul>
+
+
+                        </div>
                 </div>
             </nav>
 
             <div className="mainContenedor mt-4 text-center">
 
 
-                <div className='presentacion'> 
-                
+                <div className='presentacion'>
+
                     <h1 className='text-white'>Profesionales de la Salud</h1>
                     <p className='text-white'>Colectivo de Profesionales de la Salud auto-organizados</p>
                     <div className='carousel'>
-                    <Carousel >
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide1}
-                            alt="First slide"
-                        />
-                        <Carousel.Caption>
-                            <h3 className="text-white">Gestion online de turnos</h3>
-                            <p className="text-white">Turnos con modalidad online y presencial a un click.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide2}
-                            alt="Second slide"
-                        />
+                        <Carousel >
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide1}
+                                    alt="First slide"
+                                />
+                                <Carousel.Caption>
+                                    <h3 className="text-white">Gestion online de turnos</h3>
+                                    <p className="text-white">Turnos con modalidad online y presencial a un click.</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide2}
+                                    alt="Second slide"
+                                />
 
-                        <Carousel.Caption>
-                            <h3 className="text-white">Todos los especialistas que necesita en un solo lugar</h3>
-                            <p className="text-white">Contamos con los mejores profesionales de la zona.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide3}
-                            alt="Third slide"
-                        />
+                                <Carousel.Caption>
+                                    <h3 className="text-white">Todos los especialistas que necesita en un solo lugar</h3>
+                                    <p className="text-white">Contamos con los mejores profesionales de la zona.</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide3}
+                                    alt="Third slide"
+                                />
 
-                        <Carousel.Caption>
-                            <h3 className="text-white">El mejor equipo de trabajo</h3>
-                            <h6 className="text-white">
-                                Contamos con evaluaciones de satisfaccion de cada personal para poder asegurarnos que reciba la mejor atencion.
-                            </h6>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                </Carousel>
-                
+                                <Carousel.Caption>
+                                    <h3 className="text-white">El mejor equipo de trabajo</h3>
+                                    <h6 className="text-white">
+                                        Contamos con evaluaciones de satisfaccion de cada personal para poder asegurarnos que reciba la mejor atencion.
+                                    </h6>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        </Carousel>
+
                     </div>
-                    
+
                 </div>
 
 
@@ -148,12 +152,6 @@ const Inicio = () => {
                     </div>
                 </div>
                     : <></>}
-
-                <div className='formulario container mt-5'>
-                    <h3 className='textoPasos'>¿Cómo usar la página?</h3>
-
-
-                </div>
 
             </div>
         </div>
