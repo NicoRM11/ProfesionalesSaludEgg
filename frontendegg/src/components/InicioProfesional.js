@@ -12,8 +12,10 @@ import { MisTurnos } from './MisTurnos';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import { NavSesionProfesional } from './NavSesionProfesional';
 
-const Inicio = () => {
+export const InicioProfesional = () => {
+
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
     const [data, setdata] = useState({});
@@ -22,7 +24,7 @@ const Inicio = () => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
+    const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
@@ -50,7 +52,7 @@ const Inicio = () => {
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button
@@ -69,7 +71,7 @@ const Inicio = () => {
                         id="navbarnav">
                         <ul className="navbar-nav">
                             {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
-                            <NavSesionGuest data={data}></NavSesionGuest>
+                            <NavSesionProfesional data={data}></NavSesionProfesional>
                         </ul>
                     </div>
                 </div>
@@ -78,59 +80,59 @@ const Inicio = () => {
             <div className="mainContenedor mt-4 text-center">
 
 
-                <div className='presentacion'> 
-                
+                <div className='presentacion'>
+
                     <h1 className='text-white'>Profesionales de la Salud</h1>
                     <p className='text-white'>Colectivo de Profesionales de la Salud auto-organizados</p>
                     <div className='carousel'>
-                    <Carousel >
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide1}
-                            alt="First slide"
-                        />
-                        <Carousel.Caption>
-                            <h3 className="text-white">Gestion online de turnos</h3>
-                            <p className="text-white">Turnos con modalidad online y presencial a un click.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide2}
-                            alt="Second slide"
-                        />
+                        <Carousel >
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide1}
+                                    alt="First slide"
+                                />
+                                <Carousel.Caption>
+                                    <h3 className="text-white">Gestion online de turnos</h3>
+                                    <p className="text-white">Turnos con modalidad online y presencial a un click.</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide2}
+                                    alt="Second slide"
+                                />
 
-                        <Carousel.Caption>
-                            <h3 className="text-white">Todos los especialistas que necesita en un solo lugar</h3>
-                            <p className="text-white">Contamos con los mejores profesionales de la zona.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="rounded-2"
-                            height="500"
-                            width="1100"
-                            src={slide3}
-                            alt="Third slide"
-                        />
+                                <Carousel.Caption>
+                                    <h3 className="text-white">Todos los especialistas que necesita en un solo lugar</h3>
+                                    <p className="text-white">Contamos con los mejores profesionales de la zona.</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <img
+                                    className="rounded-2"
+                                    height="500"
+                                    width="1100"
+                                    src={slide3}
+                                    alt="Third slide"
+                                />
 
-                        <Carousel.Caption>
-                            <h3 className="text-white">El mejor equipo de trabajo</h3>
-                            <h6 className="text-white">
-                                Contamos con evaluaciones de satisfaccion de cada personal para poder asegurarnos que reciba la mejor atencion.
-                            </h6>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                </Carousel>
-                
+                                <Carousel.Caption>
+                                    <h3 className="text-white">El mejor equipo de trabajo</h3>
+                                    <h6 className="text-white">
+                                        Contamos con evaluaciones de satisfaccion de cada personal para poder asegurarnos que reciba la mejor atencion.
+                                    </h6>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        </Carousel>
+
                     </div>
-                    
+
                 </div>
 
 
@@ -149,7 +151,7 @@ const Inicio = () => {
                 </div>
                     : <></>}
 
-                <div className='formulario container mt-5'>
+                <div className='formulario container mt-5 '>
                     <h3 className='textoPasos'>¿Cómo usar la página?</h3>
 
 
@@ -162,4 +164,4 @@ const Inicio = () => {
     )
 }
 
-export default Inicio
+

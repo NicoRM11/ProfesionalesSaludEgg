@@ -190,6 +190,34 @@ Link{
 
 }
 
+.presentacion{
+
+  margin: 50px 150px;
+  background-color: #98CFA1;
+  padding: 55px;
+  border-radius:10px;
+  
+  
+}
+
+.carousel{
+  padding: 0 25px 0 25px;
+  
+  
+}
+
+.textoPasos{
+  color: #98CFA1;
+}
+
+
+
+.calendario{
+  background-color: #98CFA1;
+  border-radius: 5px;
+  padding: 5px 0 25px 0;
+  
+}
 
 
 

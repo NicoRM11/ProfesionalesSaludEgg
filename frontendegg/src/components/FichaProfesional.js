@@ -10,6 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import lupa from '../images/lupa.png';
 
 import Card from 'react-bootstrap/Card';
+import logo from '../images/logo.png';
+import { NavSesionProfesional } from './NavSesionProfesional';
+
 
 export const FichaProfesional = () => {
     const username = JSON.parse(localStorage.getItem('usuario'))
@@ -85,8 +88,64 @@ export const FichaProfesional = () => {
             console.log(error)
         }
     }
+    
+    useEffect(() => {
+        cargarPerfil();
+    }, []);
+
+    const [dataUsuario,setDataUsuario] = useState({});
+
+    const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
+        try {
+            const response = await axios.get(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            }
+            );
+            console.log(response);
+            if (response.status === 200) {
+                response.data.password = `${password}`;
+                setDataUsuario(response.data);
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
+        <>
+            <nav className="navbar  navbar-expand-sm" >
+                <div className="container-xxl">
+                    <div className="navbar-brand mb-0 h1 text-white" href="#">
+                        <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
+                    </div>
+
+                    <button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarnav"
+                        className="navbar-toggler"
+                        aria-controls="navbarnav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse flex-row-reverse"
+                        id="navbarnav">
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionProfesional data={dataUsuario}></NavSesionProfesional>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
 
         <section className="container py-5">
 
@@ -139,6 +198,7 @@ export const FichaProfesional = () => {
                 </Form>
             </div>
         </section>
+        </>
     )
 }
 

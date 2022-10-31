@@ -208,7 +208,7 @@ export const GuestProfile = () => {
             <div className="row justify-content-center align-items-center">
                 <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
                     <Row className="h2 text-center mt-4">
-                        <Form.Label>Editar Perfil</Form.Label>
+                        <Form.Label>Mi Perfil</Form.Label>
                     </Row>
 
 

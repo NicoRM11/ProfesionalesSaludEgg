@@ -5,8 +5,13 @@ import DatePicker from "react-datepicker";
 import Swal from 'sweetalert2';
 import { CustomEvent } from './CustomEvent';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
+import { NavSesionProfesional } from './NavSesionProfesional';
+
+
 require('moment/locale/es.js');
+
 
 
 export const OfertaProfesional = () => {
@@ -15,20 +20,23 @@ export const OfertaProfesional = () => {
     const [allEvents, setAllEvents] = useState([]);
     const [estado, setEstado] = useState(1)
 
+    
     const [data, setData] = useState({ start: "", end: "", consultorio: "", modalidad: "", telefono: "", localidad: "", guest: [] });
     const [selected, setSelected] = useState();
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
 
-    
+
     let navigate = useNavigate();
     useEffect(() => {
         cargarOfertas();
     }, [estado])
 
+
+
     const handleSelected = (event) => {
         setSelected(event);
-        if(event.disponible){
+        if (event.disponible) {
             Swal.fire({
                 title: `Modalidad: ${event.modalidad}\n
             Telefono: ${event.telefono}\n
@@ -45,7 +53,7 @@ export const OfertaProfesional = () => {
                     Swal.fire('Oferta Eliminada!', '', 'success')
                 }
             })
-        }else{
+        } else {
             Swal.fire({
                 title: `Modalidad: ${event.modalidad}\n
             Telefono: ${event.telefono}\n
@@ -63,7 +71,7 @@ export const OfertaProfesional = () => {
                 if (result.isConfirmed) {
                     eliminarOferta(event);
                     Swal.fire('Oferta Eliminada!', '', 'success')
-                }else if (result.isDenied) {
+                } else if (result.isDenied) {
                     const nombreApellido = `${event.guest.nombre} ${event.guest.apellido}`;
                     localStorage.setItem('nombreApellido', JSON.stringify(nombreApellido));
                     localStorage.setItem('especialidad', JSON.stringify(event.especialidad));
@@ -73,7 +81,7 @@ export const OfertaProfesional = () => {
                 }
             })
         }
-        
+
     };
 
     const eliminarOferta = async (event) => {
@@ -85,7 +93,7 @@ export const OfertaProfesional = () => {
                     password: `${password}`
                 }
             })
-            
+
             if (response.status === 200) {
                 Swal.fire('Oferta Eliminada!', '', 'success')
                 setEstado(estado + 1);
@@ -117,7 +125,7 @@ export const OfertaProfesional = () => {
                         password: `${password}`
                     }
                 })
-                
+
                 if (response.status === 201) {
                     Swal.fire(
                         'Excelente!',
@@ -165,70 +173,134 @@ export const OfertaProfesional = () => {
         }
     }
 
+    
+    useEffect(() => {
+        cargarPerfil();
+    }, []);
+
+    const [dataUsuario,setdata] = useState({});
+
+    const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
+        try {
+            const response = await axios.get(URL, {
+                auth: {
+                    username: `${username}`,
+                    password: `${password}`
+                }
+            }
+            );
+            console.log(response);
+            if (response.status === 200) {
+                response.data.password = `${password}`;
+                setdata(response.data);
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
     return (
-        <div className="container-xxl">
-            <h1 className="text-center">Calendario</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="row justify-content-center">
-                    <div className="col-md-2">
-                        <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
+        <>
+            <nav className="navbar  navbar-expand-sm" >
+                <div className="container-xxl">
+                    <div className="navbar-brand mb-0 h1 text-white" href="#">
+                        <Link to="/inicioProfesional"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
-                    <div className="col-md-2">
-                        <input className="form-control rounded-2"  type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
-                    </div>
-                    <div className="col-md-2">
-                        <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
-                    </div>
-                    <div className="col-md-2">
-                        <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
-                            <option value="Modalidad">Modalidad</option>
-                            <option value="Virtual">Virtual</option>
-                            <option value="Presencial">Presencial</option>
-                        </select>
+
+                    <button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarnav"
+                        className="navbar-toggler"
+                        aria-controls="navbarnav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse flex-row-reverse"
+                        id="navbarnav">
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionProfesional data={dataUsuario}></NavSesionProfesional>
+                        </ul>
                     </div>
                 </div>
-                <div className="row justify-content-center mt-2" style={{ position: "relative", zIndex: "999" }}>
-                    <div className="col-md-2">
-                        <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
+            </nav>
 
-                    </div>
-                    <div className="col-md-2">
-                        <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
 
+            <div className="container-xxl">
+                <div className='calendario mt-5'>
+                <h1 className=" text-center text-white mt-4 mb-4">Calendario</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="row justify-content-center">
+                        <div className="col-md-2">
+                            <input className="form-control rounded-2" required type="number" placeholder="Telefono" value={newEvent.telefono} onChange={(e) => setNewEvent({ ...newEvent, telefono: e.target.value })} />
+                        </div>
+                        <div className="col-md-2">
+                            <input className="form-control rounded-2" type="text" placeholder="Localidad" value={newEvent.localidad} onChange={(e) => setNewEvent({ ...newEvent, localidad: e.target.value })} />
+                        </div>
+                        <div className="col-md-2">
+                            <input className="form-control rounded-2" type="text" placeholder="Consultorio" value={newEvent.consultorio} onChange={(e) => setNewEvent({ ...newEvent, consultorio: e.target.value })} />
+                        </div>
+                        <div className="col-md-2">
+                            <select className="form-select" value={newEvent.modalidad} name="modalidad" onChange={(e) => setNewEvent({ ...newEvent, modalidad: e.target.value })}>
+                                <option value="Modalidad">Modalidad</option>
+                                <option value="Virtual">Virtual</option>
+                                <option value="Presencial">Presencial</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="col-md-2">
-                        <button className="btn btn-success">
-                            Crear Oferta
-                        </button>
+                    <div className="row justify-content-center mt-2" style={{ position: "relative", zIndex: "999" }}>
+                        <div className="col-md-2">
+                            <DatePicker className="form-control rounded-2" required placeholderText="Start Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} />
+
+                        </div>
+                        <div className="col-md-2">
+                            <DatePicker className="form-control rounded-2" required tabindex="10" placeholderText="End Date" dateFormat="MM/dd/yyyy HH:mm aa" showTimeSelect timeFormat="HH:mm" selected={newEvent.end} onChange={(end) => setNewEvent({ ...newEvent, end })} />
+
+                        </div>
+                        <div className="col-md-2">
+                            <button className="btn btn-success">
+                                Crear Oferta
+                            </button>
+                        </div>
+                        <div className="col-md-2"></div>
                     </div>
-                    <div className="col-md-2"></div>
+                </form>
+                
+
                 </div>
-            </form>
-            <Calendar
-                localizer={localizer}
-                events={allEvents}
-                selected={selected}
-                onSelectEvent={handleSelected}
-                components={{ event: CustomEvent }}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 600, margin: "20px" }}
-                min={moment('2018-02-23 09:00:00').toDate()}
-                max={moment('2018-02-23 19:00:00').toDate()}
-                messages={{
-                    next: "sig",
-                    previous: "ant",
-                    today: "Hoy",
-                    month: "Mes",
-                    week: "Semana",
-                    day: "Día"
-                }}
-                eventPropGetter={(event) => {
-                    const backgroundColor = event.disponible ? '#ec6434' : '#66bf4f';
-                    return { style: { backgroundColor } }
-                }}
-            />
-        </div>
+                <Calendar
+                    localizer={localizer}
+                    events={allEvents}
+                    selected={selected}
+                    onSelectEvent={handleSelected}
+                    components={{ event: CustomEvent }}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 600, margin: "20px" }}
+                    min={moment('2018-02-23 09:00:00').toDate()}
+                    max={moment('2018-02-23 19:00:00').toDate()}
+                    messages={{
+                        next: "sig",
+                        previous: "ant",
+                        today: "Hoy",
+                        month: "Mes",
+                        week: "Semana",
+                        day: "Día"
+                    }}
+                    eventPropGetter={(event) => {
+                        const backgroundColor = event.disponible ? '#ec6434' : '#66bf4f';
+                        return { style: { backgroundColor } }
+                    }}
+                />
+            </div>
+        </>
     )
 }
