@@ -51,6 +51,7 @@ public class MapperGuest {
     public ResponseGuestDTO map(Guest guest) {
 
         ResponseGuestDTO responseGuest = new ResponseGuestDTO();
+        responseGuest.setId(guest.getId());
         responseGuest.setNombre(guest.getNombre());
         responseGuest.setApellido(guest.getApellido());
         responseGuest.setDni(guest.getDni());

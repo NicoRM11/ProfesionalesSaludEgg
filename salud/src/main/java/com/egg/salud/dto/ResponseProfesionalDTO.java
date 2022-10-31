@@ -19,5 +19,6 @@ public class ResponseProfesionalDTO {
     private Integer dni;
     private String domicilio;
     private String urlFoto;
+    private Boolean estado;
 
 }
