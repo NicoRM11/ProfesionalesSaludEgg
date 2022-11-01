@@ -45,7 +45,7 @@ public class GuestControlador {
         return ResponseEntity.ok().body(guestServicio.buscarPorEmail(usuario));
     }
 
-    @GetMapping("/listar/{obra_social}")
+    @GetMapping("/lista/{obra_social}")
     public ResponseEntity<List<ResponseGuestDTO>> listarObraSocial(@PathVariable(name= "obra_social") String obra_social) throws Exception{
         return ResponseEntity.ok().body(guestServicio.listarObraSocial(obra_social));
     }

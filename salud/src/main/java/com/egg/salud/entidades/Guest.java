@@ -35,7 +35,11 @@ public class Guest extends Usuario{
     @JsonIgnore
     private List<Oferta> oferta;
 
-    public Guest(String nombre, String apellido, Integer dni, String obra_social, long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, List<Oferta> oferta, Long id, String usuario, String password, Boolean estado, Rol rol) {
+    @OneToMany(mappedBy ="guest", cascade=CascadeType.ALL)
+    @JsonIgnore
+    private List<FicheroGuest> ficheroGuest;
+
+    public Guest(String nombre, String apellido, Integer dni, String obra_social, Long telefono, Date fecha_nac, String nacionalidad, String urlFoto, String localidad, List<Oferta> oferta, List<FicheroGuest> ficheroGuest, Long id, String usuario, String password, Boolean estado, Rol rol) {
         super(id, usuario, password, estado, rol);
         this.nombre = nombre;
         this.apellido = apellido;
@@ -47,6 +51,9 @@ public class Guest extends Usuario{
         this.urlFoto = urlFoto;
         this.localidad = localidad;
         this.oferta = oferta;
+        this.ficheroGuest = ficheroGuest;
     }
+
+    
     
 }

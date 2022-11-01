@@ -1,30 +1,19 @@
-
 package com.egg.salud.dto;
 
+import com.egg.salud.entidades.Profesional;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 @Data
-public class RequestOfertaProfesionalDTO {
-    
+public class ResponseOfertaGuestDTO {
+     
+    private Long id;
     private Timestamp start;
     private Timestamp end;
     private String localidad;
-    //agregar - al imp
-    private String consultorio;
-    
     private String modalidad;
-    
+    private String consultorio;
+    private Profesional profesional;
     private Long telefono;
     
-    
-
-    
-    
 }
-   
-
-

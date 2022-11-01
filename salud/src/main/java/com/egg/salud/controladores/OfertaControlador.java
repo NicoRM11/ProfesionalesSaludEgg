@@ -8,6 +8,8 @@ import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseOfertaProfesionalDTO;
 import com.egg.salud.servicio.OfertaServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,7 @@ public class OfertaControlador {
     
     @PostMapping("/crear-oferta/{usuario}")
     public ResponseEntity<?> crearOferta(@RequestBody CrearOfertaDTO crearOfertaDto,@PathVariable (name= "usuario") String usuario){
-        System.out.println("mostrar (controlador) " + crearOfertaDto);
+       
         return ofertaServicio.crearOfertaProfesional(usuario, crearOfertaDto);
     }
     
@@ -56,10 +58,11 @@ public class OfertaControlador {
         return ofertaServicio.eliminarOfertaProfesional(id, usuario);
     }
     
-    @GetMapping("/listar-ofertas-profesional/{usuario}")
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(@PathVariable(name = "usuario") String usuario){
-        return ofertaServicio.buscarOfertaProfesionalAceptadas(usuario);
+    @GetMapping("/listarOfertas")
+    public ResponseEntity<?> listadoCompletoOfertas() throws Exception{
+       return ResponseEntity.ok().body(ofertaServicio.listadoCompletoOfertas());
     }
+
     
     @GetMapping("/listar-ofertas-profesional-disponibles")
     public ResponseEntity<List<ResponseOfertaDisponibleProfesionalDTO>> buscarOfertaProfesionalDisponibles(){
@@ -99,10 +102,16 @@ public class OfertaControlador {
         return ofertaServicio.todasLasOfertasGuest(usuario);
     }
     
-    
-    @GetMapping("/listar-ofertas-localidad/{localidad}")
-    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(@PathVariable String localidad){
-       return ofertaServicio.buscarPorLocalidad(localidad);
+    @GetMapping("listar/{localidad}/{especialidad}")
+    public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(@PathVariable String localidad , @PathVariable String especialidad){
+        return ofertaServicio.filtroBusqueda(localidad, especialidad);
     }
+    
+    
+    @GetMapping("listarOfertasProfesional/{usuario}")
+    public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(@PathVariable String usuario){
+       return ofertaServicio.ofertasProfesionalDisponibles(usuario);
+    }
+    
     
 }

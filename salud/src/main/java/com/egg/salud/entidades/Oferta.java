@@ -1,10 +1,12 @@
 package com.egg.salud.entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.Date;
+
+
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
+
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,7 @@ public class Oferta {
    //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Guest guest;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_profesional", nullable = false)
     //@OneToOne(mappedBy ="oferta", cascade=CascadeType.ALL)
     private Profesional profesional;
@@ -32,8 +34,11 @@ public class Oferta {
     
     //Revisar el Date para start y end
 
-    private String start;
-    private String end;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ",timezone="UTC-3")
+    private Timestamp start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ",timezone="UTC-3")
+    private Timestamp end;
+
     
     private String localidad;
     private String consultorio;

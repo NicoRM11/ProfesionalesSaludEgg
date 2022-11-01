@@ -3,10 +3,10 @@ package com.egg.salud.servicio;
 import com.egg.salud.dto.RequestProfesionalDTO;
 import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Profesional;
-import com.egg.salud.enumeraciones.Rol;
 import com.egg.salud.exceptions.DataNotFoundException;
 import com.egg.salud.exceptions.ResourceNotFoundException;
 import com.egg.salud.exceptions.UserIsExistsException;
+import com.egg.salud.mapper.MapperProfesional;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -29,6 +28,9 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
     private SimpleDateFormat formateo;
     @Autowired
     private ProfesionalRepositorio profesionalRepositorio;
+
+    @Autowired
+    private MapperProfesional mapper;
 
     @Override
     @Transactional
@@ -47,28 +49,8 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             }
 
         }
-        Profesional profesional = new Profesional();
 
-        profesional.setUsuario(requestProfesionalDTO.getUsuario());
-        profesional.setPassword(new BCryptPasswordEncoder().encode(requestProfesionalDTO.getPassword()));
-        profesional.setNombre(requestProfesionalDTO.getNombre());
-        profesional.setApellido(requestProfesionalDTO.getApellido());
-        profesional.setDni(requestProfesionalDTO.getDni());
-        profesional.setDomicilio(requestProfesionalDTO.getDomicilio());
-        try {
-            profesional.setFecha_nac(formateo.parse(requestProfesionalDTO.getFecha_nac()));
-
-        } catch (ParseException ex) {
-            Logger.getLogger(GuestServicioImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        profesional.setEspecialidad(requestProfesionalDTO.getEspecialidad());
-        profesional.setMatricula(requestProfesionalDTO.getMatricula());
-        profesional.setNacionalidad(requestProfesionalDTO.getNacionalidad());
-        profesional.setUrlFoto("");
-        profesional.setEstado(true);
-
-
-        profesional.setRol(Rol.PROFESIONAL);
+        Profesional profesional = mapper.map(requestProfesionalDTO);
 
         profesionalRepositorio.save(profesional);
 
@@ -77,7 +59,7 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
     @Override
     @Transactional
-    public String  modificarUsuario(String usuario, RequestProfesionalDTO modificarDto) throws Exception {
+    public String modificarUsuario(String usuario, RequestProfesionalDTO modificarDto) throws Exception {
 
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
@@ -103,12 +85,12 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
 
                 profesionalRepositorio.save(profesional);
 
-                return "usuario modificado con éxito" ;
+                return "usuario modificado con éxito";
             } else {
-                throw  new UserIsExistsException("no se puede modificar al usuario ");
+                throw new UserIsExistsException("no se puede modificar al usuario ");
             }
         } else {
-            throw  new ResourceNotFoundException("no se encontró el email de usuario");
+            throw new ResourceNotFoundException("no se encontró el email de usuario");
         }
 
     }
@@ -126,38 +108,22 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             return ("usuario eliminado correctamente");
 
         } else {
-            throw  new ResourceNotFoundException("no se encontró el email de usuario");
+            throw new ResourceNotFoundException("no se encontró el email de usuario");
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResponseProfesionalDTO> listar() throws Exception{
+    public List<ResponseProfesionalDTO> listar() throws Exception {
 
         List<Profesional> listaProfesional = profesionalRepositorio.findAll();
-        List<ResponseProfesionalDTO> listaProfesionalDto = new ArrayList<>();
-        if(listaProfesional.size() < 1){
+
+        if (listaProfesional.size() < 1) {
             throw new DataNotFoundException("no se encuentran registros en la base de datos");
         }
 
-        for (Profesional profesional : listaProfesional) {
-            if(profesional.getEstado()) {
-                ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
-                responseProfesional.setApellido(profesional.getApellido());
-                responseProfesional.setDomicilio(profesional.getDomicilio());
-                responseProfesional.setMatricula(profesional.getMatricula());
-                responseProfesional.setEspecialidad(profesional.getEspecialidad());
-                responseProfesional.setFecha_nac(profesional.getFecha_nac());
-                responseProfesional.setNombre(profesional.getNombre());
-                responseProfesional.setUsuario(profesional.getUsuario());
-                responseProfesional.setDni(profesional.getDni());
-                responseProfesional.setUrlFoto(profesional.getUrlFoto());
-                responseProfesional.setPassword(profesional.getPassword());
-                responseProfesional.setNacionalidad(profesional.getNacionalidad());
+        List<ResponseProfesionalDTO> listaProfesionalDto = mapper.map(listaProfesional);
 
-                listaProfesionalDto.add(responseProfesional);
-            }
-        }
         return listaProfesionalDto;
     }
 
@@ -168,61 +134,29 @@ public class ProfesionalServicioImpl implements ProfesionalServicio {
             Profesional profesional = respuesta.get();
             if (profesional.getEstado()) {
 
-                ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
-                responseProfesional.setApellido(profesional.getApellido());
-                responseProfesional.setDomicilio(profesional.getDomicilio());
-                responseProfesional.setMatricula(profesional.getMatricula());
-                responseProfesional.setEspecialidad(profesional.getEspecialidad());
-                responseProfesional.setFecha_nac(profesional.getFecha_nac());
-                responseProfesional.setNombre(profesional.getNombre());
-                responseProfesional.setUsuario(profesional.getUsuario());
-                responseProfesional.setDni(profesional.getDni());
-                responseProfesional.setUrlFoto(profesional.getUrlFoto());
-                responseProfesional.setPassword(profesional.getPassword());
-                responseProfesional.setNacionalidad(profesional.getNacionalidad());
-
-
+                ResponseProfesionalDTO responseProfesional = mapper.map(profesional);
                 return responseProfesional;
 
             } else {
                 throw new UserIsExistsException("error, usuario dado de baja");
             }
-            }else{
-                throw new ResourceNotFoundException("no se encontro el usuario");
+        } else {
+            throw new ResourceNotFoundException("no se encontro el usuario");
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResponseProfesionalDTO> listarEspecialidad(String especialidad) throws Exception{
+    public List<ResponseProfesionalDTO> listarEspecialidad(String especialidad) throws Exception {
         List<Profesional> listaProfesional = profesionalRepositorio.listaPorEspecialidad(especialidad);
-        List<ResponseProfesionalDTO> listaProfesionalDto = new ArrayList<>();
 
-        if(listaProfesional.size() < 1){
+        if (listaProfesional.size() < 1) {
             throw new DataNotFoundException("no se encuentran registros en la base de datos");
         }
 
-        for (Profesional profesional : listaProfesional) {
-            if (profesional.getEstado()) {
-                ResponseProfesionalDTO responseProfesional = new ResponseProfesionalDTO();
-                responseProfesional.setNombre(profesional.getNombre());
-                responseProfesional.setApellido(profesional.getApellido());
-                responseProfesional.setDni(profesional.getDni());
-                responseProfesional.setUrlFoto(profesional.getUrlFoto());
-                responseProfesional.setFecha_nac(profesional.getFecha_nac());
-                responseProfesional.setEspecialidad(profesional.getEspecialidad());
-                responseProfesional.setNacionalidad(profesional.getNacionalidad());
-                responseProfesional.setPassword(profesional.getPassword());
-                responseProfesional.setUrlFoto(profesional.getUrlFoto());
-                responseProfesional.setMatricula(profesional.getMatricula());
-                responseProfesional.setDomicilio(profesional.getDomicilio());
+        List<ResponseProfesionalDTO> listaProfesionalDto = mapper.map(listaProfesional);
 
-                responseProfesional.setUsuario(profesional.getUsuario());
-
-                listaProfesionalDto.add(responseProfesional);
-            }
-        }
-        return  listaProfesionalDto;
+        return listaProfesionalDto;
 
     }
 }

@@ -5,14 +5,22 @@ import com.egg.salud.dto.RequestOfertaProfesionalDTO;
 import com.egg.salud.dto.ResponseListaOfertaDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaGuestDTO;
 import com.egg.salud.dto.ResponseOfertaAceptadaProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaAdmin;
 import com.egg.salud.dto.ResponseOfertaDisponibleGuestDTO;
 import com.egg.salud.dto.ResponseOfertaDisponibleProfesionalDTO;
+import com.egg.salud.dto.ResponseOfertaGuestDTO;
+import com.egg.salud.dto.ResponseOfertaProfesionalDTO;
+import com.egg.salud.dto.ResponseProfesionalDTO;
 import com.egg.salud.entidades.Guest;
 import com.egg.salud.entidades.Oferta;
 import com.egg.salud.entidades.Profesional;
+import com.egg.salud.exceptions.DataNotFoundException;
+import com.egg.salud.mapper.MapperProfesional;
 import com.egg.salud.repositorios.GuestRepositorio;
 import com.egg.salud.repositorios.OfertaRepositorio;
 import com.egg.salud.repositorios.ProfesionalRepositorio;
+
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +51,9 @@ public class OfertaServicioImpl implements OfertaServicio {
 
     @Autowired
     private OfertaRepositorio ofertaRepositorio;
+
+    @Autowired
+    private MapperProfesional mapperProfesional;
 
     @Override
     @Transactional
@@ -129,51 +140,6 @@ public class OfertaServicioImpl implements OfertaServicio {
         } else {
             return new ResponseEntity<>("no se encontró el id de la oferta", HttpStatus.NOT_FOUND);
         }
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ResponseEntity<List<ResponseOfertaAceptadaProfesionalDTO>> buscarOfertaProfesionalAceptadas(String usuario) {
-
-        Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
-
-        if (respuesta.isPresent()) {
-            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
-
-            List<ResponseOfertaAceptadaProfesionalDTO> listaOfertaAceptadaProfesionalDTO = new ArrayList<>();
-
-            for (Oferta oferta : listaOfertaProfesional) {
-
-                if (oferta.getDisponible() == false && oferta.getEstado() == true) {
-                    ResponseOfertaAceptadaProfesionalDTO ofertaAceptadaDto = new ResponseOfertaAceptadaProfesionalDTO();
-                    ofertaAceptadaDto.setGuest(oferta.getGuest());
-                    ofertaAceptadaDto.setApellido(oferta.getGuest().getApellido());
-                    ofertaAceptadaDto.setFecha_nac(oferta.getGuest().getFecha_nac());
-                    ofertaAceptadaDto.setObra_social(oferta.getGuest().getObra_social());
-                    ofertaAceptadaDto.setTelefono(oferta.getGuest().getTelefono());
-
-                    ofertaAceptadaDto.setId(oferta.getId());
-                    ofertaAceptadaDto.setStart(oferta.getStart());
-                    ofertaAceptadaDto.setEnd(oferta.getEnd());
-                    ofertaAceptadaDto.setLocalidad(oferta.getLocalidad());
-                    ofertaAceptadaDto.setModalidad(oferta.getModalidad());
-                    ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
-
-                    listaOfertaAceptadaProfesionalDTO.add(ofertaAceptadaDto);
-                } else {
-                    System.out.println("Ninguna oferta aceptada");
-                }
-            }
-            return new ResponseEntity<>(listaOfertaAceptadaProfesionalDTO, HttpStatus.OK);
-        }
-
-        Guest asd = new Guest();
-        ResponseOfertaAceptadaProfesionalDTO a = new ResponseOfertaAceptadaProfesionalDTO();
-
-        List<ResponseOfertaAceptadaProfesionalDTO> prueba = new ArrayList<>();
-        prueba.add(a);
-        return new ResponseEntity<>(prueba, HttpStatus.NOT_FOUND);
 
     }
 
@@ -282,6 +248,8 @@ public class OfertaServicioImpl implements OfertaServicio {
                     ofertaAceptadaDto.setModalidad(oferta.getModalidad());
                     ofertaAceptadaDto.setConsultorio(oferta.getConsultorio());
                     ofertaAceptadaDto.setTelefono(oferta.getTelefono());
+                    ofertaAceptadaDto.setApellidoProfesional(oferta.getProfesional().getApellido());
+                    ofertaAceptadaDto.setNombreProfesional(oferta.getProfesional().getNombre());
 
                     listaOfertaAceptadaGuestDTO.add(ofertaAceptadaDto);
                 } else {
@@ -327,6 +295,8 @@ public class OfertaServicioImpl implements OfertaServicio {
                 ofertaDisponibleDto.setNombre(oferta.getProfesional().getNombre());
                 ofertaDisponibleDto.setTelefono(oferta.getTelefono());
                 ofertaDisponibleDto.setEspecialidad(oferta.getEspecialidad());
+                ofertaDisponibleDto.setApellidoProfesional(oferta.getProfesional().getApellido());
+                ofertaDisponibleDto.setNombreProfesional(oferta.getProfesional().getNombre());
 
                 listaOfertaDisponibleGuestDTO.add(ofertaDisponibleDto);
             } else {
@@ -344,8 +314,10 @@ public class OfertaServicioImpl implements OfertaServicio {
         Optional<Profesional> respuesta = profesionalRepositorio.findByUsuario(usuario);
 
         if (respuesta.isPresent()) {
-
-            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario);
+            Date date = new Date();
+            Timestamp fechaDeHoy = new Timestamp(date.getTime() - ((540 * 60) * 1000));
+            System.out.println(fechaDeHoy);
+            List<Oferta> listaOfertaProfesional = ofertaRepositorio.listaPorProfesional(usuario, fechaDeHoy);
 
             List<ResponseListaOfertaDTO> listaProfesionalDTO = new ArrayList<>();
 
@@ -422,33 +394,150 @@ public class OfertaServicioImpl implements OfertaServicio {
     }
 
     @Override
-    public ResponseEntity<List<ResponseOfertaDisponibleGuestDTO>> buscarPorLocalidad(String localidad) {
+    public ResponseEntity<List<ResponseOfertaGuestDTO>> filtroBusqueda(String localidad, String especialidad) {
 
-        List<Oferta> listaOfertas = ofertaRepositorio.buscarPorLocalidad(localidad);
-        List<ResponseOfertaDisponibleGuestDTO> listaResponse = new ArrayList<>();
+        List<ResponseProfesionalDTO> listaProfesional = new ArrayList<>();
 
-        for (Oferta aux : listaOfertas) {
+        if (localidad.equals("-") && !especialidad.equals("-")) {
 
-            if (aux.getEstado() == true && aux.getDisponible() == true) {
-                ResponseOfertaDisponibleGuestDTO response = new ResponseOfertaDisponibleGuestDTO();
-                response.setId(aux.getId());
-                response.setStart(aux.getStart());
-                response.setEnd(aux.getEnd());
-                response.setNombre(aux.getProfesional().getNombre());
-                response.setApellido(aux.getProfesional().getApellido());
-                response.setTelefono(aux.getTelefono());
-                response.setLocalidad(aux.getLocalidad());
-                response.setConsultorio(aux.getConsultorio());
-                response.setModalidad(aux.getModalidad());
-                response.setEspecialidad(aux.getEspecialidad());
+            List<Profesional> filtroBusqueda = ofertaRepositorio.buscarPorEspecialidad(especialidad);
 
-                listaResponse.add(response);
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
+                }
+            }
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
+
+        } else if (!localidad.equals("-") && especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = ofertaRepositorio.buscarPorLocalidad(localidad);
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
+                }
+            }
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
+
+        } else if (localidad.equals("-") && especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = profesionalRepositorio.findAll();
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
+                }
+            }
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
+
+        } else if (!localidad.equals("-") && !especialidad.equals("-")) {
+
+            List<Profesional> filtroBusqueda = ofertaRepositorio.filtroBusqueda(especialidad, localidad);
+
+            for (Profesional aux : filtroBusqueda) {
+                if (aux.getEstado()) {
+                    ResponseProfesionalDTO response = mapperProfesional.map(aux);
+                    listaProfesional.add(response);
+                }
+            }
+
+            if (listaProfesional.size() < 1) {
+                return new ResponseEntity("No se encontraron profesionales, intente con otro criterio", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(listaProfesional, HttpStatus.OK);
+            }
+
+        }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseOfertaProfesionalDTO>> ofertasProfesionalDisponibles(String usuario) {
+
+        Optional<Profesional> profesional = profesionalRepositorio.findByUsuario(usuario);
+
+        if (profesional.isPresent()) {
+            Date date = new Date();
+            Timestamp fechaDeHoy = new Timestamp(date.getTime());
+            List<Oferta> listaOferta = ofertaRepositorio.ofertaProfesionalDisponible(usuario, fechaDeHoy);
+
+            if (listaOferta.size() < 1) {
+                return new ResponseEntity("No hay ofertas del profesional disponibles", HttpStatus.NOT_FOUND);
+            } else {
+                List<ResponseOfertaProfesionalDTO> listaResponse = new ArrayList();
+                for (Oferta aux : listaOferta) {
+                    ResponseOfertaProfesionalDTO response = new ResponseOfertaProfesionalDTO();
+                    response.setId(aux.getId());
+                    response.setProfesional(aux.getProfesional());
+                    response.setStart(aux.getStart());
+                    response.setEnd(aux.getEnd());
+                    response.setLocalidad(aux.getLocalidad());
+                    response.setConsultorio(aux.getConsultorio());
+                    response.setModalidad(aux.getModalidad());
+                    response.setEspecialidad(aux.getEspecialidad());
+                    response.setTelefono(aux.getTelefono());
+                    response.setDisponible(aux.getDisponible());
+                    response.setEstado(aux.getEstado());
+                    listaResponse.add(response);
+                }
+                return new ResponseEntity(listaResponse, HttpStatus.OK);
 
             }
+        } else {
+            return new ResponseEntity("No se encuentra al profesional", HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(listaResponse, HttpStatus.OK);
 
     }
 
+    @Override
+    public List<ResponseOfertaAdmin> listadoCompletoOfertas() throws Exception {
+
+        Date date = new Date();
+        Timestamp fechaDeHoy = new Timestamp(date.getTime() - ((540 * 60)* 1000));
+        List<Oferta> listaOfertas = ofertaRepositorio.listaCompleta(fechaDeHoy);
+     
+        if (listaOfertas.size() >= 1) {
+            List<ResponseOfertaAdmin> listaResponse = new ArrayList();
+
+            for (Oferta aux : listaOfertas) {
+                if (aux.getEstado()) {
+                   ResponseOfertaAdmin response =  new ResponseOfertaAdmin();
+                   response.setId(aux.getId());
+                   response.setProfesional(aux.getProfesional());
+                   response.setGuest(aux.getGuest());
+                   response.setStart(aux.getStart());
+                   response.setEnd(aux.getEnd());
+                   response.setLocalidad(aux.getLocalidad());
+                   response.setConsultorio(aux.getConsultorio());
+                   response.setModalidad(aux.getModalidad());
+                   response.setEspecialidad(aux.getEspecialidad());
+                   response.setTelefono(aux.getTelefono());
+                   response.setDisponible(aux.getDisponible());
+                   response.setEstado(aux.getEstado());
+                   listaResponse.add(response);
+                }
+            }
+            return listaResponse;
+
+        } else {
+          throw new DataNotFoundException("No se encuentran ofertas");
+        }
+
+    }
 }
