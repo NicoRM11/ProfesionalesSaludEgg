@@ -2,11 +2,14 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { NavSesionGuest } from './NavSesionGuest';
+import logo from '../images/logo.png';
 
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
+  const [data, setdata] = useState({});
 
   let navigate = useNavigate()
 
@@ -24,10 +27,13 @@ const Login = () => {
       localStorage.setItem('usuario', JSON.stringify(usuario));
       localStorage.setItem('password', JSON.stringify(password));
       if(rol==='ROLE_GUEST'){
-        navigate('/GuestProfile');
+        navigate('/inicio');
       }
       if(rol==='ROLE_PROFESIONAL'){
-        navigate('/ProfesionalProfile');
+        navigate('/inicio/Profesional');
+      }
+      if(rol==='ROLE_ADMIN'){
+        navigate('/listar/usuarios');
       }
       
 
@@ -44,6 +50,35 @@ const Login = () => {
     }
   }
   return (
+    <>
+      <nav className="navbar  navbar-expand-sm" >
+                <div className="container-xxl">
+                    <div className="navbar-brand mb-0 h1 text-white" href="#">
+                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                    </div>
+
+                    <button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarnav"
+                        className="navbar-toggler"
+                        aria-controls="navbarnav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse flex-row-reverse"
+                        id="navbarnav">
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionGuest data={data}></NavSesionGuest>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+    
     <section className="container ">
       <div className="row justify-content-center align-items-center mt-5 mainContenedor">
         <form className="Formulario col-md-4 col-xxl-5 py-4 rounded-4 text-white" onSubmit={handleSubmit}>
@@ -74,6 +109,7 @@ const Login = () => {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

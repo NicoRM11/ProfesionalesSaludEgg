@@ -12,17 +12,20 @@ import { MisTurnos } from './MisTurnos';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import { NavSesionProfesional } from './NavSesionProfesional';
 
-const Inicio = () => {
+export const InicioProfesional = () => {
+
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     const [data, setdata] = useState({});
 
     useEffect(() => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
+    const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
     const cargarPerfil = async () => {
         try {
             const response = await axios.get(URL, {
@@ -50,7 +53,7 @@ const Inicio = () => {
             <nav className="navbar  navbar-expand-sm" >
                 <div className="container-xxl">
                     <div className="navbar-brand mb-0 h1 text-white" href="#">
-                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                        <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
                     </div>
 
                     <button
@@ -65,17 +68,13 @@ const Inicio = () => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
-                    <div className="text-white h6 collapse navbar-collapse flex-row-reverse"
+                    <div className="collapse navbar-collapse flex-row-reverse"
                         id="navbarnav">
-
-
-                            <ul className="navbar-nav">
-                                {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
-                                <NavSesionGuest data={data}></NavSesionGuest>
-                            </ul>
-
-
-                        </div>
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionProfesional data={data}></NavSesionProfesional>
+                        </ul>
+                    </div>
                 </div>
             </nav>
 
@@ -136,22 +135,23 @@ const Inicio = () => {
                     </div>
 
                 </div>
-
-
                 {username !== "" ? <div className='botonesI'>
                     <div>
-                        <Link to="/MisTurnos">
-                            <button className='botonI'>Mis Turnos</button>
+                        <Link to="/Oferta/profesional">
+                            <button className='botonI'>Manejar Turnos</button>
                         </Link>
                     </div>
 
                     <div className='boton2'>
-                        <Link to="/cartilla">
-                            <button className='botonI'>Cartilla</button>
+                        <Link to="/ProfesionalProfile">
+                            <button className='botonI'>Mi perfil</button>
                         </Link>
                     </div>
                 </div>
                     : <></>}
+
+
+
 
             </div>
         </div>
@@ -160,4 +160,4 @@ const Inicio = () => {
     )
 }
 
-export default Inicio
+

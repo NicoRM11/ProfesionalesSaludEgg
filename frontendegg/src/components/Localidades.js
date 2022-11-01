@@ -1,0 +1,4 @@
+const Localidades = ["Almirante Brown","Avellaneda", "Berazatagui", "Berisso", "Brandsen", "Campana", "Cañuelas", "Ensenada", "Escobar", "Esteban Echeverría", "Exaltación de la Cruz", "Ezeiza", "Florencio Varela", "General Las Heras", "General Rodríguez", "General San Martín", "Hurlingham", "Ituzaingó", "José C. Paz","La Matanza", "Lanús", "La Plata", "Lomas de Zamora", "Luján", "Marcos Paz", "Malvinas Argentinas", "Moreno", "Merlo", "Morón", "Pilar", "Presidente Perón", "Quilmes", "San Fernando", "San Isidro", "San Miguel", "San Vicente", "Tigre", "Tres de Febrero", "Vicente López", "Zárate"];
+
+
+export default Localidades;

@@ -5,13 +5,16 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 import Avatar from "@mui/material/Avatar";
 import { storage } from "./firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { NavSesionGuest } from './NavSesionGuest';
+import { Error404 } from './Error404';
 
 
 
@@ -22,6 +25,7 @@ export const GuestProfile = () => {
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     const [image, setImage] = useState(null);
     //const [url, setUrl] = useState(null);
 
@@ -33,8 +37,9 @@ export const GuestProfile = () => {
         cargarPerfil();
     }, []);
 
-    const URL = `http://localhost:8080/api/guest/detalle/${username}`;
+    
     const cargarPerfil = async () => {
+        const URL = `http://localhost:8080/api/guest/detalle/${username}`;
         try {
             const response = await axios.get(URL, {
                 auth: {
@@ -53,8 +58,6 @@ export const GuestProfile = () => {
             console.log(error)
         }
     }
-
-
 
     const handleChange = ({ target }) => {
         setEdicion(true);
@@ -105,6 +108,7 @@ export const GuestProfile = () => {
 
     const handleDelete = async (e) => {
         e.preventDefault();
+        const URL = `http://localhost:8080/api/guest/${username}`;
         try {
             const response = await axios.delete(URL, {
                 auth: {
@@ -120,7 +124,7 @@ export const GuestProfile = () => {
                     'Lo vamos a extrañar',
                     'success'
                 )
-                navigate('/login');
+                handleLogout();
             }
 
         } catch (error) {
@@ -167,15 +171,55 @@ export const GuestProfile = () => {
             setEdicion(true);
     }
 
+    const handleLogout = () => {
+        localStorage.setItem('rol', JSON.stringify(""));
+        localStorage.setItem('usuario', JSON.stringify(""));
+        localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('profesional', JSON.stringify(""));
+        navigate('/inicio');
+    }
+
    // console.log(image)
     return (
+        <>
+        {rol==="ROLE_GUEST" ? 
+        <>
+        <nav className="navbar  navbar-expand-sm" >
+                <div className="container-xxl">
+                    <div className="navbar-brand mb-0 h1 text-white" href="#">
+                        <Link to="/inicio"> <img src={logo} width="150" height="50" /> </Link>
+                    </div>
+
+                    <button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarnav"
+                        className="navbar-toggler"
+                        aria-controls="navbarnav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse flex-row-reverse"
+                        id="navbarnav">
+                        <ul className="navbar-nav">
+                            {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                            <NavSesionGuest data={data}></NavSesionGuest>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        
+        
 
         <section className="container py-5">
 
             <div className="row justify-content-center align-items-center">
                 <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
                     <Row className="h2 text-center mt-4">
-                        <Form.Label>Editar Perfil</Form.Label>
+                        <Form.Label>Mi Perfil</Form.Label>
                     </Row>
 
 
@@ -289,7 +333,13 @@ export const GuestProfile = () => {
                 </button>
             </div>
         </section>
-    )
+        </>
+        :
+        <Error404></Error404>    
+    }
+        </>
+        )
+    
 }
 
 

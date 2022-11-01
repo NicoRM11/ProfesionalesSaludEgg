@@ -103,7 +103,7 @@ export const ProfesionalRegister = () => {
                             <Col md={3}>
                                 <Form.Label >Especialidad</Form.Label>
                                 <select className="form-select" value={data.especialidad} name="especialidad" aria-label="Default select example" onChange={handleChange}>
-                                        <option  selected>Seleccione</option>
+                                        <option  >Seleccione</option>
                                         <option  value="Pediatria">Pediatria</option>
                                         <option  value="Ginecologia">Ginecología</option>
                                         <option  value="Clinica">Clinica</option>

@@ -5,19 +5,23 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 import Avatar from "@mui/material/Avatar";
 import { storage } from "./firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { NavSesionProfesional } from './NavSesionProfesional';
+import { Error404 } from './Error404';
 
 export const ProfesionalProfile = () => {
     const [data, setdata] = useState({ usuario: "", password: "", fecha_nac: "", nombre: "", nacionalidad: "", apellido: "", dni: "", domicilio: "", especialidad: "", matricula: "" });
     const [edicion, setEdicion] = useState(false);
     const username = JSON.parse(localStorage.getItem('usuario'))
     const password = JSON.parse(localStorage.getItem('password'))
+    const rol = JSON.parse(localStorage.getItem('rol'))
     let navigate = useNavigate();
     const [image, setImage] = useState(null);
 
@@ -27,6 +31,7 @@ export const ProfesionalProfile = () => {
 
     console.log(data);
     console.log(image);
+    
     const cargarPerfil = async () => {
         const URL = `http://localhost:8080/api/profesional/detalle/${username}`;
         try {
@@ -110,7 +115,7 @@ export const ProfesionalProfile = () => {
                     'Lo vamos a extrañar',
                     'success'
                 )
-                navigate('/login');
+                handleLogout();
             }
 
         } catch (error) {
@@ -153,7 +158,49 @@ export const ProfesionalProfile = () => {
             })
         setEdicion(true);
     }
+
+    const handleLogout = () => {
+        localStorage.setItem('rol', JSON.stringify(""));
+        localStorage.setItem('usuario', JSON.stringify(""));
+        localStorage.setItem('password', JSON.stringify(""));
+        localStorage.setItem('nombreApellido', JSON.stringify(""));
+        localStorage.setItem('especialidad', JSON.stringify(""));
+        localStorage.setItem('fechaConsulta', JSON.stringify(""));
+        localStorage.setItem('paciente', JSON.stringify(""));
+        navigate('/inicio');
+    }
     return (
+        <>
+        {rol==="ROLE_PROFESIONAL" ? 
+        <>
+        <nav className="navbar  navbar-expand-sm" >
+        <div className="container-xxl">
+            <div className="navbar-brand mb-0 h1 text-white" href="#">
+                <Link to="/inicio/Profesional"> <img src={logo} width="150" height="50" /> </Link>
+            </div>
+
+            <button
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarnav"
+                className="navbar-toggler"
+                aria-controls="navbarnav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span className="navbar-toggler-icon"></span>
+            </button>
+
+            <div className="collapse navbar-collapse flex-row-reverse"
+                id="navbarnav">
+                <ul className="navbar-nav">
+                    {/*location.pathname ==='/register' && <NavLogin></NavLogin>*/}
+                    <NavSesionProfesional data={data}></NavSesionProfesional>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
 
         <section className="container py-5">
 
@@ -162,7 +209,7 @@ export const ProfesionalProfile = () => {
                 <Form className="Formulario col-8 py-2 rounded h6 text-white" onSubmit={handleSubmit}>
 
                     <Row className="h2 text-center mt-4">
-                        <Form.Label>Editar Perfil</Form.Label>
+                        <Form.Label>Mi Perfil</Form.Label>
                     </Row>
 
                     <Row className="h2 text-center">
@@ -277,6 +324,12 @@ export const ProfesionalProfile = () => {
                 </button>
             </div>
         </section>
+        </>
+        :
+        <Error404></Error404>
+        }
+        
+        </>
     )
 }
 
